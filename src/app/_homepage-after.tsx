@@ -266,6 +266,8 @@ export function AfterHero() {
 
   // Mobile top crop — fades in after hero text is gone so it never covers eyebrow
   const mobileCropTopOpacity = useTransform(scrollYProgress, [0.15, 0.28], [0, 1])
+  // Bottom globe fade — scroll-activated, invisible at rest
+  const globeBottomFadeOpacity = useTransform(scrollYProgress, [0.15, 0.32], [0, 1])
 
   // Full-bleed quote — fades in over the giant globe, stays at full opacity
   const quoteOpacity = useTransform(scrollYProgress, [0.35, 0.52], [0, 1])
@@ -311,8 +313,8 @@ export function AfterHero() {
         {/* Mobile crop fades — hide green gap at top and globe overflow at bottom (z:18, above dark overlay, below quote z:20) */}
         <motion.div className="absolute inset-x-0 top-0 pointer-events-none lg:hidden" aria-hidden="true"
           style={{ height: '30%', background: 'linear-gradient(to bottom, var(--forest-dark) 45%, transparent 100%)', zIndex: 18, opacity: mobileCropTopOpacity }} />
-        <div className="absolute inset-x-0 bottom-0 pointer-events-none" aria-hidden="true"
-          style={{ height: '24%', background: 'linear-gradient(to top, var(--forest-dark) 45%, transparent 100%)', zIndex: 18 }} />
+        <motion.div className="absolute inset-x-0 bottom-0 pointer-events-none" aria-hidden="true"
+          style={{ height: '24%', background: 'linear-gradient(to top, var(--forest-dark) 45%, transparent 100%)', zIndex: 18, opacity: globeBottomFadeOpacity }} />
 
         {/* Amber twilight bottom */}
         <div className="absolute inset-x-0 bottom-0 pointer-events-none" aria-hidden="true"
