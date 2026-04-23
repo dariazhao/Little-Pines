@@ -234,7 +234,7 @@ function AfterHeroConstellations() {
 export function AfterHero() {
   const [quoteIdx, setQuoteIdx] = useState(0)
   const [quoteVisible, setQuoteVisible] = useState(true)
-  const [isMobile, setIsMobile] = useState(true) // default true so Globe never loads on mobile
+  const [isMobile, setIsMobile] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -393,13 +393,7 @@ export function AfterHero() {
                       }}
                     />
                     <div style={{ position: 'relative', zIndex: 1 }}>
-                      {isMobile ? (
-                        <div style={{ display:'flex', alignItems:'center', justifyContent:'center', aspectRatio:'1', padding:'12%' }}>
-                          <Image src="/logo.png" alt="" width={220} height={220} style={{ objectFit:'contain', filter:'brightness(0) invert(1)', opacity:0.45 }} />
-                        </div>
-                      ) : (
-                        <Globe />
-                      )}
+                      <Globe />
                       <motion.div style={{ opacity: innerQuoteOpacity }}>
                         <AfterQuoteOverlay idx={quoteIdx} visible={quoteVisible} />
                       </motion.div>
