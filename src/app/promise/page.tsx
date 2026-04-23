@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, GitFork, FileText, MessageCircle, Github } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
-import { MethodSection, StarField, ForestSilhouette, ShootingStars, TwinklingStars } from '@/app/_homepage-after'
+import { StarField, ForestSilhouette, ShootingStars, TwinklingStars } from '@/app/_homepage-after'
 import { PineBranch } from '@/components/illustrations/pine-branch'
 
 /* ─── Data ─────────────────────────────────────────────────────── */
@@ -372,8 +372,6 @@ export default function PromisePage() {
   return (
     <>
       <PromiseHero />
-
-      <MethodSection hideCta />
 
       {/* Six commitments ─────────────────────────────────────────── */}
       <section style={{ background: 'var(--cream)', position: 'relative', overflow: 'hidden' }}>

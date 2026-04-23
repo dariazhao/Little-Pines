@@ -267,7 +267,7 @@ export function AfterHero() {
   // Mobile top crop — fades in after hero text is gone so it never covers eyebrow
   const mobileCropTopOpacity = useTransform(scrollYProgress, [0.15, 0.28], [0, 1])
   // Bottom globe fade — scroll-activated, invisible at rest
-  const globeBottomFadeOpacity = useTransform(scrollYProgress, [0.40, 0.75], [0, 1])
+  const globeBottomFadeOpacity = useTransform(scrollYProgress, [0.50, 0.90], [0, 1])
 
   // Full-bleed quote — fades in over the giant globe, stays at full opacity
   const quoteOpacity = useTransform(scrollYProgress, [0.35, 0.52], [0, 1])
@@ -1755,11 +1755,104 @@ function EpigraphSection() {
   )
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   COMMITMENTS — FLIP CARDS
+══════════════════════════════════════════════════════════════════ */
+function FlipCard({ num, title, body, Icon, delay }: {
+  num: string; title: string; body: string; Icon: IconComp; delay: number
+}) {
+  const [flipped, setFlipped] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, amount: 0.25 })
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 22 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.75, delay, ease: [0.19, 1, 0.22, 1] }}
+      onClick={() => setFlipped(f => !f)}
+      style={{ perspective: '1000px', cursor: 'pointer', flex: 1, minWidth: 0 }}
+    >
+      <motion.div
+        animate={{ rotateY: flipped ? 180 : 0 }}
+        transition={{ duration: 0.55, ease: [0.19, 1, 0.22, 1] }}
+        style={{
+          transformStyle: 'preserve-3d',
+          WebkitTransformStyle: 'preserve-3d',
+          position: 'relative',
+          height: 'clamp(220px, 28vw, 310px)',
+        }}
+      >
+        {/* Front */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
+          background: 'var(--cream)',
+          border: '1px solid rgba(42,74,48,0.10)',
+          borderRadius: '0.85rem',
+          padding: 'clamp(1.25rem, 2.5vw, 2rem)',
+          display: 'flex', flexDirection: 'column',
+        }}>
+          <div style={{ marginBottom: 'clamp(0.75rem, 1.5vw, 1.25rem)' }}>
+            <Icon active={inView} size={40} />
+          </div>
+          <p className="font-sans uppercase text-amber" style={{ fontSize: '0.48rem', letterSpacing: '0.24em', marginBottom: '0.5rem' }}>{num}</p>
+          <h3 className="font-serif font-semibold text-forest" style={{ fontSize: 'clamp(1.1rem, 1.8vw, 1.5rem)', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '0.65rem' }}>{title}</h3>
+          <div style={{ height: '1px', width: '1.5rem', background: 'var(--amber)', opacity: 0.65 }} />
+          <p className="font-sans text-forest/28 uppercase mt-auto" style={{ fontSize: '0.46rem', letterSpacing: '0.18em' }}>Tap to reveal</p>
+        </div>
+
+        {/* Back */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
+          transform: 'rotateY(180deg)',
+          background: 'var(--forest)',
+          borderRadius: '0.85rem',
+          padding: 'clamp(1.25rem, 2.5vw, 2rem)',
+          display: 'flex', flexDirection: 'column', justifyContent: 'center',
+        }}>
+          <p className="font-sans uppercase text-amber/60" style={{ fontSize: '0.46rem', letterSpacing: '0.22em', marginBottom: '0.85rem' }}>{num} · {title}</p>
+          <p className="font-serif text-cream/80" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 1rem)', lineHeight: 1.78 }}>{body}</p>
+          <p className="font-sans text-cream/22 uppercase mt-auto" style={{ fontSize: '0.44rem', letterSpacing: '0.18em' }}>Tap to close</p>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+function CommitmentsFlipSection() {
+  return (
+    <section style={{ background: 'var(--cream-dark)', position: 'relative', zIndex: 5, borderRadius: '2rem 2rem 0 0', marginTop: '-2rem' }}>
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-20 pt-14 pb-16 md:pt-16 md:pb-20">
+        <Reveal className="mb-10">
+          <p className="font-sans uppercase text-forest/32 mb-2" style={{ fontSize: '0.56rem', letterSpacing: '0.22em' }}>
+            The Little Pines Promise
+          </p>
+          <h2 className="font-serif font-semibold text-forest" style={{ fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', letterSpacing: '-0.022em', lineHeight: 1.2 }}>
+            Three decisions that constrain<br className="hidden lg:inline" /> everything we build.
+          </h2>
+        </Reveal>
+
+        <div style={{ display: 'flex', gap: 'clamp(0.5rem, 1.5vw, 1rem)' }}>
+          {METHOD_PANELS.map(({ num, title, body, Icon }, i) => (
+            <FlipCard key={num} num={num} title={title} body={body} Icon={Icon} delay={0.08 + i * 0.10} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export function AfterHomePage() {
   return (
     <>
       <AfterHero />
       <ConceptPaperSection />
+      <CommitmentsFlipSection />
       <AfterEarlyAccessSection />
     </>
   )
