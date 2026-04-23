@@ -267,7 +267,7 @@ export function AfterHero() {
   // Mobile top crop — fades in after hero text is gone so it never covers eyebrow
   const mobileCropTopOpacity = useTransform(scrollYProgress, [0.15, 0.28], [0, 1])
   // Bottom globe fade — scroll-activated, invisible at rest
-  const globeBottomFadeOpacity = useTransform(scrollYProgress, [0.15, 0.32], [0, 1])
+  const globeBottomFadeOpacity = useTransform(scrollYProgress, [0.40, 0.75], [0, 1])
 
   // Full-bleed quote — fades in over the giant globe, stays at full opacity
   const quoteOpacity = useTransform(scrollYProgress, [0.35, 0.52], [0, 1])
