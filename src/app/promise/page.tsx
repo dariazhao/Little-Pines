@@ -199,7 +199,7 @@ function PromiseHero() {
                 transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut', repeatDelay: 0.3 }}
               >
                 <Image
-                  src="/bear_eats.png"
+                  src="/bear_sits.png"
                   alt="The Little Pines bear"
                   width={500}
                   height={500}
@@ -207,7 +207,8 @@ function PromiseHero() {
                   style={{
                     width: 'min(420px, 78vw)',
                     height: 'auto',
-                    filter: 'drop-shadow(0 32px 60px rgba(0,0,0,0.5)) drop-shadow(0 8px 20px rgba(196,149,75,0.18))',
+                    filter: 'brightness(0) invert(1)',
+                    opacity: 0.62,
                     display: 'block',
                   }}
                 />
@@ -430,7 +431,7 @@ export default function PromisePage() {
           aria-hidden="true"
           style={{ width: 'min(280px, 35vw)', opacity: 0.06 }}
         >
-          <Image src="/bear_sits.png" alt="" width={400} height={400} style={{ width: '100%', height: 'auto', filter: 'brightness(2)' }} />
+          <Image src="/bear_eats.png" alt="" width={400} height={400} style={{ width: '100%', height: 'auto', filter: 'brightness(0) invert(1)' }} />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-12 lg:px-20">
