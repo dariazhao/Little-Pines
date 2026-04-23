@@ -172,7 +172,7 @@ function PromiseHero() {
             </div>
 
             <Reveal delay={0.44}>
-              <p className="font-sans text-cream/38 leading-relaxed mb-8" style={{ fontSize: '0.875rem', maxWidth: '44ch' }}>
+              <p className="font-sans text-cream/65 leading-relaxed mb-8" style={{ fontSize: '0.875rem', maxWidth: '44ch' }}>
                 Three decisions and six commitments — written down before a single line of code, and kept in public.
               </p>
             </Reveal>
