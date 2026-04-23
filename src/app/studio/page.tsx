@@ -1,381 +1,186 @@
 'use client'
 
 import React, { useRef } from 'react'
-import Link from 'next/link'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { Reveal } from '@/components/ui/reveal'
-import { EmailCapture } from '@/components/email-capture'
 import { PineBranch } from '@/components/illustrations/pine-branch'
 import { WorkshopSection, AfterBearSection, SessionsSection } from '../_homepage-after'
 import { BuildWithUsCards } from './_cards'
 
 
 /* ══════════════════════════════════════════════════════════════════
-   DATA
+   SENTENCE HERO
 ══════════════════════════════════════════════════════════════════ */
-type Invitation = {
-  num: string
-  id: string
-  role: string
-  label: string
-  headline: string
-  body: string
-  ask: string
-  ctas: { label: string; href: string; note?: string }[]
-}
 
-const INVITATIONS: Invitation[] = [
-  {
-    num: '01',
-    id: 'engineer',
-    role: 'Engineer',
-    label: 'Edge AI · Embedded Systems · Hardware',
-    headline: 'The hardest design problem in this product is the one nobody sees.',
-    body: 'We are running a frontier small model on-device, on a sealed hardware pod, inside a nine-inch plush. Gemma 4 on Synaptics Astra-class silicon. Whisper for child-voice STT. A physical microphone kill-switch at the circuit level. No cloud, ever. The hardest problems are child-voice recognition, sub-second latency on a quantized model, and the thermal and power envelope inside a toy a four-year-old sleeps with.',
-    ask: "If you've shipped something that had to be invisible, efficient, and right — and you want to do that again for something that matters — I'd like to find a time to talk. Equity-and-mission terms. Part-time or full-time. Based anywhere.",
-    ctas: [{ label: 'build@littlepinesstudio.com', href: 'mailto:build@littlepinesstudio.com' }],
-  },
-  {
-    num: '02',
-    id: 'researcher',
-    role: 'Researcher',
-    label: 'Child Psychology · Developmental Science',
-    headline: 'We need your worst objection, not your encouragement.',
-    body: "The pedagogy is grounded in Siegel, Delahooke, Greene, Gerber, Montessori's spiritual embryo, and the CASEL framework. The full 38-page concept paper includes the four session types, the disclosure protocol, and the efficacy design. I want it torn apart. Any clinical objection I haven't anticipated. Anywhere the developmental claims are wrong or overreaching. Anywhere the product is naïve about what children aged 3–7 can actually do.",
-    ask: "Would you read the concept paper and come back with the one thing that would give you pause? That's the conversation I'm looking for. Paid consulting or advisor equity, your call.",
-    ctas: [
-      { label: 'Read the concept paper', href: 'https://drive.google.com/file/d/1qMV7FTpaoKbYQ7feTzYFMXVjav_-GpBf/view' },
-      { label: 'research@littlepinesstudio.com', href: 'mailto:research@littlepinesstudio.com?subject=Reaction%20call' },
-    ],
-  },
-  {
-    num: '03',
-    id: 'educator',
-    role: 'Educator',
-    label: 'Montessori · Waldorf · Early Childhood',
-    headline: 'Tell us where this breaks the tradition. We need that conversation.',
-    body: "The brand claims Montessori- and Waldorf-inspired, and that claim is only worth making if credentialed educators agree with it. I want to know where this is genuinely aligned with the tradition: grace and courtesy, the prepared environment, the child's interior life. And where it isn't. I also want to pilot with ten to fifteen families in a real classroom community this fall.",
-    ask: "Would you sit with the curriculum and tell me honestly where this earns the Montessori and Waldorf names, and where it borrows without understanding? I'd rather hear that now, not after we've printed something on the box.",
-    ctas: [{ label: 'educators@littlepinesstudio.com', href: 'mailto:educators@littlepinesstudio.com' }],
-  },
-  {
-    num: '04',
-    id: 'grantmaker',
-    role: 'Grantmaker',
-    label: 'Early Childhood · Youth Mental Health',
-    headline: 'We need a clinical partner and a research design you can fund.',
-    body: 'The efficacy work is the spine of the brand. A two-arm RCT with 120 families over 12 weeks, co-designed with a leading child-development research lab, measuring emotional vocabulary, self-regulation (BRIEF-P), tantrum frequency, sleep quality, and child anxiety (Spence Preschool). All instruments preregistered. All data open. All results published, regardless of direction.',
-    ask: "Before the formal application, I'd welcome thirty minutes to hear what a rigorous study design would need to look like from your program's perspective. I am preparing a $200–400K efficacy-study request for the pilot RCT.",
-    ctas: [
-      { label: 'Read the research brief', href: '/research' },
-      { label: 'research@littlepinesstudio.com', href: 'mailto:research@littlepinesstudio.com' },
-    ],
-  },
-  {
-    num: '05',
-    id: 'investor',
-    role: 'Investor',
-    label: 'Friends & Family · Mission-Aligned Pre-Seed',
-    headline: 'We are looking to raise a friends and family round to fund the prototype, research pilot, and platform IP.',
-    body: 'I am not raising yet. The current capital plan is non-dilutive: in-kind R&D from NVIDIA Inception and Synaptics, foundation funding for the RCT, an academic research partnership, and a friends-and-family SAFE to cover the first six months. A pre-seed conversation opens in roughly ninety days, after the pedagogy team and efficacy design are locked.',
-    ask: "If this is a mission you share, I'd like to tell you more. The round is small. I'm being careful about who's in it.",
-    ctas: [
-      { label: 'Join the investor notice list', href: 'mailto:build@littlepinesstudio.com?subject=Investor%20notice%20list', note: 'one email per quarter' },
-    ],
-  },
-  {
-    num: '06',
-    id: 'voice',
-    role: 'Voice',
-    label: "Children's Audiobook · Voice Direction",
-    headline: "The voice is the most important design decision in this product. It doesn't exist yet.",
-    body: "The voice is the product. A single character, performed by a real actor from the children's audiobook world, converted to an on-device TTS model. The bar to beat is the founder's own voice reading to her daughter at bedtime. This is the most important design decision in the product and the one I know least about.",
-    ask: "Would you help me understand what world-class children's voice performance actually requires, before I write the brief? I'm not ready to cast yet. I'm still learning what to ask for.",
-    ctas: [{ label: 'voice@littlepinesstudio.com', href: 'mailto:voice@littlepinesstudio.com' }],
-  },
-  {
-    num: '07',
-    id: 'retail',
-    role: 'Retail',
-    label: 'Maisonette · MindWare · Bella Luna · Independents',
-    headline: 'We are not pitching a Holiday 2026 product. We are starting a 2027+ conversation.',
-    body: 'The target retail debut is holiday 2027. The plush would sit on the shelf next to Tonies, Yoto, and Lovevery — on a different pedagogical shelf: emotional literacy rather than audio content or developmental play. Retail MSRP is in line with Tonies and Yoto. The story parents can tell each other is screen-free, on-device, and built around the developmental literature.',
-    ask: "If the story is one you'd want to tell your buyers: when should we first talk? What would you need to see before the Q4 2027 assortment meeting?",
-    ctas: [{ label: 'retail@littlepinesstudio.com', href: 'mailto:retail@littlepinesstudio.com' }],
-  },
+const SENTENCE_STARS: [number, number, number][] = [
+  [8, 12, 1.2], [15, 7, 0.9], [23, 18, 1.4], [32, 5, 0.8], [41, 14, 1.1],
+  [55, 9, 1.3], [63, 20, 0.9], [72, 6, 1.5], [80, 15, 1.0], [91, 8, 1.2],
+  [5, 35, 0.8], [18, 42, 1.1], [28, 78, 0.9], [37, 88, 1.3], [48, 82, 0.8],
+  [58, 92, 1.1], [67, 75, 1.4], [76, 85, 0.9], [88, 70, 1.2], [94, 90, 0.8],
+  [12, 60, 1.0], [87, 45, 1.1], [3, 80, 0.9], [96, 30, 1.3], [45, 3, 0.8],
+  [70, 95, 1.0], [25, 95, 1.2], [85, 25, 0.9], [52, 50, 0.7], [33, 65, 1.0],
 ]
 
-const ANCHORS = [
-  { id: 'engineer',   label: 'Engineer' },
-  { id: 'researcher', label: 'Researcher' },
-  { id: 'educator',   label: 'Educator' },
-  { id: 'grantmaker', label: 'Grantmaker' },
-  { id: 'investor',   label: 'Investor' },
-  { id: 'voice',      label: 'Voice' },
-  { id: 'retail',     label: 'Retail' },
-  { id: 'parents',    label: 'Parents' },
+const SENTENCE_LINES = [
+  { text: 'Children are born with', amber: false, weight: 400 },
+  { text: 'an extraordinary capacity', amber: false, weight: 400 },
+  { text: 'to feel, notice,', amber: true, weight: 600 },
+  { text: 'and express', amber: true, weight: 600 },
+  { text: 'the full range of', amber: false, weight: 400 },
+  { text: 'human emotion.', amber: false, weight: 700 },
 ]
 
-/* ══════════════════════════════════════════════════════════════════
-   ANCHOR PILL
-══════════════════════════════════════════════════════════════════ */
-function AnchorPill({ id, label }: { id: string; label: string }) {
-  const [hovered, setHovered] = React.useState(false)
-  return (
-    <a
-      href={`#${id}`}
-      className="font-sans transition-all duration-200"
-      style={{
-        display: 'inline-block',
-        fontSize: '0.62rem',
-        letterSpacing: '0.10em',
-        textTransform: 'uppercase',
-        color: hovered ? 'var(--cream)' : 'var(--forest)',
-        background: hovered ? 'var(--forest)' : 'transparent',
-        border: `1px solid ${hovered ? 'var(--forest)' : 'rgba(42,74,48,0.20)'}`,
-        padding: '0.32rem 0.85rem',
-        borderRadius: '100px',
-        textDecoration: 'none',
-        cursor: 'pointer',
-        transition: 'all 0.18s ease',
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {label}
-    </a>
-  )
-}
+const LINE_DELAYS = [0.3, 0.52, 0.74, 0.91, 1.1, 1.28]
 
-/* ══════════════════════════════════════════════════════════════════
-   INVITATION ENTRY
-══════════════════════════════════════════════════════════════════ */
-function InvitationEntry({ inv }: { inv: Invitation }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, amount: 0.1 })
-
-  return (
-    <motion.div
-      ref={ref}
-      id={inv.id}
-      initial={{ opacity: 0, y: 28 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.75, ease: [0.19, 1, 0.22, 1] }}
-      style={{
-        borderTop: '1px solid rgba(42,74,48,0.09)',
-        paddingTop: '4rem',
-        paddingBottom: '4.5rem',
-        scrollMarginTop: '5rem',
-        position: 'relative',
-      }}
-    >
-      {/* Ghost watermark number */}
-      <span
-        aria-hidden="true"
-        className="font-serif select-none pointer-events-none"
-        style={{
-          position: 'absolute',
-          top: '2.5rem',
-          right: 0,
-          fontSize: 'clamp(5.5rem, 11vw, 9rem)',
-          fontWeight: 700,
-          color: 'var(--forest)',
-          opacity: 0.038,
-          lineHeight: 1,
-          letterSpacing: '-0.05em',
-        }}
-      >
-        {inv.num}
-      </span>
-
-      {/* Two-column grid: metadata | content */}
-      <div className="grid grid-cols-1 lg:grid-cols-[190px_1fr] gap-5 lg:gap-14">
-
-        {/* Left — role metadata */}
-        <div style={{ paddingTop: '0.2rem' }}>
-          <p
-            className="font-sans"
-            style={{ fontSize: '0.48rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.75)', marginBottom: '0.55rem' }}
-          >
-            {inv.num}
-          </p>
-          <p
-            className="font-sans"
-            style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.09em', textTransform: 'uppercase', color: 'var(--forest)', lineHeight: 1.35, marginBottom: '0.35rem' }}
-          >
-            {inv.role}
-          </p>
-          <p
-            className="font-sans"
-            style={{ fontSize: '0.62rem', color: 'rgba(42,74,48,0.38)', lineHeight: 1.6 }}
-          >
-            {inv.label}
-          </p>
-        </div>
-
-        {/* Right — content */}
-        <div>
-          {/* Headline */}
-          <h3
-            className="font-serif"
-            style={{
-              fontSize: 'clamp(1.3rem, 2.2vw, 1.85rem)',
-              fontStyle: 'italic',
-              fontWeight: 600,
-              color: 'var(--forest)',
-              lineHeight: 1.22,
-              letterSpacing: '-0.022em',
-              marginBottom: '1rem',
-              maxWidth: '50ch',
-            }}
-          >
-            {inv.headline}
-          </h3>
-
-          {/* Amber rule */}
-          <div style={{ width: '1.75rem', height: '1px', background: 'var(--amber)', opacity: 0.55, marginBottom: '1.1rem' }} />
-
-          {/* Body */}
-          <p
-            className="font-sans"
-            style={{ fontSize: '0.875rem', color: 'rgba(44,44,40,0.56)', lineHeight: 1.9, marginBottom: '1.75rem', maxWidth: '56ch' }}
-          >
-            {inv.body}
-          </p>
-
-          {/* The ask — amber left-border callout */}
-          <div
-            style={{
-              borderLeft: '2px solid rgba(196,149,75,0.55)',
-              paddingLeft: '1.25rem',
-              paddingBlock: '0.65rem',
-              marginBottom: '1.75rem',
-              background: 'rgba(196,149,75,0.028)',
-              borderRadius: '0 6px 6px 0',
-            }}
-          >
-            <p
-              className="font-serif"
-              style={{ fontSize: 'clamp(0.92rem, 1.4vw, 1.05rem)', fontStyle: 'italic', fontWeight: 400, color: 'var(--forest)', lineHeight: 1.68 }}
-            >
-              {inv.ask}
-            </p>
-          </div>
-
-          {/* CTAs */}
-          <div style={{ display: 'flex', gap: '1.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
-            {inv.ctas.map((cta) => (
-              <a
-                key={cta.href}
-                href={cta.href}
-                target={cta.href.startsWith('http') ? '_blank' : undefined}
-                rel={cta.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className="font-sans text-amber hover:text-amber-light transition-colors inline-flex items-center gap-1.5"
-                style={{ fontSize: '0.75rem' }}
-              >
-                <ArrowRight size={11} strokeWidth={2.2} />
-                {cta.label}
-                {cta.note && (
-                  <span style={{ opacity: 0.32, marginLeft: '0.2rem', fontSize: '0.63rem' }}>
-                    · {cta.note}
-                  </span>
-                )}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  )
-}
-
-/* ══════════════════════════════════════════════════════════════════
-   QUOTE HERO
-══════════════════════════════════════════════════════════════════ */
-function QuoteHero() {
-  const phrases = [
-    'There is a child somewhere',
-    'right now, trying to find',
-    'the word for what they feel.',
-  ]
-
+function SentenceHero() {
   return (
     <section
-      className="relative overflow-hidden flex flex-col items-center justify-center"
-      style={{ background: 'var(--forest-dark)', minHeight: '88vh', paddingTop: '9rem', paddingBottom: '6rem', textAlign: 'center' }}
+      className="relative flex flex-col items-center justify-center overflow-hidden"
+      style={{
+        background: 'var(--forest-dark)',
+        minHeight: '100svh',
+        paddingTop: '8rem',
+        paddingBottom: '6rem',
+        textAlign: 'center',
+      }}
     >
+      {/* Grain */}
       <div className="absolute inset-0 bg-grain opacity-50 pointer-events-none" aria-hidden="true" />
 
-      {/* Ambient pine decorations */}
+      {/* Static star field */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
+        {SENTENCE_STARS.map(([x, y, r], i) => (
+          <circle
+            key={i}
+            cx={`${x}%`}
+            cy={`${y}%`}
+            r={r}
+            fill="rgba(244,239,226,1)"
+            opacity={0.14 + (i % 8) * 0.07}
+          />
+        ))}
+      </svg>
+
+      {/* Amber radial bloom */}
       <div
-        className="absolute top-0 left-0 pointer-events-none opacity-[0.045]"
+        className="absolute inset-x-0 pointer-events-none"
         aria-hidden="true"
-        style={{ width: 'min(260px, 32vw)', transform: 'rotate(-10deg) translateX(-10%)' }}
+        style={{
+          top: '20%',
+          height: '60%',
+          background: 'radial-gradient(ellipse at 50% 50%, rgba(196,149,75,0.065) 0%, transparent 62%)',
+        }}
+      />
+
+      {/* Pine branch corners */}
+      <div
+        className="absolute top-0 left-0 pointer-events-none opacity-[0.038]"
+        aria-hidden="true"
+        style={{ width: 'min(240px, 30vw)', transform: 'rotate(-12deg) translateX(-14%)' }}
       >
         <PineBranch color="var(--cream)" />
       </div>
       <div
-        className="absolute bottom-0 right-0 pointer-events-none opacity-[0.045]"
+        className="absolute bottom-0 right-0 pointer-events-none opacity-[0.038]"
         aria-hidden="true"
-        style={{ width: 'min(260px, 32vw)', transform: 'rotate(10deg) translateX(10%)' }}
+        style={{ width: 'min(240px, 30vw)', transform: 'rotate(12deg) translateX(14%)' }}
       >
         <PineBranch color="var(--cream)" flip />
       </div>
 
-      {/* Amber radial glow */}
-      <div
-        className="absolute inset-x-0 top-0 pointer-events-none"
-        aria-hidden="true"
-        style={{ height: '250px', background: 'radial-gradient(ellipse at 50% -10%, rgba(196,149,75,0.07) 0%, transparent 65%)' }}
-      />
+      {/* Content */}
+      <div className="relative z-10 px-6" style={{ maxWidth: 'min(840px, 90vw)' }}>
 
-      <div className="relative z-10 px-6" style={{ maxWidth: '32ch' }}>
-        {/* Studio eyebrow */}
-        <Reveal>
-          <p
-            className="font-sans"
-            style={{ fontSize: '0.54rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.60)', marginBottom: '3rem' }}
-          >
-            Little Pines Studio · Build with us
-          </p>
-        </Reveal>
+        {/* Eyebrow */}
+        <motion.p
+          className="font-sans"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.1 }}
+          style={{
+            fontSize: '0.52rem',
+            letterSpacing: '0.28em',
+            textTransform: 'uppercase',
+            color: 'rgba(196,149,75,0.50)',
+            marginBottom: '3.5rem',
+          }}
+        >
+          Little Pines Studio
+        </motion.p>
 
-        {/* Quote — staggered phrases */}
-        <div style={{ marginBottom: '2.75rem' }}>
-          {phrases.map((phrase, i) => (
-            <Reveal key={i} delay={0.14 + i * 0.20}>
-              <span
+        {/* Sentence — per-line mask slide-up */}
+        <div style={{ marginBottom: '3rem' }}>
+          {SENTENCE_LINES.map((line, i) => (
+            <div key={i} style={{ overflow: 'hidden' }}>
+              <motion.span
                 className="font-serif block"
+                initial={{ y: '110%' }}
+                animate={{ y: '0%' }}
+                transition={{ duration: 0.95, delay: LINE_DELAYS[i], ease: [0.19, 1, 0.22, 1] }}
                 style={{
-                  fontSize: 'clamp(1.55rem, 3.8vw, 2.5rem)',
+                  fontSize: 'clamp(2rem, 4.5vw, 3.5rem)',
                   fontStyle: 'italic',
-                  fontWeight: 300,
-                  lineHeight: 1.35,
-                  color: 'var(--cream)',
-                  letterSpacing: '-0.025em',
+                  fontWeight: line.weight,
+                  lineHeight: 1.22,
+                  letterSpacing: '-0.03em',
+                  color: line.amber
+                    ? 'var(--amber)'
+                    : i === 5
+                    ? 'var(--cream)'
+                    : 'rgba(244,239,226,0.8)',
+                  paddingBottom: '0.06em',
                 }}
               >
-                {phrase}
-              </span>
-            </Reveal>
+                {line.text}
+              </motion.span>
+            </div>
           ))}
         </div>
 
-        {/* Amber divider + attribution */}
-        <Reveal delay={0.82}>
-          <div
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginBottom: '1.1rem' }}
-            aria-hidden="true"
+        {/* Amber underline draw-in */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '3.5rem' }}>
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1.2, delay: 1.8, ease: [0.19, 1, 0.22, 1] }}
+            style={{
+              height: '1px',
+              width: '4rem',
+              background: 'rgba(196,149,75,0.50)',
+              transformOrigin: 'left center',
+            }}
+          />
+        </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.9, delay: 2.1 }}
+          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.45rem' }}
+          aria-hidden="true"
+        >
+          <p
+            className="font-sans"
+            style={{
+              fontSize: '0.48rem',
+              letterSpacing: '0.24em',
+              textTransform: 'uppercase',
+              color: 'rgba(244,239,226,0.18)',
+            }}
           >
-            <div style={{ height: '1px', width: '2.5rem', background: 'linear-gradient(to right, transparent, rgba(196,149,75,0.38))' }} />
-            <div style={{ width: '3px', height: '3px', borderRadius: '50%', background: 'rgba(196,149,75,0.38)' }} />
-            <div style={{ height: '1px', width: '2.5rem', background: 'linear-gradient(to left, transparent, rgba(196,149,75,0.38))' }} />
-          </div>
-          <p className="font-sans" style={{ fontSize: '0.68rem', letterSpacing: '0.06em', color: 'rgba(244,239,226,0.32)' }}>
-            — Daria Zhao, Founder
+            Scroll
           </p>
-        </Reveal>
+          <motion.div
+            animate={{ y: [0, 5, 0] }}
+            transition={{ duration: 1.7, repeat: Infinity, ease: 'easeInOut', delay: 2.4 }}
+          >
+            <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
+              <line x1="6" y1="1" x2="6" y2="12" stroke="rgba(244,239,226,0.18)" strokeWidth="1.2" strokeLinecap="round"/>
+              <path d="M3 9.5 L6 12.5 L9 9.5" stroke="rgba(244,239,226,0.18)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   )
@@ -423,16 +228,6 @@ function FounderLetter() {
             style={{ fontSize: 'clamp(0.97rem, 1.4vw, 1.07rem)', lineHeight: 1.88 }}
           >
             <p style={{ marginBottom: '1.5rem' }}>
-              Children are born with an extraordinary capacity to feel, notice, and express the full
-              range of human emotion. In the first years of life, they do this naturally: they cry when
-              they&rsquo;re sad, they laugh when they&rsquo;re delighted, they cling when they&rsquo;re
-              afraid. Parents, teachers, and cultures then spend the next decade — often without meaning
-              to — teaching them to suppress, ignore, and perform these feelings rather than notice,
-              name, and understand them. By the time a child is eight, most of them have lost the
-              vocabulary for what&rsquo;s happening inside them, even as the feelings themselves are
-              intensifying.
-            </p>
-            <p style={{ marginBottom: '1.5rem' }}>
               The screen economy has accelerated this loss. Every minute a child spends on YouTube,
               TikTok, or a tablet is a minute they&rsquo;re not sitting with their own interior life.
               The dopamine reward cycle of short-form content trains children to flee from boredom,
@@ -473,149 +268,6 @@ function FounderLetter() {
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   INVITATIONS LIST
-══════════════════════════════════════════════════════════════════ */
-function InvitationsSection() {
-  return (
-    <section style={{ background: 'var(--cream)', position: 'relative', zIndex: 2 }}>
-      {/* Subtle left-edge timeline line */}
-      <div
-        aria-hidden="true"
-        className="hidden lg:block"
-        style={{
-          position: 'absolute',
-          left: 'calc(50% - 450px + 20px)',
-          top: 0,
-          bottom: 0,
-          width: '1px',
-          background: 'linear-gradient(to bottom, transparent, rgba(42,74,48,0.055) 8%, rgba(42,74,48,0.055) 92%, transparent)',
-          pointerEvents: 'none',
-        }}
-      />
-
-      <div
-        className="mx-auto px-6 md:px-10"
-        style={{ maxWidth: '900px' }}
-      >
-        {/* Section header */}
-        <div style={{ borderTop: '1px solid rgba(42,74,48,0.09)', paddingTop: '4rem', paddingBottom: '1rem' }}>
-          <Reveal>
-            <p
-              className="font-sans"
-              style={{ fontSize: '0.52rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(42,74,48,0.35)', marginBottom: '0.75rem' }}
-            >
-              01 – 07
-            </p>
-            <h2
-              className="font-serif font-semibold text-forest"
-              style={{ fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', letterSpacing: '-0.022em', lineHeight: 1.18 }}
-            >
-              Seven invitations.
-            </h2>
-          </Reveal>
-        </div>
-
-        {/* All invitations */}
-        {INVITATIONS.map((inv) => (
-          <InvitationEntry key={inv.id} inv={inv} />
-        ))}
-
-        {/* Closing note */}
-        <div style={{ borderTop: '1px solid rgba(42,74,48,0.09)', paddingTop: '2.5rem', paddingBottom: '4rem' }}>
-          <p className="font-sans" style={{ fontSize: '0.78rem', color: 'rgba(42,74,48,0.38)', lineHeight: 1.7 }}>
-            None of the seven above?{' '}
-            <a href="#parents" className="text-amber hover:text-amber-light transition-colors">
-              The eighth invitation is for parents →
-            </a>
-          </p>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ══════════════════════════════════════════════════════════════════
-   PARENTS / EARLY ACCESS
-══════════════════════════════════════════════════════════════════ */
-function ParentsSection() {
-  return (
-    <section
-      id="parents"
-      className="relative overflow-hidden"
-      style={{
-        background: 'var(--forest-dark)',
-        borderRadius: '2.5rem 2.5rem 0 0',
-        marginTop: '-2.5rem',
-        position: 'relative',
-        zIndex: 3,
-        scrollMarginTop: '5rem',
-      }}
-    >
-      <div className="absolute inset-0 bg-grain opacity-50 pointer-events-none" aria-hidden="true" />
-
-      {/* Pine branch accents */}
-      <div
-        className="absolute top-0 right-0 pointer-events-none opacity-[0.045]"
-        aria-hidden="true"
-        style={{ width: 'min(240px, 28vw)' }}
-      >
-        <PineBranch color="var(--cream)" flip />
-      </div>
-
-      <div
-        className="relative z-10 mx-auto px-6 md:px-12"
-        style={{ maxWidth: '620px', paddingTop: '6rem', paddingBottom: '6.5rem', textAlign: 'center' }}
-      >
-        {/* Eyebrow */}
-        <Reveal>
-          <p
-            className="font-sans"
-            style={{ fontSize: '0.52rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.62)', marginBottom: '1.5rem' }}
-          >
-            08 · For parents
-          </p>
-        </Reveal>
-
-        {/* Heading */}
-        <Reveal delay={0.08}>
-          <h2
-            className="font-serif font-semibold text-cream"
-            style={{ fontSize: 'clamp(1.7rem, 3.8vw, 2.75rem)', lineHeight: 1.16, letterSpacing: '-0.025em', marginBottom: '1.25rem' }}
-          >
-            And if you&rsquo;re here as a parent —<br />
-            you&rsquo;re the reason all of this exists.
-          </h2>
-        </Reveal>
-
-        {/* Body */}
-        <Reveal delay={0.14}>
-          <p
-            className="font-sans"
-            style={{ fontSize: '0.87rem', color: 'rgba(244,239,226,0.44)', lineHeight: 1.82, maxWidth: '42ch', margin: '0 auto 0.75rem' }}
-          >
-            We write only when there is something worth saying.
-            <br />
-            When the bear is closer, you&rsquo;ll be the first to know.
-          </p>
-          <p
-            className="font-sans"
-            style={{ fontSize: '0.72rem', color: 'rgba(244,239,226,0.22)', lineHeight: 1.6, maxWidth: '36ch', margin: '0 auto 2.75rem' }}
-          >
-            No pitch deck. No product launch spam. One note,
-            when it&rsquo;s ready.
-          </p>
-        </Reveal>
-
-        {/* Email capture */}
-        <Reveal delay={0.20}>
-          <EmailCapture dark buttonLabel="Notify Me" />
-        </Reveal>
-      </div>
-    </section>
-  )
-}
-
-/* ══════════════════════════════════════════════════════════════════
    PULL-UP SESSIONS WRAPPER
 ══════════════════════════════════════════════════════════════════ */
 function PullUpSessionsSection() {
@@ -635,8 +287,7 @@ function PullUpSessionsSection() {
 export default function BuildWithUsPage() {
   return (
     <>
-      <AfterBearSection />
-      <PullUpSessionsSection />
+      <SentenceHero />
       <FounderLetter />
 
       {/* Envelope section break */}
@@ -650,6 +301,8 @@ export default function BuildWithUsPage() {
       </div>
 
       <BuildWithUsCards />
+      <AfterBearSection />
+      <PullUpSessionsSection />
       <WorkshopSection />
     </>
   )
