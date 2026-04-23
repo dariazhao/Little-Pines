@@ -311,7 +311,7 @@ export function AfterHero() {
         {/* Mobile crop fades — hide green gap at top and globe overflow at bottom (z:18, above dark overlay, below quote z:20) */}
         <motion.div className="absolute inset-x-0 top-0 pointer-events-none lg:hidden" aria-hidden="true"
           style={{ height: '30%', background: 'linear-gradient(to bottom, var(--forest-dark) 45%, transparent 100%)', zIndex: 18, opacity: mobileCropTopOpacity }} />
-        <div className="absolute inset-x-0 bottom-0 pointer-events-none lg:hidden" aria-hidden="true"
+        <div className="absolute inset-x-0 bottom-0 pointer-events-none" aria-hidden="true"
           style={{ height: '24%', background: 'linear-gradient(to top, var(--forest-dark) 45%, transparent 100%)', zIndex: 18 }} />
 
         {/* Amber twilight bottom */}
