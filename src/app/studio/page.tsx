@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react'
 import Link from 'next/link'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { EmailCapture } from '@/components/email-capture'
@@ -423,16 +423,44 @@ function FounderLetter() {
             style={{ fontSize: 'clamp(0.97rem, 1.4vw, 1.07rem)', lineHeight: 1.88 }}
           >
             <p style={{ marginBottom: '1.5rem' }}>
-              In 2019 I left finance to co-found Learn With Mochi, a screen-free coding kit for young
-              children that has since shipped to families in 62 countries. I spent eight years listening
-              to what four-year-olds actually need, and I kept arriving at the same answer: not more
-              academic content, and not another screen. A quiet friend who helps them notice what they
-              feel.
+              Children are born with an extraordinary capacity to feel, notice, and express the full
+              range of human emotion. In the first years of life, they do this naturally: they cry when
+              they&rsquo;re sad, they laugh when they&rsquo;re delighted, they cling when they&rsquo;re
+              afraid. Parents, teachers, and cultures then spend the next decade — often without meaning
+              to — teaching them to suppress, ignore, and perform these feelings rather than notice,
+              name, and understand them. By the time a child is eight, most of them have lost the
+              vocabulary for what&rsquo;s happening inside them, even as the feelings themselves are
+              intensifying.
+            </p>
+            <p style={{ marginBottom: '1.5rem' }}>
+              The screen economy has accelerated this loss. Every minute a child spends on YouTube,
+              TikTok, or a tablet is a minute they&rsquo;re not sitting with their own interior life.
+              The dopamine reward cycle of short-form content trains children to flee from boredom,
+              from discomfort, from the quiet moments where self-awareness actually develops. Jonathan
+              Haidt documented the population-level consequences. But the individual consequence is
+              simpler and sadder: millions of children are growing up without the basic emotional
+              vocabulary and self-regulation skills that we carry with us through a lifetime.
+            </p>
+            <p style={{ marginBottom: '1.5rem' }}>
+              Montessori, Waldorf, and other child-development traditions have always understood that
+              emotional awareness is not separate from learning — it is the foundation of learning. A
+              child who cannot name their frustration cannot work through it. A child who cannot
+              recognize their excitement cannot channel it. Academic skills come later, and they come
+              more easily, when the emotional foundation is strong.
+            </p>
+            <p style={{ marginBottom: '1.5rem' }}>
+              Little Pines Studio exists because this foundation is being undermined faster than any
+              other part of childhood — and because the tools parents have been given to address it
+              (therapy apps, SEL curricula, meditation videos) are almost all delivered through the
+              same screens that caused the problem. The answer has to come from a different form factor
+              entirely: a quiet, unhurried, screen-free friend that lives in a child&rsquo;s room and
+              helps them notice what they feel, name it, sit with it, and move through it. Not a
+              therapist. Not a teacher. A friend.
             </p>
             <p>
-              The technical moment to build that friend arrived in 2026. Little Pines Studio is what I
-              would have built the first time, if the models had existed. We are going to build it slowly,
-              in public, and in partnership with people who care for the whole child.
+              I spent eight years at Learn With Mochi learning what four-year-olds actually need.
+              The technical moment to build this particular friend arrived in 2026. We are going to
+              build it slowly, in public, and in partnership with people who care for the whole child.
               If you are one of those people, I&rsquo;d like to meet you.
             </p>
             <p className="mt-10 font-serif italic text-forest-mid">&mdash;Daria</p>
@@ -588,13 +616,27 @@ function ParentsSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════
+   PULL-UP SESSIONS WRAPPER
+══════════════════════════════════════════════════════════════════ */
+function PullUpSessionsSection() {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'start 0.25'] })
+  const y = useTransform(scrollYProgress, [0, 1], [100, 0])
+  return (
+    <motion.div ref={ref} style={{ y, position: 'relative', zIndex: 5 }}>
+      <SessionsSection />
+    </motion.div>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════════
    PAGE
 ══════════════════════════════════════════════════════════════════ */
 export default function BuildWithUsPage() {
   return (
     <>
       <AfterBearSection />
-      <SessionsSection />
+      <PullUpSessionsSection />
       <FounderLetter />
 
       {/* Envelope section break */}

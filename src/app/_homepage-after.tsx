@@ -1101,7 +1101,7 @@ function BearSpotlight() {
         transition={{ duration: 1.4, ease: [0.19, 1, 0.22, 1] }}
       >
         <div
-          className="relative w-36 h-36 md:w-52 md:h-52"
+          className="relative w-52 h-52 md:w-72 md:h-72"
           style={{ animation: 'bear-breathe 5.5s ease-in-out infinite' }}
         >
           <Image
@@ -1425,10 +1425,8 @@ export function AfterBearSection() {
           </Reveal>
           <StaggerHeadline />
           <Reveal delay={0.35}>
-            <p className="font-sans text-sm text-cream/45 leading-relaxed mt-5 max-w-[46ch] mx-auto">
-              <span className="text-cream/75 font-medium">Asleep by default.</span>{' '}
-              Nine inches tall and infinitely patient. Made from the softest Peruvian alpaca.
-              Squeeze the paw and the bear wakes, ready to listen.
+            <p className="font-sans text-sm text-cream/60 leading-relaxed mt-5 max-w-[46ch] mx-auto">
+              Standing nine inches tall and endlessly patient, our flagship plush is made from the softest Peruvian alpaca. Squeeze its paw and the bear wakes, ready to listen.
             </p>
           </Reveal>
         </div>
