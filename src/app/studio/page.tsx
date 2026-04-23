@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import React, { useRef, useState } from 'react'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Reveal } from '@/components/ui/reveal'
 import { PineBranch } from '@/components/illustrations/pine-branch'
 import { WorkshopSection, AfterBearSection, SessionsSection } from '../_homepage-after'
@@ -38,9 +38,8 @@ function SentenceHero() {
       className="relative flex flex-col items-center justify-center overflow-hidden"
       style={{
         background: 'var(--forest-dark)',
-        minHeight: '100svh',
-        paddingTop: '8rem',
-        paddingBottom: '6rem',
+        paddingTop: '10rem',
+        paddingBottom: '9rem',
         textAlign: 'center',
       }}
     >
@@ -61,14 +60,37 @@ function SentenceHero() {
         ))}
       </svg>
 
+      {/* Concentric ring motif — depth and warmth */}
+      <div
+        className="absolute pointer-events-none"
+        aria-hidden="true"
+        style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
+      >
+        {([580, 440, 310] as const).map((size, i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              width: size,
+              height: size,
+              borderRadius: '50%',
+              border: `1px solid rgba(196,149,75,${0.055 - i * 0.012})`,
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        ))}
+      </div>
+
       {/* Amber radial bloom */}
       <div
         className="absolute inset-x-0 pointer-events-none"
         aria-hidden="true"
         style={{
-          top: '20%',
-          height: '60%',
-          background: 'radial-gradient(ellipse at 50% 50%, rgba(196,149,75,0.065) 0%, transparent 62%)',
+          top: '15%',
+          height: '70%',
+          background: 'radial-gradient(ellipse at 50% 50%, rgba(196,149,75,0.07) 0%, transparent 58%)',
         }}
       />
 
@@ -76,14 +98,14 @@ function SentenceHero() {
       <div
         className="absolute top-0 left-0 pointer-events-none opacity-[0.038]"
         aria-hidden="true"
-        style={{ width: 'min(240px, 30vw)', transform: 'rotate(-12deg) translateX(-14%)' }}
+        style={{ width: 'min(200px, 26vw)', transform: 'rotate(-12deg) translateX(-14%)' }}
       >
         <PineBranch color="var(--cream)" />
       </div>
       <div
         className="absolute bottom-0 right-0 pointer-events-none opacity-[0.038]"
         aria-hidden="true"
-        style={{ width: 'min(240px, 30vw)', transform: 'rotate(12deg) translateX(14%)' }}
+        style={{ width: 'min(200px, 26vw)', transform: 'rotate(12deg) translateX(14%)' }}
       >
         <PineBranch color="var(--cream)" flip />
       </div>
@@ -102,7 +124,7 @@ function SentenceHero() {
             letterSpacing: '0.28em',
             textTransform: 'uppercase',
             color: 'rgba(196,149,75,0.50)',
-            marginBottom: '3.5rem',
+            marginBottom: '3rem',
           }}
         >
           Little Pines Studio
@@ -138,58 +160,29 @@ function SentenceHero() {
         </div>
 
         {/* Amber underline draw-in */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '3.5rem' }}>
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 1.2, delay: 1.8, ease: [0.19, 1, 0.22, 1] }}
-            style={{
-              height: '1px',
-              width: '4rem',
-              background: 'rgba(196,149,75,0.50)',
-              transformOrigin: 'left center',
-            }}
-          />
-        </div>
-
-        {/* Scroll indicator */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, delay: 2.1 }}
-          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.45rem' }}
-          aria-hidden="true"
-        >
-          <p
-            className="font-sans"
-            style={{
-              fontSize: '0.48rem',
-              letterSpacing: '0.24em',
-              textTransform: 'uppercase',
-              color: 'rgba(244,239,226,0.18)',
-            }}
-          >
-            Scroll
-          </p>
-          <motion.div
-            animate={{ y: [0, 5, 0] }}
-            transition={{ duration: 1.7, repeat: Infinity, ease: 'easeInOut', delay: 2.4 }}
-          >
-            <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
-              <line x1="6" y1="1" x2="6" y2="12" stroke="rgba(244,239,226,0.18)" strokeWidth="1.2" strokeLinecap="round"/>
-              <path d="M3 9.5 L6 12.5 L9 9.5" stroke="rgba(244,239,226,0.18)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </motion.div>
-        </motion.div>
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 1.2, delay: 1.8, ease: [0.19, 1, 0.22, 1] }}
+          style={{
+            height: '1px',
+            width: '3.5rem',
+            background: 'rgba(196,149,75,0.50)',
+            transformOrigin: 'left center',
+            margin: '0 auto',
+          }}
+        />
       </div>
     </section>
   )
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   FOUNDER LETTER + ANCHOR NAV
+   FOUNDER LETTER
 ══════════════════════════════════════════════════════════════════ */
 function FounderLetter() {
+  const [expanded, setExpanded] = useState(false)
+
   return (
     <section
       id="build-with-us"
@@ -227,41 +220,94 @@ function FounderLetter() {
             className="font-serif text-charcoal"
             style={{ fontSize: 'clamp(0.97rem, 1.4vw, 1.07rem)', lineHeight: 1.88 }}
           >
+            {/* Always-visible first paragraph */}
             <p style={{ marginBottom: '1.5rem' }}>
-              The screen economy has accelerated this loss. Every minute a child spends on YouTube,
-              TikTok, or a tablet is a minute they&rsquo;re not sitting with their own interior life.
-              The dopamine reward cycle of short-form content trains children to flee from boredom,
-              from discomfort, from the quiet moments where self-awareness actually develops. Jonathan
-              Haidt documented the population-level consequences. But the individual consequence is
-              simpler and sadder: millions of children are growing up without the basic emotional
-              vocabulary and self-regulation skills that we carry with us through a lifetime.
+              In the first years of life, children do this naturally: they cry when they&rsquo;re
+              sad, they laugh when they&rsquo;re delighted, they cling when they&rsquo;re afraid,
+              they withdraw when they&rsquo;re overstimulated. Parents, teachers, and cultures then
+              spend the next decade of a child&rsquo;s life, often without meaning to, teaching them
+              to suppress, ignore, and perform these feelings rather than notice, name, and understand
+              them. By the time a child is eight, most of them have lost the vocabulary for what&rsquo;s
+              happening inside them, even as the feelings themselves are intensifying.
             </p>
-            <p style={{ marginBottom: '1.5rem' }}>
-              Montessori, Waldorf, and other child-development traditions have always understood that
-              emotional awareness is not separate from learning — it is the foundation of learning. A
-              child who cannot name their frustration cannot work through it. A child who cannot
-              recognize their excitement cannot channel it. Academic skills come later, and they come
-              more easily, when the emotional foundation is strong.
-            </p>
-            <p style={{ marginBottom: '1.5rem' }}>
-              Little Pines Studio exists because this foundation is being undermined faster than any
-              other part of childhood — and because the tools parents have been given to address it
-              (therapy apps, SEL curricula, meditation videos) are almost all delivered through the
-              same screens that caused the problem. The answer has to come from a different form factor
-              entirely: a quiet, unhurried, screen-free friend that lives in a child&rsquo;s room and
-              helps them notice what they feel, name it, sit with it, and move through it. Not a
-              therapist. Not a teacher. A friend.
-            </p>
-            <p>
-              I spent eight years at Learn With Mochi learning what four-year-olds actually need.
-              The technical moment to build this particular friend arrived in 2026. We are going to
-              build it slowly, in public, and in partnership with people who care for the whole child.
-              If you are one of those people, I&rsquo;d like to meet you.
-            </p>
-            <p className="mt-10 font-serif italic text-forest-mid">&mdash;Daria</p>
+
+            {/* Expandable rest of letter */}
+            <AnimatePresence initial={false}>
+              {expanded && (
+                <motion.div
+                  key="letter-body"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.55, ease: [0.19, 1, 0.22, 1] }}
+                  style={{ overflow: 'hidden' }}
+                >
+                  <p style={{ marginBottom: '1.5rem' }}>
+                    The screen economy has accelerated this loss. Every minute a child spends on YouTube,
+                    TikTok, or a tablet is a minute they&rsquo;re not sitting with their own interior life.
+                    The dopamine reward cycle of short-form content trains children to flee from boredom,
+                    from discomfort, from the quiet moments where self-awareness actually develops. Jonathan
+                    Haidt documented the population-level consequences. But the individual consequence is
+                    simpler and sadder: millions of children are growing up without the basic emotional
+                    vocabulary and self-regulation skills that we carry with us through a lifetime.
+                  </p>
+                  <p style={{ marginBottom: '1.5rem' }}>
+                    Montessori, Waldorf, and other child-development traditions have always understood that
+                    emotional awareness is not separate from learning — it is the foundation of learning. A
+                    child who cannot name their frustration cannot work through it. A child who cannot
+                    recognize their excitement cannot channel it. Academic skills come later, and they come
+                    more easily, when the emotional foundation is strong.
+                  </p>
+                  <p style={{ marginBottom: '1.5rem' }}>
+                    Little Pines Studio exists because this foundation is being undermined faster than any
+                    other part of childhood — and because the tools parents have been given to address it
+                    (therapy apps, SEL curricula, meditation videos) are almost all delivered through the
+                    same screens that caused the problem. The answer has to come from a different form factor
+                    entirely: a quiet, unhurried, screen-free friend that lives in a child&rsquo;s room and
+                    helps them notice what they feel, name it, sit with it, and move through it. Not a
+                    therapist. Not a teacher. A friend.
+                  </p>
+                  <p style={{ marginBottom: '1.5rem' }}>
+                    I spent eight years at Learn With Mochi learning what four-year-olds actually need.
+                    The technical moment to build this particular friend arrived in 2026. We are going to
+                    build it slowly, in public, and in partnership with people who care for the whole child.
+                    If you are one of those people, I&rsquo;d like to meet you.
+                  </p>
+                  <p className="font-serif italic" style={{ color: 'var(--forest)', opacity: 0.6, marginTop: '2rem' }}>
+                    &mdash;Daria
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Toggle button */}
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="font-sans inline-flex items-center gap-2 transition-colors mt-2"
+              style={{
+                fontSize: '0.72rem',
+                letterSpacing: '0.04em',
+                color: expanded ? 'rgba(42,74,48,0.38)' : 'var(--amber)',
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                cursor: 'pointer',
+              }}
+            >
+              <span>{expanded ? 'Collapse' : 'Read the full invitation'}</span>
+              <motion.svg
+                width="13"
+                height="13"
+                viewBox="0 0 13 13"
+                fill="none"
+                animate={{ rotate: expanded ? 180 : 0 }}
+                transition={{ duration: 0.3, ease: [0.19, 1, 0.22, 1] }}
+              >
+                <path d="M2 4.5 L6.5 9 L11 4.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+              </motion.svg>
+            </button>
           </div>
         </Reveal>
-
       </div>
     </section>
   )
@@ -288,6 +334,8 @@ export default function BuildWithUsPage() {
   return (
     <>
       <SentenceHero />
+      <AfterBearSection />
+      <PullUpSessionsSection />
       <FounderLetter />
 
       {/* Envelope section break */}
@@ -301,8 +349,6 @@ export default function BuildWithUsPage() {
       </div>
 
       <BuildWithUsCards />
-      <AfterBearSection />
-      <PullUpSessionsSection />
       <WorkshopSection />
     </>
   )
