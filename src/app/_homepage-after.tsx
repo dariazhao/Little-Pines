@@ -305,6 +305,12 @@ export function AfterHero() {
           aria-hidden="true"
         />
 
+        {/* Mobile crop fades — hide green gap at top and globe overflow at bottom (z:18, above dark overlay, below quote z:20) */}
+        <div className="absolute inset-x-0 top-0 pointer-events-none lg:hidden" aria-hidden="true"
+          style={{ height: '30%', background: 'linear-gradient(to bottom, var(--forest-dark) 45%, transparent 100%)', zIndex: 18 }} />
+        <div className="absolute inset-x-0 bottom-0 pointer-events-none lg:hidden" aria-hidden="true"
+          style={{ height: '24%', background: 'linear-gradient(to top, var(--forest-dark) 45%, transparent 100%)', zIndex: 18 }} />
+
         {/* Amber twilight bottom */}
         <div className="absolute inset-x-0 bottom-0 pointer-events-none" aria-hidden="true"
           style={{ height: '140px', background: 'linear-gradient(to top, rgba(196,149,75,0.09) 0%, transparent 100%)' }} />
@@ -417,7 +423,7 @@ export function AfterHero() {
             style={{
               y: quoteY,
               color: 'var(--forest)',
-              fontSize: 'clamp(1.6rem, 4vw, 3.2rem)',
+              fontSize: 'clamp(2rem, 5vw, 3.5rem)',
               lineHeight: 1.22,
               letterSpacing: '-0.015em',
               maxWidth: '22ch',
