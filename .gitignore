@@ -1,0 +1,16 @@
+.vercel
+node_modules/
+.next/
+out/
+.env*
+!.env.example
+.DS_Store
+*.pem
+npm-debug.log*
+
+# Local folders not part of this project
+Nano Banana/
+Photos/
+v0/
+v1/
+tsconfig.tsbuildinfo
