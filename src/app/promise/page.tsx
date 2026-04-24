@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { FileText, GitFork, MessageCircle, Github } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
@@ -54,6 +54,18 @@ const CONTRIBUTE = [
   { Icon: FileText,      title: 'Translate',       desc: 'A family in São Paulo should not need to read English to use these sessions. Open a pull request.' },
   { Icon: MessageCircle, title: 'Ask in public',   desc: 'Found something wrong? Have a question about the pedagogy? Say it publicly — we answer publicly.' },
 ]
+
+/* ─── Mobile detection ──────────────────────────────────────────── */
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+  return mobile
+}
 
 /* ─── Static star field ─────────────────────────────────────────── */
 const HERO_STARS: [number, number, number][] = [
@@ -375,12 +387,20 @@ function OpenSourceSection() {
 
 /* ─── Page ──────────────────────────────────────────────────────── */
 export default function PromisePage() {
+  const heroRef = useRef<HTMLDivElement>(null)
+  const isMobile = useIsMobile()
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
+  const carouselY = useTransform(scrollYProgress, [0, 1], ['0px', '-60px'])
+
   return (
     <>
-      <PromiseHero />
+      <div ref={heroRef}>
+        <PromiseHero />
+      </div>
 
-      {/* Horizontal scroll commitment carousel */}
-      <section style={{ background: 'var(--cream)', paddingTop: 'clamp(3.5rem, 7vw, 5.5rem)', paddingBottom: 'clamp(3.5rem, 7vw, 5.5rem)', overflow: 'hidden', position: 'relative' }}>
+      {/* Horizontal scroll commitment carousel — pulled up on scroll, rounded top corners */}
+      <motion.div style={{ y: isMobile ? 0 : carouselY }}>
+      <section style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', paddingTop: 'clamp(3.5rem, 7vw, 5.5rem)', paddingBottom: 'clamp(3.5rem, 7vw, 5.5rem)', overflow: 'hidden', position: 'relative', zIndex: 2 }}>
         <style>{`.promise-scroll::-webkit-scrollbar { display: none; }`}</style>
         <div
           className="absolute pointer-events-none"
@@ -405,6 +425,7 @@ export default function PromisePage() {
           <div style={{ flexShrink: 0, width: 'clamp(1.5rem, 7vw, 5rem)' }} />
         </div>
       </section>
+      </motion.div>
 
       <OpenSourceSection />
     </>

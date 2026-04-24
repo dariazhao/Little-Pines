@@ -1,12 +1,13 @@
 'use client'
 
 import React, { useRef, useState } from 'react'
-import { motion, useScroll, useTransform, AnimatePresence, MotionValue } from 'framer-motion'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { PineBranch } from '@/components/illustrations/pine-branch'
 import { WorkshopSection, AfterBearSection, SessionsSection, ShootingStars } from '../_homepage-after'
 import { CARDS } from './_cards'
+import { Globe } from '@/components/globe'
 
 /* ─── Mobile detection (disables parallax on phones) ───────────── */
 function useIsMobile() {
@@ -184,28 +185,12 @@ function WaxSeal({ onClick, open }: { onClick: () => void; open: boolean }) {
 }
 
 /* ─── Hero ──────────────────────────────────────────────────────── */
-function InvitationHero({ bgY, isMobile }: { bgY: MotionValue<string>; isMobile: boolean }) {
+function InvitationHero() {
   return (
     <section
       className="relative flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: 'var(--forest-dark)', paddingTop: '11rem', paddingBottom: '10rem', textAlign: 'center', minHeight: '100svh' }}
+      style={{ background: 'var(--forest-dark)', paddingTop: '11rem', paddingBottom: '4rem', textAlign: 'center', minHeight: '100svh' }}
     >
-      {/* Petit Prince background — extends beyond section so parallax has room to move */}
-      <motion.div
-        className="absolute pointer-events-none"
-        aria-hidden="true"
-        style={{
-          top: '-15%', bottom: '-15%', left: 0, right: 0,
-          backgroundImage: "url('/petitprince.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 30%',
-          y: isMobile ? '0%' : bgY,
-        }}
-      />
-      {/* Dark overlay */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true"
-        style={{ background: 'rgba(14,32,16,0.86)' }}
-      />
       <div className="absolute inset-0 bg-grain opacity-50 pointer-events-none" aria-hidden="true" />
 
       {/* Static stars */}
@@ -247,7 +232,21 @@ function InvitationHero({ bgY, isMobile }: { bgY: MotionValue<string>; isMobile:
         <PineBranch color="var(--cream)" flip />
       </div>
 
-      <div className="relative z-10 px-6" style={{ maxWidth: 'min(920px, 92vw)' }}>
+      {/* Globe peeking at bottom — top arc only */}
+      <motion.div
+        className="absolute pointer-events-none"
+        aria-hidden="true"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.8, delay: 1.2 }}
+        style={{ bottom: 0, left: '50%', transform: 'translateX(-50%)', width: 'min(680px, 90vw)', height: 'min(240px, 24vh)', overflow: 'hidden', zIndex: 1 }}
+      >
+        <div style={{ width: '100%', aspectRatio: '1' }}>
+          <Globe style={{ width: '100%', height: '100%', display: 'block' }} />
+        </div>
+      </motion.div>
+
+      <div className="relative z-10 px-6" style={{ maxWidth: 'min(920px, 92vw)', zIndex: 10 }}>
         {/* Eyebrow */}
         <motion.p className="font-sans" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.1 }}
           style={{ fontSize: '0.52rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.50)', marginBottom: '3rem' }}>
@@ -528,14 +527,13 @@ export default function BuildWithUsPage() {
   const isMobile = useIsMobile()
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
 
-  // Parallax: bg image rises, letter section gets pulled up — desktop/tablet only
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '-22%'])
+  // Pull the founder letter upward as hero scrolls out — desktop/tablet only
   const letterY = useTransform(scrollYProgress, [0, 1], ['0px', '-60px'])
 
   return (
     <>
       <div ref={heroRef}>
-        <InvitationHero bgY={bgY} isMobile={isMobile} />
+        <InvitationHero />
       </div>
       <motion.div style={{ y: isMobile ? 0 : letterY }}>
         <FounderLetter />
