@@ -266,6 +266,8 @@ export function AfterHero() {
 
   // Mobile top crop — fades in after hero text is gone so it never covers eyebrow
   const mobileCropTopOpacity = useTransform(scrollYProgress, [0.15, 0.28], [0, 1])
+  // CTA button fades slower — lingers until globe is near max enlarged size
+  const ctaOpacity = useTransform(scrollYProgress, [0.35, 0.62], [1, 0])
   // Bottom globe fade — scroll-activated, invisible at rest
   const globeBottomFadeOpacity = useTransform(scrollYProgress, [0.50, 0.90], [0, 1])
 
@@ -327,50 +329,51 @@ export function AfterHero() {
           <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-20 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 items-start lg:items-center pt-24 lg:pt-0" style={{ minHeight: '100vh' }}>
 
-              {/* Left column — fades out on scroll */}
-              <motion.div
-                className="flex flex-col justify-center items-center lg:items-start lg:py-32"
-                style={{ opacity: heroOpacity, y: heroY }}
-              >
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15, duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
-                  className="font-sans text-[0.64rem] tracking-[0.2em] uppercase text-sage-light/55 mb-7 text-center lg:text-left"
-                >
-                  For ages 3–7<br className="lg:hidden" />
-                  <span className="hidden lg:inline">&nbsp;·&nbsp;</span>Shipping holiday 2027
-                </motion.p>
+              {/* Left column — title/desc fade fast; CTA lingers */}
+              <div className="flex flex-col justify-center items-center lg:items-start lg:py-32">
+                <motion.div style={{ opacity: heroOpacity, y: heroY }}>
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15, duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
+                    className="font-sans text-[0.64rem] tracking-[0.2em] uppercase text-sage-light/55 mb-7 text-center lg:text-left"
+                  >
+                    For ages 3–7<br className="lg:hidden" />
+                    <span className="hidden lg:inline">&nbsp;·&nbsp;</span>Shipping holiday 2027
+                  </motion.p>
 
-                <motion.h1
-                  initial={{ opacity: 0, y: 22 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.28, duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
-                  className="font-serif font-semibold text-cream leading-[1.04] tracking-tight mb-9 text-center lg:text-left"
-                  style={{ fontSize: 'clamp(3rem, 5.5vw, 5rem)' }}
-                >
-                  <span style={{ position: 'relative', display: 'inline-block', whiteSpace: 'nowrap' }}>
-                    <em style={{ color: 'var(--amber-light)', fontStyle: 'inherit' }}>Big feelings</em>
-                    <svg aria-hidden="true" viewBox="0 0 100 7" preserveAspectRatio="none"
-                      style={{ position: 'absolute', left: '2%', bottom: '-5px', width: '96%', height: '7px', pointerEvents: 'none' }}>
-                      <path d="M0,5 C8,1.5 16,6 25,3.5 C34,1 43,6 52,3.5 C61,1 70,6 79,3.5 C88,1 95,5.5 100,4"
-                        fill="none" stroke="var(--amber-light)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" opacity="0.85" />
-                    </svg>
-                  </span>
-                  {' '}are{' '}<br className="hidden lg:inline" />hard to hold{' '}<br className="hidden lg:inline" />alone.
-                </motion.h1>
+                  <motion.h1
+                    initial={{ opacity: 0, y: 22 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.28, duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+                    className="font-serif font-semibold text-cream leading-[1.04] tracking-tight mb-9 text-center lg:text-left"
+                    style={{ fontSize: 'clamp(3rem, 5.5vw, 5rem)' }}
+                  >
+                    <span style={{ position: 'relative', display: 'inline-block', whiteSpace: 'nowrap' }}>
+                      <em style={{ color: 'var(--amber-light)', fontStyle: 'inherit' }}>Big feelings</em>
+                      <svg aria-hidden="true" viewBox="0 0 100 7" preserveAspectRatio="none"
+                        style={{ position: 'absolute', left: '2%', bottom: '-5px', width: '96%', height: '7px', pointerEvents: 'none' }}>
+                        <path d="M0,5 C8,1.5 16,6 25,3.5 C34,1 43,6 52,3.5 C61,1 70,6 79,3.5 C88,1 95,5.5 100,4"
+                          fill="none" stroke="var(--amber-light)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" opacity="0.85" />
+                      </svg>
+                    </span>
+                    {' '}are{' '}<br className="hidden lg:inline" />hard to hold{' '}<br className="hidden lg:inline" />alone.
+                  </motion.h1>
 
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.44, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-                  className="font-sans text-sm leading-relaxed text-cream/45 mb-10 text-center lg:text-left mx-auto lg:mx-0"
-                  style={{ maxWidth: '38ch' }}
-                >
-                  We are an open-source toy studio that helps kids ages 3–7 notice and name what they feel. Designed in partnership with child psychologists, Montessori educators, and the parents who love them dearly.
-                </motion.p>
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.44, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+                    className="font-sans text-sm leading-relaxed text-cream/45 text-center lg:text-left mx-auto lg:mx-0"
+                    style={{ maxWidth: '38ch' }}
+                  >
+                    We are an open-source toy studio that helps kids ages 3–7 notice and name what they feel. Designed in partnership with child psychologists, Montessori educators, and the parents who love them dearly.
+                  </motion.p>
+                </motion.div>
 
+                {/* CTA — separate fade, lingers until globe near max */}
                 <motion.div
+                  style={{ opacity: ctaOpacity, y: heroY, marginTop: '2.5rem' }}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.54, duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
@@ -380,10 +383,18 @@ export function AfterHero() {
                     href="#why-we-exist"
                     className="font-sans text-sm text-cream/80 hover:text-cream transition-all duration-200 flex items-center gap-2.5 px-5 py-2 border border-cream/40 hover:border-cream/70 rounded-sm"
                   >
-                    Read the concept brief <span aria-hidden="true" style={{ fontSize: '1rem', lineHeight: 1 }}>↓</span>
+                    Read the concept brief{' '}
+                    <motion.span
+                      aria-hidden="true"
+                      style={{ display: 'inline-block', fontSize: '1rem', lineHeight: 1 }}
+                      animate={{ y: [0, 4, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', repeatDelay: 0.4 }}
+                    >
+                      ↓
+                    </motion.span>
                   </a>
                 </motion.div>
-              </motion.div>
+              </div>
 
               {/* Right column — globe grows + drifts to center */}
               <motion.div
@@ -1359,21 +1370,20 @@ function ConceptPaperSection() {
           </div>
         </div>
 
-        {/* CC footer + Build with us CTA */}
-        <Reveal delay={0.18}>
-          <div className="mt-14 pt-7 border-t border-charcoal/8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <p className="font-sans text-xs text-charcoal/45">
-              Released under CC BY‑SA 4.0. Share freely; attribute Little Pines Studio.
-            </p>
-            <Link
-              href="/promise"
-              className="shrink-0 inline-flex items-center gap-2 font-sans text-sm text-amber hover:text-amber-light transition-colors duration-200 whitespace-nowrap"
-            >
-              <ArrowRight className="w-3.5 h-3.5" />
-              The Little Pines Promise
-            </Link>
+        {/* Three commitments — hover to reveal, no standalone heading */}
+        <div style={{ marginTop: '4rem', paddingBottom: '2rem' }}>
+          <div style={{
+            width: '56px',
+            height: '1px',
+            background: 'linear-gradient(to right, rgba(42,74,48,0.25), transparent)',
+            marginBottom: '2.75rem',
+          }} />
+          <div style={{ display: 'flex', gap: 'clamp(0.5rem, 1.2vw, 0.85rem)' }}>
+            {METHOD_PANELS.map(({ num, title, body, Icon }, i) => (
+              <HoverRevealCard key={num} num={num} title={title} body={body} Icon={Icon} delay={0.06 + i * 0.09} />
+            ))}
           </div>
-        </Reveal>
+        </div>
 
       </motion.div>
     </motion.section>
@@ -1654,6 +1664,17 @@ function AfterEarlyAccessSection() {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const contentY = useTransform(scrollYProgress, [0, 1], [32, -32])
+  const starsY   = useTransform(scrollYProgress, [0, 1], ['-6%', '6%'])
+  const forestY  = useTransform(scrollYProgress, [0, 1], ['-3%', '3%'])
+
+  const [isDesktop, setIsDesktop] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)')
+    setIsDesktop(mq.matches)
+    const h = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
+    mq.addEventListener('change', h)
+    return () => mq.removeEventListener('change', h)
+  }, [])
 
   return (
     <section
@@ -1671,15 +1692,23 @@ function AfterEarlyAccessSection() {
       <div className="absolute inset-0 bg-grain opacity-55 pointer-events-none" aria-hidden="true" />
       <PineNeedles color="var(--sage-light)" />
 
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{ y: isDesktop ? starsY : 0 }}
+        aria-hidden="true"
+      >
         <StarField />
-      </div>
+      </motion.div>
       <TwinklingStars />
       <ShootingStars />
 
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{ y: isDesktop ? forestY : 0 }}
+        aria-hidden="true"
+      >
         <ForestSilhouette />
-      </div>
+      </motion.div>
 
       <motion.div className="relative z-10 text-center px-6 max-w-md mx-auto" style={{ y: contentY }}>
         <p className="font-sans text-[0.64rem] tracking-[0.2em] uppercase text-sage-light/65 mb-4">
@@ -1756,94 +1785,125 @@ function EpigraphSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   COMMITMENTS — FLIP CARDS
+   COMMITMENTS — HOVER REVEAL CARDS
 ══════════════════════════════════════════════════════════════════ */
-function FlipCard({ num, title, body, Icon, delay }: {
+function HoverRevealCard({ num, title, body, Icon, delay }: {
   num: string; title: string; body: string; Icon: IconComp; delay: number
 }) {
-  const [flipped, setFlipped] = useState(false)
+  const [hovered, setHovered] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, amount: 0.25 })
+  const inView = useInView(ref, { once: true, amount: 0.2 })
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 22 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.75, delay, ease: [0.19, 1, 0.22, 1] }}
-      onClick={() => setFlipped(f => !f)}
-      style={{ perspective: '1000px', cursor: 'pointer', flex: 1, minWidth: 0 }}
+      transition={{ duration: 0.85, delay, ease: [0.19, 1, 0.22, 1] }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      style={{
+        flex: 1,
+        minWidth: 0,
+        position: 'relative',
+        borderRadius: '0.75rem',
+        overflow: 'hidden',
+        cursor: 'default',
+        height: 'clamp(260px, 28vw, 380px)',
+        background: 'var(--cream)',
+        border: '1px solid rgba(42,74,48,0.09)',
+      }}
     >
-      <motion.div
-        animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ duration: 0.55, ease: [0.19, 1, 0.22, 1] }}
+      {/* Giant ghost number watermark */}
+      <span
+        aria-hidden="true"
         style={{
-          transformStyle: 'preserve-3d',
-          WebkitTransformStyle: 'preserve-3d',
-          position: 'relative',
-          height: 'clamp(220px, 28vw, 310px)',
+          position: 'absolute',
+          bottom: '-0.15em',
+          right: '-0.04em',
+          fontSize: 'clamp(7rem, 18vw, 14rem)',
+          fontWeight: 800,
+          fontFamily: 'Georgia, serif',
+          color: 'var(--forest)',
+          opacity: 0.042,
+          lineHeight: 1,
+          userSelect: 'none',
+          pointerEvents: 'none',
+          letterSpacing: '-0.05em',
         }}
       >
-        {/* Front */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          backfaceVisibility: 'hidden',
-          WebkitBackfaceVisibility: 'hidden',
-          background: 'var(--cream)',
-          border: '1px solid rgba(42,74,48,0.10)',
-          borderRadius: '0.85rem',
-          padding: 'clamp(1.25rem, 2.5vw, 2rem)',
-          display: 'flex', flexDirection: 'column',
-        }}>
-          <div style={{ marginBottom: 'clamp(0.75rem, 1.5vw, 1.25rem)' }}>
-            <Icon active={inView} size={40} />
-          </div>
-          <p className="font-sans uppercase text-amber" style={{ fontSize: '0.48rem', letterSpacing: '0.24em', marginBottom: '0.5rem' }}>{num}</p>
-          <h3 className="font-serif font-semibold text-forest" style={{ fontSize: 'clamp(1.1rem, 1.8vw, 1.5rem)', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '0.65rem' }}>{title}</h3>
-          <div style={{ height: '1px', width: '1.5rem', background: 'var(--amber)', opacity: 0.65 }} />
-          <p className="font-sans text-forest/28 uppercase mt-auto" style={{ fontSize: '0.46rem', letterSpacing: '0.18em' }}>Tap to reveal</p>
-        </div>
+        {num}
+      </span>
 
-        {/* Back */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          backfaceVisibility: 'hidden',
-          WebkitBackfaceVisibility: 'hidden',
-          transform: 'rotateY(180deg)',
-          background: 'var(--forest)',
-          borderRadius: '0.85rem',
-          padding: 'clamp(1.25rem, 2.5vw, 2rem)',
-          display: 'flex', flexDirection: 'column', justifyContent: 'center',
-        }}>
-          <p className="font-sans uppercase text-amber/60" style={{ fontSize: '0.46rem', letterSpacing: '0.22em', marginBottom: '0.85rem' }}>{num} · {title}</p>
-          <p className="font-serif text-cream/80" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 1rem)', lineHeight: 1.78 }}>{body}</p>
-          <p className="font-sans text-cream/22 uppercase mt-auto" style={{ fontSize: '0.44rem', letterSpacing: '0.18em' }}>Tap to close</p>
+      {/* Front content */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          padding: 'clamp(1.4rem, 2.5vw, 2.25rem)',
+          display: 'flex',
+          flexDirection: 'column',
+          zIndex: 1,
+        }}
+      >
+        <div style={{ marginBottom: '0.9rem' }}>
+          <Icon active={inView} size={34} />
         </div>
+        <p
+          className="font-sans"
+          style={{ fontSize: '0.44rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'var(--amber)', marginBottom: '0.55rem' }}
+        >
+          {num}
+        </p>
+        <h3
+          className="font-serif"
+          style={{
+            fontSize: 'clamp(1.9rem, 4.5vw, 3.8rem)',
+            fontWeight: 700,
+            letterSpacing: '-0.03em',
+            lineHeight: 0.95,
+            color: 'var(--forest)',
+          }}
+        >
+          {title}
+        </h3>
+        <motion.div
+          animate={{ width: hovered ? '3rem' : '1.25rem' }}
+          transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
+          style={{ height: '1px', background: 'var(--amber)', opacity: 0.6, marginTop: '0.85rem' }}
+        />
+      </div>
+
+      {/* Hover reveal — slides up from bottom */}
+      <motion.div
+        initial={false}
+        animate={{ y: hovered ? 0 : '102%' }}
+        transition={{ duration: 0.42, ease: [0.19, 1, 0.22, 1] }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'var(--forest)',
+          padding: 'clamp(1.4rem, 2.5vw, 2.25rem)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          zIndex: 2,
+        }}
+      >
+        <p
+          className="font-sans"
+          style={{ fontSize: '0.44rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.65)', marginBottom: '1rem' }}
+        >
+          {num} · {title}
+        </p>
+        <p
+          className="font-serif"
+          style={{ fontSize: 'clamp(0.92rem, 1.3vw, 1.06rem)', lineHeight: 1.8, color: 'rgba(244,239,226,0.82)' }}
+        >
+          {body}
+        </p>
       </motion.div>
     </motion.div>
-  )
-}
-
-function CommitmentsFlipSection() {
-  return (
-    <section style={{ background: 'var(--cream-dark)', position: 'relative', zIndex: 5, borderRadius: '2rem 2rem 0 0', marginTop: '-2rem' }}>
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-20 pt-14 pb-16 md:pt-16 md:pb-20">
-        <Reveal className="mb-10">
-          <p className="font-sans uppercase text-forest/32 mb-2" style={{ fontSize: '0.56rem', letterSpacing: '0.22em' }}>
-            The Little Pines Promise
-          </p>
-          <h2 className="font-serif font-semibold text-forest" style={{ fontSize: 'clamp(1.4rem, 2.5vw, 2rem)', letterSpacing: '-0.022em', lineHeight: 1.2 }}>
-            Three decisions that constrain<br className="hidden lg:inline" /> everything we build.
-          </h2>
-        </Reveal>
-
-        <div style={{ display: 'flex', gap: 'clamp(0.5rem, 1.5vw, 1rem)' }}>
-          {METHOD_PANELS.map(({ num, title, body, Icon }, i) => (
-            <FlipCard key={num} num={num} title={title} body={body} Icon={Icon} delay={0.08 + i * 0.10} />
-          ))}
-        </div>
-      </div>
-    </section>
   )
 }
 
@@ -1852,7 +1912,6 @@ export function AfterHomePage() {
     <>
       <AfterHero />
       <ConceptPaperSection />
-      <CommitmentsFlipSection />
       <AfterEarlyAccessSection />
     </>
   )
