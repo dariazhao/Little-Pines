@@ -21,13 +21,13 @@ const PROMISES = [
   },
   {
     num: '03',
-    title: "We don’t measure minutes.",
-    body: "When a child is ready to stop, that’s good. Success looks like a child with more words for what they feel — and humans in their life who know them a little better.",
+    title: "We don't measure minutes.",
+    body: "When a child is ready to stop, that's good. Success looks like a child with more words for what they feel — and humans in their life who know them a little better.",
   },
   {
     num: '04',
-    title: "The bear listens. It doesn’t lead.",
-    body: "It won’t instruct, correct, or advise. It reflects and steps back. The work of raising a child belongs to the humans who love them.",
+    title: "The bear listens. It doesn't lead.",
+    body: "It won't instruct, correct, or advise. It reflects and steps back. The work of raising a child belongs to the humans who love them.",
   },
   {
     num: '05',
@@ -164,37 +164,35 @@ function PromiseHero() {
           style={{ height: '1px', width: '3rem', background: 'rgba(196,149,75,0.5)', transformOrigin: 'left center', margin: '0 auto 2.5rem' }}
         />
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2.0 }}
-          className="flex items-center justify-center gap-2.5"
-          style={{ color: 'rgba(196,149,75,0.35)' }}
-        >
-          <div style={{ width: '24px', height: '1px', background: 'rgba(196,149,75,0.35)' }} />
-          <span className="font-sans" style={{ fontSize: '0.52rem', letterSpacing: '0.22em', textTransform: 'uppercase' }}>
-            Read them
-          </span>
-          <div style={{ width: '24px', height: '1px', background: 'rgba(196,149,75,0.35)' }} />
+        {/* Floating down arrow */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 2.0 }} className="flex justify-center">
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ color: 'rgba(196,149,75,0.32)' }}
+          >
+            <svg width="14" height="22" viewBox="0 0 14 22" fill="none" aria-hidden="true">
+              <path d="M7 2 V18 M2 13 L7 18 L12 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </motion.div>
         </motion.div>
       </div>
     </section>
   )
 }
 
-/* ─── Commitment block ──────────────────────────────────────────── */
-function CommitmentItem({ num, title, body, index }: { num: string; title: string; body: string; index: number }) {
+/* ─── Commitment card (2×3 grid) ────────────────────────────────── */
+function CommitmentCard({ num, title, body, index }: { num: string; title: string; body: string; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, amount: 0.18 })
+  const isInView = useInView(ref, { once: true, amount: 0.15 })
 
   return (
     <div
       ref={ref}
-      className="relative"
+      className="promise-card relative"
       style={{
-        borderBottom: index < 5 ? '1px solid rgba(42,74,48,0.07)' : 'none',
-        paddingTop: 'clamp(3.5rem, 6vw, 5rem)',
-        paddingBottom: 'clamp(3.5rem, 6vw, 5rem)',
+        padding: 'clamp(2.25rem, 4vw, 3.25rem)',
+        borderBottom: '1px solid rgba(42,74,48,0.07)',
         overflow: 'hidden',
       }}
     >
@@ -203,13 +201,12 @@ function CommitmentItem({ num, title, body, index }: { num: string; title: strin
         className="absolute pointer-events-none select-none font-serif font-black"
         aria-hidden="true"
         style={{
-          fontSize: 'clamp(7rem, 18vw, 14rem)',
+          fontSize: 'clamp(5.5rem, 12vw, 9rem)',
           lineHeight: 1,
           letterSpacing: '-0.06em',
-          color: 'rgba(42,74,48,0.04)',
-          top: '50%',
-          right: '-0.5%',
-          transform: 'translateY(-50%)',
+          color: 'rgba(42,74,48,0.035)',
+          bottom: '-0.15em',
+          right: '-0.05em',
         }}
       >
         {num}
@@ -222,10 +219,10 @@ function CommitmentItem({ num, title, body, index }: { num: string; title: strin
         transition={{ duration: 1.1, delay: 0.05, ease: [0.19, 1, 0.22, 1] }}
         style={{
           height: '1.5px',
-          width: 'clamp(2rem, 5vw, 3rem)',
+          width: 'clamp(1.75rem, 4vw, 2.5rem)',
           background: 'rgba(196,149,75,0.6)',
           transformOrigin: 'left center',
-          marginBottom: '1.5rem',
+          marginBottom: '1.25rem',
         }}
       />
 
@@ -235,7 +232,7 @@ function CommitmentItem({ num, title, body, index }: { num: string; title: strin
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
         transition={{ duration: 0.7, delay: 0.1 }}
-        style={{ fontSize: '0.5rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.45)', marginBottom: '1.25rem' }}
+        style={{ fontSize: '0.5rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.45)', marginBottom: '1rem' }}
       >
         {num}
       </motion.p>
@@ -243,18 +240,17 @@ function CommitmentItem({ num, title, body, index }: { num: string; title: strin
       {/* Title */}
       <motion.h2
         className="font-serif"
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
         style={{
-          fontSize: 'clamp(2.2rem, 5vw, 4.2rem)',
+          fontSize: 'clamp(1.45rem, 2.8vw, 2.2rem)',
           fontWeight: 600,
           fontStyle: 'italic',
-          lineHeight: 1.08,
-          letterSpacing: '-0.035em',
+          lineHeight: 1.1,
+          letterSpacing: '-0.03em',
           color: 'var(--forest)',
-          marginBottom: '1.5rem',
-          maxWidth: '20ch',
+          marginBottom: '0.9rem',
         }}
       >
         {title}
@@ -263,84 +259,18 @@ function CommitmentItem({ num, title, body, index }: { num: string; title: strin
       {/* Body */}
       <motion.p
         className="font-sans"
-        initial={{ opacity: 0, y: 8 }}
+        initial={{ opacity: 0, y: 6 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8, delay: 0.25, ease: [0.19, 1, 0.22, 1] }}
         style={{
-          fontSize: 'clamp(0.9rem, 1.4vw, 1.0rem)',
-          lineHeight: 1.85,
-          color: 'rgba(40,40,40,0.50)',
-          maxWidth: '52ch',
+          fontSize: 'clamp(0.84rem, 1.2vw, 0.94rem)',
+          lineHeight: 1.82,
+          color: 'rgba(40,40,40,0.48)',
         }}
       >
         {body}
       </motion.p>
     </div>
-  )
-}
-
-/* ─── CTA Bridge ────────────────────────────────────────────────── */
-function CtaBridge() {
-  return (
-    <section
-      style={{
-        background: 'var(--forest-dark)',
-        borderRadius: '2rem 2rem 0 0',
-        marginTop: '-2rem',
-        position: 'relative',
-        zIndex: 3,
-        overflow: 'hidden',
-        padding: 'clamp(4.5rem, 9vw, 8rem) 1.5rem',
-        textAlign: 'center',
-      }}
-    >
-      <div className="absolute inset-0 bg-grain opacity-45 pointer-events-none" aria-hidden="true" />
-
-      <div className="absolute inset-x-0 pointer-events-none" aria-hidden="true" style={{
-        top: '10%', height: '80%',
-        background: 'radial-gradient(ellipse at 50% 50%, rgba(196,149,75,0.08) 0%, transparent 62%)',
-      }} />
-
-      <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
-        {HERO_STARS.slice(0, 20).map(([x, y, r], i) => (
-          <circle key={i} cx={`${x}%`} cy={`${y}%`} r={r * 0.85} fill="rgba(244,239,226,1)" opacity={0.07 + (i % 5) * 0.035} />
-        ))}
-      </svg>
-
-      <div className="relative z-10" style={{ maxWidth: 'min(580px, 90vw)', marginInline: 'auto' }}>
-        <Reveal>
-          <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(196,149,75,0.38)', marginBottom: '2.5rem' }}>
-            Early access
-          </p>
-        </Reveal>
-        <Reveal delay={0.08}>
-          <div style={{ marginBottom: '2.75rem' }}>
-            <span className="font-serif block" style={{ fontSize: 'clamp(2.6rem, 6vw, 4.8rem)', fontWeight: 300, lineHeight: 1.05, letterSpacing: '-0.04em', color: 'rgba(244,239,226,0.65)' }}>
-              Hold a place
-            </span>
-            <span className="font-serif block" style={{ fontSize: 'clamp(2.6rem, 6vw, 4.8rem)', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.05, letterSpacing: '-0.04em', color: 'var(--cream)' }}>
-              for your child.
-            </span>
-          </div>
-        </Reveal>
-        <Reveal delay={0.16}>
-          <a
-            href="/#notify"
-            className="inline-flex items-center gap-2.5 font-sans font-medium transition-opacity hover:opacity-85"
-            style={{
-              background: 'rgba(196,149,75,0.88)',
-              color: '#1D2E20',
-              padding: '0.9rem 2.25rem',
-              borderRadius: '4px',
-              fontSize: '0.82rem',
-              letterSpacing: '0.04em',
-            }}
-          >
-            Reserve early access
-          </a>
-        </Reveal>
-      </div>
-    </section>
   )
 }
 
@@ -361,7 +291,16 @@ function OpenSourceSection() {
       <motion.div className="relative z-10 mx-auto max-w-6xl px-6 md:px-12 lg:px-20" style={{ y: contentY }}>
 
         <Reveal>
-          <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start', marginBottom: '3.5rem', paddingBottom: '3.5rem', borderBottom: '1px solid rgba(240,232,210,0.1)' }}>
+          <div style={{ marginBottom: '1rem' }}>
+            <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(196,149,75,0.45)', marginBottom: '0.9rem' }}>
+              Our commitment to open source
+            </p>
+            <div style={{ height: '1px', width: '3rem', background: 'rgba(196,149,75,0.3)' }} />
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.06}>
+          <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start', marginBottom: '3.5rem', paddingTop: '2.5rem', paddingBottom: '3.5rem', borderBottom: '1px solid rgba(240,232,210,0.1)' }}>
             <div style={{ color: 'var(--amber)', flexShrink: 0, marginTop: '0.1rem' }}>
               <FileText size={22} />
             </div>
@@ -438,6 +377,16 @@ export default function PromisePage() {
       <PromiseHero />
 
       <section style={{ background: 'var(--cream)', position: 'relative', overflow: 'hidden' }}>
+        {/* Grid border rules: right border on left-column cells, no bottom border on last row */}
+        <style>{`
+          .promise-grid > .promise-card:nth-child(odd) { border-right: 1px solid rgba(42,74,48,0.07); }
+          .promise-grid > .promise-card:nth-last-child(-n+2) { border-bottom: none !important; }
+          @media (max-width: 767px) {
+            .promise-grid > .promise-card:nth-child(odd) { border-right: none !important; }
+            .promise-grid > .promise-card:nth-last-child(-n+2) { border-bottom: 1px solid rgba(42,74,48,0.07) !important; }
+            .promise-grid > .promise-card:last-child { border-bottom: none !important; }
+          }
+        `}</style>
         <div
           className="absolute pointer-events-none"
           aria-hidden="true"
@@ -446,14 +395,15 @@ export default function PromisePage() {
             background: 'radial-gradient(ellipse 80% 70% at 95% 5%, rgba(196,149,75,0.05) 0%, transparent 70%)',
           }}
         />
-        <div style={{ maxWidth: '760px', marginInline: 'auto', padding: '0 clamp(1.5rem, 5vw, 3rem)' }}>
-          {PROMISES.map((p, i) => (
-            <CommitmentItem key={p.num} {...p} index={i} />
-          ))}
+        <div style={{ maxWidth: '900px', marginInline: 'auto', padding: 'clamp(4rem, 8vw, 5.5rem) clamp(1.5rem, 5vw, 3rem)' }}>
+          <div className="promise-grid grid grid-cols-1 md:grid-cols-2">
+            {PROMISES.map((p, i) => (
+              <CommitmentCard key={p.num} {...p} index={i} />
+            ))}
+          </div>
         </div>
       </section>
 
-      <CtaBridge />
       <OpenSourceSection />
     </>
   )
