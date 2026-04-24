@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import React, { useRef, useState } from 'react'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { PineBranch } from '@/components/illustrations/pine-branch'
@@ -112,7 +112,7 @@ function ResearchHero() {
 }
 
 /* ─── Thesis section ─────────────────────────────────────────────── */
-function ThesisSection() {
+function ThesisSection({ onShowBear, bearRevealed }: { onShowBear: () => void; bearRevealed: boolean }) {
   return (
     <section style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 2 }}>
       <div className="mx-auto px-6 md:px-12 lg:px-20" style={{ maxWidth: '1100px', paddingTop: '5rem', paddingBottom: '5.5rem' }}>
@@ -159,6 +159,21 @@ function ThesisSection() {
             </p>
           </div>
         </Reveal>
+
+        {!bearRevealed && (
+          <Reveal>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2.5rem' }}>
+              <button
+                onClick={onShowBear}
+                className="font-sans inline-flex items-center gap-2 transition-opacity hover:opacity-70"
+                style={{ fontSize: '0.58rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--forest)', border: '1px solid rgba(42,74,48,0.22)', borderRadius: '4px', padding: '0.75rem 2rem', cursor: 'pointer', background: 'transparent' }}
+              >
+                Meet the bear
+                <ArrowRight size={11} />
+              </button>
+            </div>
+          </Reveal>
+        )}
       </div>
     </section>
   )
@@ -193,9 +208,9 @@ const PILLARS = [
 ]
 
 /* ─── Pillars section ────────────────────────────────────────────── */
-function PillarsSection() {
+function PillarsSection({ onShowSessions, sessionsRevealed }: { onShowSessions: () => void; sessionsRevealed: boolean }) {
   return (
-    <section style={{ background: 'var(--forest-dark)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 3, padding: '5rem 0 6rem', overflow: 'hidden' }}>
+    <section style={{ background: 'var(--forest-dark)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 4, padding: '5rem 0 6rem', overflow: 'hidden' }}>
       <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" aria-hidden="true" />
       <div className="absolute inset-x-0 pointer-events-none" aria-hidden="true" style={{ top: '10%', height: '50%', background: 'radial-gradient(ellipse at 50% 50%, rgba(196,149,75,0.05) 0%, transparent 60%)' }} />
 
@@ -234,6 +249,19 @@ function PillarsSection() {
           ))}
           <div style={{ borderTop: '1px solid rgba(240,232,210,0.08)' }} />
         </div>
+
+        {!sessionsRevealed && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>
+            <button
+              onClick={onShowSessions}
+              className="font-sans inline-flex items-center gap-2 transition-opacity hover:opacity-70"
+              style={{ fontSize: '0.58rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.85)', border: '1px solid rgba(196,149,75,0.28)', borderRadius: '4px', padding: '0.75rem 2rem', cursor: 'pointer', background: 'none' }}
+            >
+              How it works
+              <ArrowRight size={11} />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   )
@@ -249,7 +277,7 @@ const METRICS = [
 /* ─── Study section ──────────────────────────────────────────────── */
 function StudySection() {
   return (
-    <section style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 4, paddingTop: '5rem', paddingBottom: '5.5rem' }}>
+    <section style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 5, paddingTop: '5rem', paddingBottom: '5.5rem' }}>
       <div className="mx-auto px-6 md:px-12 lg:px-20" style={{ maxWidth: '1100px' }}>
 
         <Reveal>
@@ -333,14 +361,29 @@ function PullUpSessionsSection() {
 
 /* ─── Page ──────────────────────────────────────────────────────── */
 export default function ResearchPage() {
+  const [showBear, setShowBear] = useState(false)
+  const [showSessions, setShowSessions] = useState(false)
+
   return (
     <>
       <ResearchHero />
-      <ThesisSection />
-      <PillarsSection />
+      <ThesisSection onShowBear={() => setShowBear(true)} bearRevealed={showBear} />
+      <AnimatePresence>
+        {showBear && (
+          <motion.div key="bear" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.6, ease: 'easeInOut' }}>
+            <AfterBearSection />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <PillarsSection onShowSessions={() => setShowSessions(true)} sessionsRevealed={showSessions} />
+      <AnimatePresence>
+        {showSessions && (
+          <motion.div key="sessions" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.6, ease: 'easeInOut' }}>
+            <PullUpSessionsSection />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <StudySection />
-      <AfterBearSection />
-      <PullUpSessionsSection />
     </>
   )
 }
