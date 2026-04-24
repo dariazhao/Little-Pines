@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useRef, useState } from 'react'
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { PineBranch } from '@/components/illustrations/pine-branch'
-import { WorkshopSection, AfterBearSection, SessionsSection, ShootingStars } from '../_homepage-after'
+import { WorkshopSection, ShootingStars } from '../_homepage-after'
 import { CARDS } from './_cards'
 import { Globe } from '@/components/globe'
 
@@ -122,10 +122,15 @@ function WaxSeal({ onClick, open }: { onClick: () => void; open: boolean }) {
         <svg viewBox="0 0 88 88" width="68" height="68" aria-hidden="true">
           <path d="M44 3 C51 1 60 4 67 10 C74 16 80 24 82 33 C85 43 83 54 78 62 C73 70 64 76 54 79 C44 82 33 81 24 77 C15 73 8 65 5 55 C1 45 3 34 8 25 C13 16 21 8 30 5 C36 2 40 4 44 3 Z" fill="var(--amber)" opacity="0.88"/>
           <circle cx="44" cy="44" r="27" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8"/>
-          <text x="44" y="49" textAnchor="middle" fontFamily="Georgia, serif" fontSize="17" fontStyle="italic" fontWeight="600" fill="rgba(255,255,255,0.82)" letterSpacing="1">LP</text>
+          {/* Bear paw print */}
+          <ellipse cx="44" cy="53" rx="10.5" ry="8" fill="rgba(255,255,255,0.80)"/>
+          <circle cx="30" cy="38" r="4.5" fill="rgba(255,255,255,0.80)"/>
+          <circle cx="38.5" cy="32" r="4.5" fill="rgba(255,255,255,0.80)"/>
+          <circle cx="49.5" cy="32" r="4.5" fill="rgba(255,255,255,0.80)"/>
+          <circle cx="58" cy="38" r="4.5" fill="rgba(255,255,255,0.80)"/>
         </svg>
       </motion.div>
-      <span className="font-sans" style={{ fontSize: '0.54rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: open ? 'rgba(42,74,48,0.28)' : 'rgba(196,149,75,0.65)', transition: 'color 0.3s ease' }}>
+      <span className="font-sans" style={{ fontSize: '0.54rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: open ? '#7A3C1E' : 'rgba(196,149,75,0.65)', transition: 'color 0.3s ease' }}>
         {open ? 'close' : 'open the letter'}
       </span>
     </button>
@@ -442,39 +447,6 @@ function ProgrammeSection() {
   )
 }
 
-/* ─── Pull-up Sessions wrapper ──────────────────────────────────── */
-function PullUpSessionsSection() {
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'start 0.25'] })
-  const y = useTransform(scrollYProgress, [0, 1], [100, 0])
-  return (
-    <motion.div ref={ref} style={{ y, position: 'relative', zIndex: 5 }}>
-      <SessionsSection />
-      <div style={{ background: 'var(--forest-dark)', textAlign: 'center', padding: '4rem 1.5rem 5rem' }}>
-        <p className="font-sans" style={{ fontSize: '0.5rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }}>
-          Little Pines Studio &middot; Q3 2026
-        </p>
-        <a
-          href="/#notify"
-          className="font-sans inline-flex items-center gap-2 transition-opacity hover:opacity-80"
-          style={{
-            fontSize: '0.58rem',
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            color: 'rgba(196,149,75,0.85)',
-            border: '1px solid rgba(196,149,75,0.28)',
-            borderRadius: '4px',
-            padding: '0.7rem 1.8rem',
-          }}
-        >
-          Get early access
-          <ArrowRight size={10} />
-        </a>
-      </div>
-    </motion.div>
-  )
-}
-
 /* ─── Page ──────────────────────────────────────────────────────── */
 export default function BuildWithUsPage() {
   return (
@@ -483,8 +455,6 @@ export default function BuildWithUsPage() {
       <FounderLetter />
       <ProgrammeSection />
       <WorkshopSection />
-      <AfterBearSection />
-      <PullUpSessionsSection />
     </>
   )
 }

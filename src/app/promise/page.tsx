@@ -289,13 +289,7 @@ function CommitmentsSection() {
   const [active, setActive] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Auto-advance every 6 seconds
-  useEffect(() => {
-    const timer = setInterval(() => setActive(i => (i + 1) % PROMISES.length), 6000)
-    return () => clearInterval(timer)
-  }, [])
-
-  // Smooth-scroll to active card (1.2 s eased)
+  // Smooth-scroll to active card (eased)
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
@@ -344,58 +338,46 @@ function CommitmentsSection() {
         <div style={{ flexShrink: 0, width: 'clamp(1.5rem, 7vw, 5rem)' }} />
       </div>
 
-      {/* Navigation — prev arrow · numbered dots · next arrow */}
+      {/* Navigation — prev arrow · dots · next arrow */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.75rem', marginTop: '2.5rem' }}>
+        {/* Left arrow — floats when at last card */}
         <button
           onClick={() => goTo(active - 1)}
           aria-label="Previous commitment"
-          style={{
-            background: 'none', border: 'none', cursor: active === 0 ? 'default' : 'pointer',
-            padding: '0.4rem',
-            color: active === 0 ? 'rgba(42,74,48,0.14)' : 'rgba(42,74,48,0.40)',
-            transition: 'color 0.3s ease',
-          }}
+          style={{ background: 'none', border: 'none', cursor: active === 0 ? 'default' : 'pointer', padding: '0.4rem', color: active === 0 ? 'rgba(42,74,48,0.14)' : 'rgba(42,74,48,0.40)', transition: 'color 0.3s ease' }}
         >
-          <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
-            <path d="M6 1 L1 6 L6 11 M1 6 H15" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <motion.div
+            animate={active === PROMISES.length - 1 ? { x: [0, -5, 0] } : { x: 0 }}
+            transition={active === PROMISES.length - 1 ? { duration: 1.4, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.3 }}
+          >
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+              <path d="M6 1 L1 6 L6 11 M1 6 H15" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </motion.div>
         </button>
 
         <div style={{ display: 'flex', gap: '0.55rem', alignItems: 'center' }}>
           {PROMISES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setActive(i)}
-              aria-label={`Commitment ${i + 1}`}
-              style={{
-                background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem',
-              }}
-            >
-              <span style={{
-                display: 'block',
-                width: active === i ? 20 : 6,
-                height: 6,
-                borderRadius: 3,
-                background: active === i ? 'rgba(196,149,75,0.75)' : 'rgba(42,74,48,0.22)',
-                transition: 'all 0.4s ease',
-              }} />
+            <button key={i} onClick={() => setActive(i)} aria-label={`Commitment ${i + 1}`} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem' }}>
+              <span style={{ display: 'block', width: active === i ? 20 : 6, height: 6, borderRadius: 3, background: active === i ? 'rgba(196,149,75,0.75)' : 'rgba(42,74,48,0.22)', transition: 'all 0.4s ease' }} />
             </button>
           ))}
         </div>
 
+        {/* Right arrow — floats when at first card */}
         <button
           onClick={() => goTo(active + 1)}
           aria-label="Next commitment"
-          style={{
-            background: 'none', border: 'none', cursor: active === PROMISES.length - 1 ? 'default' : 'pointer',
-            padding: '0.4rem',
-            color: active === PROMISES.length - 1 ? 'rgba(42,74,48,0.14)' : 'rgba(42,74,48,0.40)',
-            transition: 'color 0.3s ease',
-          }}
+          style={{ background: 'none', border: 'none', cursor: active === PROMISES.length - 1 ? 'default' : 'pointer', padding: '0.4rem', color: active === PROMISES.length - 1 ? 'rgba(42,74,48,0.14)' : 'rgba(42,74,48,0.40)', transition: 'color 0.3s ease' }}
         >
-          <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
-            <path d="M10 1 L15 6 L10 11 M15 6 H1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <motion.div
+            animate={active === 0 ? { x: [0, 5, 0] } : { x: 0 }}
+            transition={active === 0 ? { duration: 1.4, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.3 }}
+          >
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+              <path d="M10 1 L15 6 L10 11 M15 6 H1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </motion.div>
         </button>
       </div>
     </section>
