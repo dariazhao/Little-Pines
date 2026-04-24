@@ -377,7 +377,7 @@ export function AfterHero() {
                     className="flex justify-start mt-10"
                   >
                     <a
-                      href="#why-we-exist"
+                      href="#read-the-brief"
                       className="font-sans text-sm text-cream/80 hover:text-cream transition-all duration-200 flex items-center gap-2.5 px-5 py-2 border border-cream/40 hover:border-cream/70 rounded-sm"
                     >
                       Read the concept brief{' '}
@@ -444,7 +444,7 @@ export function AfterHero() {
             }}
           >
             <span style={{
-              backgroundColor: 'var(--cream)',
+              backgroundColor: 'rgba(244,239,226,0.80)',
               WebkitBoxDecorationBreak: 'clone',
               boxDecorationBreak: 'clone',
               padding: '0.08em 0.35em',
@@ -1339,7 +1339,7 @@ function ConceptPaperSection() {
 
   return (
     <motion.section
-      id="why-we-exist"
+      id="read-the-brief"
       ref={sectionRef}
       style={{
         y: sectionY,

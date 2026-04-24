@@ -319,13 +319,23 @@ export function PageTransition() {
 
   const intervalRef     = useRef<ReturnType<typeof setInterval> | null>(null)
   const hideRef         = useRef<ReturnType<typeof setTimeout>  | null>(null)
+  const killRef         = useRef<ReturnType<typeof setTimeout>  | null>(null)
   const prevPathnameRef = useRef(pathname)
   const visibleRef      = useRef(false)
 
   useEffect(() => { visibleRef.current = visible }, [visible])
 
+  const forceHide = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current)
+    if (hideRef.current)     clearTimeout(hideRef.current)
+    if (killRef.current)     clearTimeout(killRef.current)
+    setVisible(false)
+    setProgress(0)
+  }, [])
+
   const startProgress = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current)
+    if (killRef.current)     clearTimeout(killRef.current)
     setProgress(0)
     intervalRef.current = setInterval(() => {
       setProgress(prev => {
@@ -334,10 +344,13 @@ export function PageTransition() {
         return Math.min(prev + inc, 82)
       })
     }, 240)
-  }, [])
+    // Safety valve: force-dismiss after 10 seconds no matter what
+    killRef.current = setTimeout(forceHide, 10_000)
+  }, [forceHide])
 
   const completeProgress = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current)
+    if (killRef.current)     clearTimeout(killRef.current)
     setProgress(100)
     if (hideRef.current) clearTimeout(hideRef.current)
     hideRef.current = setTimeout(() => { setVisible(false); setProgress(0) }, 570)
@@ -349,6 +362,15 @@ export function PageTransition() {
       if (visibleRef.current) completeProgress()
     }
   }, [pathname, completeProgress])
+
+  // Handle browser back/forward (bfcache restore) — page may reappear with loading screen stuck
+  useEffect(() => {
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted && visibleRef.current) forceHide()
+    }
+    window.addEventListener('pageshow', handlePageShow)
+    return () => window.removeEventListener('pageshow', handlePageShow)
+  }, [forceHide])
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -369,6 +391,7 @@ export function PageTransition() {
   useEffect(() => () => {
     if (intervalRef.current) clearInterval(intervalRef.current)
     if (hideRef.current)     clearTimeout(hideRef.current)
+    if (killRef.current)     clearTimeout(killRef.current)
   }, [])
 
   const theme = getThemeName(destPath)

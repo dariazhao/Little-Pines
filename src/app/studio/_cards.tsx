@@ -109,8 +109,8 @@ export const CARDS: CardData[] = [
     label: 'For the engineer in edge AI, embedded systems, or hardware',
     Motif: IconLeaf,
     headline: `The hardest design problem in this product is the one nobody sees.`,
-    body: `We are running a frontier small model on-device, on a sealed hardware pod, inside a nine-inch plush. Gemma 4 on Synaptics Astra-class silicon. Whisper for child-voice STT. A physical microphone kill-switch at the circuit level. No cloud, ever. The hardest problems are child-voice recognition, sub-second latency on a quantized model, and the thermal and power envelope inside a toy a four-year-old sleeps with.`,
-    ask: `If you've shipped something that had to be invisible, efficient, and right — and you want to do that again for something that matters — I'd like to find a time to talk. Equity-and-mission terms. Part-time or full-time. Based anywhere.`,
+    body: `We are running a frontier small model on-device, on a sealed hardware pod, inside a nine-inch plush. Gemma 4 on Synaptics Astra-class silicon. Whisper for child-voice STT. A physical microphone kill-switch at the circuit level. No cloud, ever. The hardest problems are child-voice recognition, sub-second latency on a quantized model, and the thermal and power envelope inside a plush that's trusted by four-year-olds.`,
+    ask: `If you've shipped something that had to be invisible, efficient, and right, and you want to do that for something that matters: I'd like to find a time to talk. Part-time or full-time. Based anywhere.`,
     ctas: [{ label: 'Write to build@littlepinesstudio.com', href: 'mailto:build@littlepinesstudio.com' }],
   },
   {
@@ -121,7 +121,7 @@ export const CARDS: CardData[] = [
     Motif: IconFeather,
     headline: `We need your worst objection, not your encouragement.`,
     body: `The pedagogy is grounded in Siegel, Delahooke, Greene, Gerber, Montessori's spiritual embryo, and the CASEL framework. The full 38-page concept paper includes the four session types, the disclosure protocol, and the efficacy design. I want it torn apart. Any clinical objection I haven't anticipated. Anywhere the developmental claims are wrong or overreaching. Anywhere the product is naïve about what children aged 3–7 can actually do.`,
-    ask: `Would you read the concept paper and come back with the one thing that would give you pause? That's the conversation I'm looking for. Paid consulting or advisor equity, your call.`,
+    ask: `Would you read the concept paper and come back with the one thing that would give you pause? That's the conversation I'm looking for.`,
     ctas: [
       { label: 'Read the concept paper', href: 'https://drive.google.com/file/d/1-WiaTL6BBVJkqct1ArMjt0H0gR_CCj6e/view?usp=drive_link' },
       { label: 'Book a thirty-minute call', href: 'mailto:research@littlepinesstudio.com?subject=Reaction%20call' },
@@ -135,7 +135,7 @@ export const CARDS: CardData[] = [
     Motif: IconSprig,
     headline: `Tell us where this breaks the tradition. We need that conversation.`,
     body: `The brand claims Montessori- and Waldorf-inspired, and that claim is only worth making if credentialed educators agree with it. I want to know where this is genuinely aligned with the tradition: grace and courtesy, the prepared environment, the child's interior life. And where it isn't. I also want to pilot with ten to fifteen families in a real classroom community this fall.`,
-    ask: `Would you sit with the curriculum and tell me honestly where this earns the Montessori and Waldorf names, and where it borrows without understanding? I'd rather hear that now, not after we've printed something on the box.`,
+    ask: `Would you sit with the curriculum and tell me honestly where this earns the Montessori and Waldorf traditions, and where it borrows without understanding? I'd rather hear that now, not after we've printed something on the box.`,
     ctas: [{ label: 'Write to educators@littlepinesstudio.com', href: 'mailto:educators@littlepinesstudio.com' }],
   },
   {
@@ -191,10 +191,10 @@ export const CARDS: CardData[] = [
     role: 'Parents',
     label: '08 · For parents',
     Motif: IconSeed,
-    headline: `And if you're here as a parent — you're the reason all of this exists.`,
-    body: `You've noticed that most technology for children is designed to hold attention, not to build character. The bear is the opposite: screen-free, child-initiated, and entirely focused on helping your child find words for what they feel. It won't teach phonics or play songs. It will listen, reflect, and step back. The work of raising your child stays with you.`,
-    ask: `We're building toward a holiday 2027 debut. One quiet note when the bear is ready — and nothing before that.`,
-    ctas: [{ label: 'Read the concept brief', href: '/#why-we-exist' }, { label: 'Join the early access list', href: '/#notify' }],
+    headline: `And if you're here as a parent, you're the reason all of this exists.`,
+    body: `You've noticed that most technology for children is designed to hold attention, not to build character. The Little Pines bear is designed to be the opposite: screen-free, child-initiated, and entirely focused on helping your child find words for what they feel. It won't teach phonics or play songs. It will listen, reflect, and step back. The work of raising your child stays with you.`,
+    ask: `We're building toward a holiday 2027 debut. One quiet note when the bear is ready, and nothing before that.`,
+    ctas: [{ label: 'Read the concept brief', href: '/#read-the-brief' }, { label: 'Join the early access list', href: '/#notify' }],
     isParents: true,
   },
 ]
