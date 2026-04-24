@@ -235,6 +235,7 @@ export function AfterHero() {
   const [quoteIdx, setQuoteIdx] = useState(0)
   const [quoteVisible, setQuoteVisible] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
+  const isPhone = useIsMobile()
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -330,7 +331,7 @@ export function AfterHero() {
 
               {/* Left column — all content fades together */}
               <div className="flex flex-col justify-center items-center lg:items-start lg:py-32">
-                <motion.div style={{ opacity: heroOpacity, y: heroY }}>
+                <motion.div style={{ opacity: heroOpacity, y: isPhone ? 0 : heroY }}>
                   <motion.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -400,7 +401,7 @@ export function AfterHero() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.45, duration: 1.3, ease: [0.19, 1, 0.22, 1] }}
               >
-                <motion.div style={{ y: globeY, scale: globeScale, x: isMobile ? 0 : globeX }}>
+                <motion.div style={{ y: isPhone ? 0 : globeY, scale: globeScale, x: isMobile ? 0 : globeX }}>
                   <div className="after-globe-wrap">
                     <div
                       aria-hidden="true"
@@ -427,14 +428,14 @@ export function AfterHero() {
 
         {/* Full-bleed quote — emerges over the giant globe */}
         <motion.div
-          className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none px-8"
+          className="absolute inset-0 flex items-end justify-center z-20 pointer-events-none px-8 pb-20 lg:items-center lg:pb-0"
           style={{ opacity: quoteOpacity }}
           aria-hidden="true"
         >
           <motion.p
             className="font-serif italic text-center"
             style={{
-              y: quoteY,
+              y: isPhone ? 0 : quoteY,
               color: 'var(--forest)',
               fontSize: 'clamp(2rem, 5vw, 3.5rem)',
               lineHeight: 1.22,
@@ -1334,6 +1335,7 @@ function ConceptPaperSection() {
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
   const contentY  = useTransform(scrollYProgress, [0, 1], [-90, 90])
   const sectionY  = useTransform(scrollYProgress, [0, 0.18], [72, 0])
+  const isPhone = useIsMobile()
 
   return (
     <motion.section
@@ -1351,7 +1353,7 @@ function ConceptPaperSection() {
     >
       <div className="absolute inset-0 bg-grain opacity-[0.018] pointer-events-none" aria-hidden="true" />
 
-      <motion.div style={{ y: contentY }} className="relative z-10 mx-auto max-w-7xl px-6 md:px-12 lg:px-20 py-24 md:py-32">
+      <motion.div style={{ y: isPhone ? 0 : contentY }} className="relative z-10 mx-auto max-w-7xl px-6 md:px-12 lg:px-20 py-24 md:py-32">
 
         {/* Two-column: statement left, chapter list right */}
         <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-14 md:gap-20">
@@ -1441,6 +1443,7 @@ export function AfterBearSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
   const starsY = useTransform(scrollYProgress, [0, 1], ['0%', '-10%'])
+  const isPhone = useIsMobile()
 
   return (
     <section
@@ -1457,7 +1460,7 @@ export function AfterBearSection() {
       <style>{BEAR_MAGIC_CSS}</style>
 
       {/* Parallax stars */}
-      <motion.div style={{ y: starsY }} className="absolute inset-0 pointer-events-none">
+      <motion.div style={{ y: isPhone ? 0 : starsY }} className="absolute inset-0 pointer-events-none">
         <BearNightSky />
       </motion.div>
 
@@ -1711,6 +1714,7 @@ function AfterEarlyAccessSection() {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const contentY = useTransform(scrollYProgress, [0, 1], [32, -32])
+  const isPhone = useIsMobile()
 
   return (
     <section
@@ -1737,7 +1741,7 @@ function AfterEarlyAccessSection() {
         <ForestSilhouette />
       </div>
 
-      <motion.div className="relative z-10 text-center px-6 max-w-md mx-auto" style={{ y: contentY }}>
+      <motion.div className="relative z-10 text-center px-6 max-w-md mx-auto" style={{ y: isPhone ? 0 : contentY }}>
         <p className="font-sans text-[0.64rem] tracking-[0.2em] uppercase text-sage-light/65 mb-4">
           Early access
         </p>
@@ -1773,6 +1777,7 @@ function EpigraphSection() {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], [18, -18])
+  const isPhone = useIsMobile()
 
   return (
     <section
@@ -1780,7 +1785,7 @@ function EpigraphSection() {
       style={{ background: 'var(--cream-dark)', position: 'relative', zIndex: 2, textAlign: 'center' }}
     >
       <div style={{ padding: '4rem 2rem 4.5rem' }}>
-        <motion.div style={{ y }} className="max-w-[44ch] mx-auto">
+        <motion.div style={{ y: isPhone ? 0 : y }} className="max-w-[44ch] mx-auto">
           <div style={{
             border: '1px solid rgba(42,74,48,0.16)',
             borderRadius: '12px',
