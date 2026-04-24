@@ -1712,9 +1712,17 @@ export function ForestSilhouette() {
 
 function AfterEarlyAccessSection() {
   const ref = useRef<HTMLElement>(null)
+  const innerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const contentY = useTransform(scrollYProgress, [0, 1], [32, -32])
   const isPhone = useIsMobile()
+  const inView = useInView(innerRef, { once: true, amount: 0.25 })
+
+  const SLIDE_UP = (delay: number) => ({
+    initial: { opacity: 0, y: 22 },
+    animate: inView ? { opacity: 1, y: 0 } : {},
+    transition: { duration: 0.75, delay, ease: [0.19, 1, 0.22, 1] as const },
+  })
 
   return (
     <section
@@ -1741,14 +1749,19 @@ function AfterEarlyAccessSection() {
         <ForestSilhouette />
       </div>
 
-      <motion.div className="relative z-10 text-center px-6 max-w-md mx-auto" style={{ y: isPhone ? 0 : contentY }}>
-        <p className="font-sans text-[0.64rem] tracking-[0.2em] uppercase text-sage-light/65 mb-4">
+      <motion.div ref={innerRef} className="relative z-10 text-center px-6 max-w-md mx-auto" style={{ y: isPhone ? 0 : contentY }}>
+        <motion.p {...SLIDE_UP(0)} className="font-sans text-[0.64rem] tracking-[0.2em] uppercase text-sage-light/65 mb-4">
           Early access
-        </p>
-        <h2 className="font-serif text-display-sm text-cream font-semibold leading-tight mb-4">
-          A quiet note when<br />the bear is ready.
-        </h2>
-        <div
+        </motion.p>
+        <div style={{ overflow: 'hidden' }}>
+          <motion.h2
+            {...SLIDE_UP(0.12)}
+            className="font-serif text-display-sm text-cream font-semibold leading-tight mb-4"
+          >
+            A quiet note when<br />the bear is ready.
+          </motion.h2>
+        </div>
+        <motion.div {...SLIDE_UP(0.22)}
           style={{ width: '160px', height: '125px' }}
           className="relative mx-auto mb-6 pointer-events-none select-none"
           aria-hidden="true"
@@ -1759,11 +1772,13 @@ function AfterEarlyAccessSection() {
             fill
             className="object-contain brightness-0 invert opacity-[0.45]"
           />
-        </div>
-        <p className="font-sans text-sm text-cream/40 mb-10 leading-relaxed">
+        </motion.div>
+        <motion.p {...SLIDE_UP(0.32)} className="font-sans text-sm text-cream/40 mb-10 leading-relaxed">
           We write only when there is something worth saying.{' '}<span className="md:block">Unsubscribe anytime.</span>
-        </p>
-        <EmailCapture dark buttonLabel="Notify Me" />
+        </motion.p>
+        <motion.div {...SLIDE_UP(0.42)}>
+          <EmailCapture dark buttonLabel="Notify Me" />
+        </motion.div>
       </motion.div>
     </section>
   )
