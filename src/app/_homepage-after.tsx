@@ -267,7 +267,7 @@ export function AfterHero() {
   // Mobile top crop — fades in after hero text is gone so it never covers eyebrow
   const mobileCropTopOpacity = useTransform(scrollYProgress, [0.15, 0.28], [0, 1])
   // CTA button fades slower — lingers until globe is near max enlarged size
-  const ctaOpacity = useTransform(scrollYProgress, [0.35, 0.62], [1, 0])
+
   // Bottom globe fade — scroll-activated, invisible at rest
   const globeBottomFadeOpacity = useTransform(scrollYProgress, [0.50, 0.90], [0, 1])
 
@@ -329,7 +329,7 @@ export function AfterHero() {
           <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-20 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 items-start lg:items-center pt-24 lg:pt-0" style={{ minHeight: '100vh' }}>
 
-              {/* Left column — title/desc fade fast; CTA lingers */}
+              {/* Left column — all content fades together */}
               <div className="flex flex-col justify-center items-center lg:items-start lg:py-32">
                 <motion.div style={{ opacity: heroOpacity, y: heroY }}>
                   <motion.p
@@ -369,30 +369,28 @@ export function AfterHero() {
                   >
                     We are an open-source toy studio that helps kids ages 3–7 notice and name what they feel. Designed in partnership with child psychologists, Montessori educators, and the parents who love them dearly.
                   </motion.p>
-                </motion.div>
 
-                {/* CTA — separate fade, lingers until globe near max */}
-                <motion.div
-                  style={{ opacity: ctaOpacity, y: heroY, marginTop: '2.5rem' }}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.54, duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
-                  className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-center lg:items-start"
-                >
-                  <a
-                    href="#why-we-exist"
-                    className="font-sans text-sm text-cream/80 hover:text-cream transition-all duration-200 flex items-center gap-2.5 px-5 py-2 border border-cream/40 hover:border-cream/70 rounded-sm"
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.54, duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
+                    className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-center lg:items-start mt-10"
                   >
-                    Read the concept brief{' '}
-                    <motion.span
-                      aria-hidden="true"
-                      style={{ display: 'inline-block', fontSize: '1rem', lineHeight: 1 }}
-                      animate={{ y: [0, 4, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', repeatDelay: 0.4 }}
+                    <a
+                      href="#why-we-exist"
+                      className="font-sans text-sm text-cream/80 hover:text-cream transition-all duration-200 flex items-center gap-2.5 px-5 py-2 border border-cream/40 hover:border-cream/70 rounded-sm"
                     >
-                      ↓
-                    </motion.span>
-                  </a>
+                      Read the concept brief{' '}
+                      <motion.span
+                        aria-hidden="true"
+                        style={{ display: 'inline-block', fontSize: '1rem', lineHeight: 1 }}
+                        animate={{ y: [0, 4, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', repeatDelay: 0.4 }}
+                      >
+                        ↓
+                      </motion.span>
+                    </a>
+                  </motion.div>
                 </motion.div>
               </div>
 
