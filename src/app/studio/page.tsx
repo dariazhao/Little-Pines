@@ -19,12 +19,12 @@ const STUDIO_STARS: [number, number, number][] = [
   [70,95,1.0],[25,95,1.2],[85,25,0.9],[52,50,0.7],[33,65,1.0],
 ]
 
-/* ─── Hero sentence (4 balanced lines — no italic, no bold) ─────── */
+/* ─── Hero sentence ─────────────────────────────────────────────── */
 const SENTENCE_LINES = [
-  { text: 'Children are born with', amber: false },
-  { text: 'an extraordinary capacity', amber: false },
-  { text: 'to feel, notice, and express', amber: true },
-  { text: 'the full range of human emotion.', amber: false },
+  { text: 'Children are born with', amber: false, italic: false },
+  { text: 'an extraordinary capacity', amber: false, italic: false },
+  { text: 'to feel, notice, and express', amber: true,  italic: true  },
+  { text: 'the full range of human emotion.', amber: false, italic: false },
 ]
 const LINE_DELAYS = [0.3, 0.52, 0.74, 0.96]
 
@@ -198,7 +198,7 @@ function InvitationHero() {
           Little Pines Studio &middot; Calls for Collaboration
         </motion.p>
 
-        {/* Floating sentence — 4 lines, no italic, no bold */}
+        {/* Floating sentence */}
         <motion.div
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut', delay: 2.5 }}
@@ -214,13 +214,16 @@ function InvitationHero() {
                 style={{
                   fontSize: 'clamp(2.2rem, 5vw, 4rem)',
                   fontWeight: 400,
+                  fontStyle: line.italic ? 'italic' : 'normal',
                   lineHeight: 1.2,
                   letterSpacing: '-0.03em',
                   color: line.amber ? 'var(--amber)' : 'rgba(244,239,226,0.85)',
                   paddingBottom: '0.06em',
                 }}
               >
-                {line.text}
+                {i === 1 ? (
+                  <>an <span style={{ fontWeight: 700 }}>extraordinary</span> capacity</>
+                ) : line.text}
               </motion.span>
             </div>
           ))}

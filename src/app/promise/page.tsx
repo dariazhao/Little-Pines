@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef, useState, useEffect } from 'react'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
+import { motion, AnimatePresence, useInView, useScroll, useTransform } from 'framer-motion'
 import { FileText, GitFork, MessageCircle, Github } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { StarField, ForestSilhouette, ShootingStars, TwinklingStars } from '@/app/_homepage-after'
@@ -46,7 +46,7 @@ type RepoStatus = { background: string; color: string }
 const REPOS: { name: string; status: string; statusStyle: RepoStatus; desc: string }[] = [
   { name: 'little-pines-patterns', status: 'IN PROGRESS', statusStyle: { background: 'rgba(196,149,75,0.14)', color: 'rgba(140,100,40,0.9)' }, desc: 'Every pattern, cut guide, and stuffing template for the bear. Three sizes. Printable.' },
   { name: 'little-pines-sessions', status: 'DRAFTING',    statusStyle: { background: 'rgba(42,74,48,0.07)',  color: 'rgba(42,74,48,0.50)' },  desc: 'Structured play sessions for all four emotional frameworks, written for the seasons a child moves through.' },
-  { name: 'little-pines-research', status: 'DRAFTING',    statusStyle: { background: 'rgba(42,74,48,0.07)',  color: 'rgba(42,74,48,0.50)' },  desc: 'Fine-tuned model weights for emotional literacy, trained on curated child-appropriate datasets. Published to Hugging Face. Adapt for your own conversational context.' },
+  { name: 'little-pines-research', status: 'DRAFTING',    statusStyle: { background: 'rgba(42,74,48,0.07)',  color: 'rgba(42,74,48,0.50)' },  desc: 'Fine-tuned model weights for emotional literacy, trained on curated child-appropriate datasets.' },
 ]
 
 const CONTRIBUTE = [
@@ -361,21 +361,24 @@ function CommitmentsSection() {
           </svg>
         </button>
 
-        <div style={{ display: 'flex', gap: '0.9rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '0.55rem', alignItems: 'center' }}>
           {PROMISES.map((_, i) => (
             <button
               key={i}
               onClick={() => setActive(i)}
               aria-label={`Commitment ${i + 1}`}
               style={{
-                background: 'none', border: 'none', cursor: 'pointer', padding: '0.2rem 0',
-                fontFamily: 'var(--font-sans, sans-serif)',
-                fontSize: '0.48rem', letterSpacing: '0.14em',
-                color: active === i ? 'rgba(196,149,75,0.85)' : 'rgba(42,74,48,0.22)',
-                transition: 'color 0.4s ease',
+                background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem',
               }}
             >
-              {String(i + 1).padStart(2, '0')}
+              <span style={{
+                display: 'block',
+                width: active === i ? 20 : 6,
+                height: 6,
+                borderRadius: 3,
+                background: active === i ? 'rgba(196,149,75,0.75)' : 'rgba(42,74,48,0.22)',
+                transition: 'all 0.4s ease',
+              }} />
             </button>
           ))}
         </div>
@@ -402,6 +405,7 @@ function CommitmentsSection() {
 /* ─── Open Source ───────────────────────────────────────────────── */
 function OpenSourceSection() {
   const ref = useRef<HTMLElement>(null)
+  const [revealed, setRevealed] = useState(false)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const contentY = useTransform(scrollYProgress, [0, 1], [28, -28])
 
@@ -415,86 +419,126 @@ function OpenSourceSection() {
 
       <motion.div className="relative z-10 mx-auto max-w-6xl px-6 md:px-12 lg:px-20" style={{ y: contentY }}>
 
-        {/* Section eyebrow — top */}
+        {/* Eyebrow — top, with dark highlight so stars don't obscure */}
         <Reveal>
           <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
             <p className="font-sans uppercase" style={{
               display: 'inline-block',
               fontSize: '0.52rem',
               letterSpacing: '0.28em',
-              color: 'rgba(196,149,75,0.55)',
+              color: 'rgba(196,149,75,0.75)',
+              background: 'var(--forest-dark)',
+              padding: '0.35rem 1rem',
+              borderRadius: '3px',
             }}>
               Our commitment to open source
             </p>
           </div>
         </Reveal>
 
+        {/* CC BY-SA — centered */}
         <Reveal>
-          <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start', marginBottom: '3.5rem', paddingBottom: '3.5rem', borderBottom: '1px solid rgba(240,232,210,0.1)' }}>
-            <div style={{ color: 'var(--amber)', flexShrink: 0, marginTop: '0.1rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '1rem', marginBottom: '3.5rem', paddingBottom: '3.5rem', borderBottom: '1px solid rgba(240,232,210,0.1)' }}>
+            <div style={{ color: 'var(--amber)' }}>
               <FileText size={22} />
             </div>
             <div>
               <p className="font-sans font-semibold text-cream" style={{ fontSize: '0.9rem', letterSpacing: '0.02em', marginBottom: '0.6rem' }}>CC BY-SA 4.0</p>
-              <p className="font-sans leading-relaxed" style={{ fontSize: '0.875rem', maxWidth: '64ch', color: 'rgba(240,232,210,0.5)' }}>
+              <p className="font-sans leading-relaxed" style={{ fontSize: '0.875rem', maxWidth: '52ch', color: 'rgba(240,232,210,0.5)' }}>
                 Use, copy, modify, and distribute anything we publish &mdash; including commercially &mdash; as long as you credit Little Pines Studio and share modifications under the same license. A Waldorf school in Vermont and a parent in Nairobi have identical access. That is the point.
               </p>
             </div>
           </div>
         </Reveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+        {/* Show me toggle */}
+        {!revealed && (
           <Reveal>
-            <h2 className="font-serif font-semibold text-cream" style={{ fontSize: 'clamp(1.3rem, 2vw, 1.65rem)', marginBottom: '1.5rem' }}>
-              What&rsquo;s Published
-            </h2>
-            <div className="flex flex-col gap-3">
-              {REPOS.map((repo) => (
-                <div key={repo.name} style={{ background: 'rgba(240,232,210,0.05)', border: '1px solid rgba(240,232,210,0.08)', borderRadius: '6px', padding: '1rem 1.25rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.45rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                      <Github size={13} style={{ color: 'rgba(240,232,210,0.35)' }} />
-                      <span className="font-sans font-medium" style={{ fontSize: '0.875rem', color: 'rgba(240,232,210,0.8)' }}>{repo.name}</span>
-                    </div>
-                    <span className="font-sans" style={{ fontSize: '0.52rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.2rem 0.55rem', borderRadius: '4px', ...repo.statusStyle }}>
-                      {repo.status}
-                    </span>
-                  </div>
-                  <p className="font-sans" style={{ fontSize: '0.8rem', lineHeight: 1.6, paddingLeft: '1.45rem', color: 'rgba(240,232,210,0.38)' }}>{repo.desc}</p>
-                </div>
-              ))}
+            <div style={{ textAlign: 'center', marginTop: '0.5rem' }}>
+              <button
+                onClick={() => setRevealed(true)}
+                className="font-sans transition-opacity hover:opacity-70"
+                style={{
+                  background: 'none',
+                  border: '1px solid rgba(240,232,210,0.18)',
+                  borderRadius: '4px',
+                  padding: '0.6rem 1.75rem',
+                  fontSize: '0.52rem',
+                  letterSpacing: '0.22em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(240,232,210,0.45)',
+                  cursor: 'pointer',
+                }}
+              >
+                show me
+              </button>
             </div>
           </Reveal>
+        )}
 
-          <Reveal delay={0.08}>
-            <h2 className="font-serif font-semibold text-cream" style={{ fontSize: 'clamp(1.3rem, 2vw, 1.65rem)', marginBottom: '1.5rem' }}>
-              Join the work
-            </h2>
-            <div className="flex flex-col gap-5 mb-8">
-              {CONTRIBUTE.map(({ Icon, title, desc }) => (
-                <div key={title} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                  <div style={{ color: 'rgba(240,232,210,0.32)', flexShrink: 0, marginTop: '0.1rem' }}>
-                    <Icon size={17} />
-                  </div>
-                  <div>
-                    <p className="font-sans font-semibold" style={{ fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--amber)' }}>{title}</p>
-                    <p className="font-sans" style={{ fontSize: '0.82rem', lineHeight: 1.65, color: 'rgba(240,232,210,0.45)' }}>{desc}</p>
+        {/* Revealed content */}
+        <AnimatePresence>
+          {revealed && (
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+                <div>
+                  <h2 className="font-serif font-semibold text-cream" style={{ fontSize: 'clamp(1.3rem, 2vw, 1.65rem)', marginBottom: '1.5rem' }}>
+                    What&rsquo;s published
+                  </h2>
+                  <div className="flex flex-col gap-3">
+                    {REPOS.map((repo) => (
+                      <div key={repo.name} style={{ background: 'rgba(240,232,210,0.05)', border: '1px solid rgba(240,232,210,0.08)', borderRadius: '6px', padding: '1rem 1.25rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.45rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                            <Github size={13} style={{ color: 'rgba(240,232,210,0.35)' }} />
+                            <span className="font-sans font-medium" style={{ fontSize: '0.875rem', color: 'rgba(240,232,210,0.8)' }}>{repo.name}</span>
+                          </div>
+                          <span className="font-sans" style={{ fontSize: '0.52rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.2rem 0.55rem', borderRadius: '4px', ...repo.statusStyle }}>
+                            {repo.status}
+                          </span>
+                        </div>
+                        <p className="font-sans" style={{ fontSize: '0.8rem', lineHeight: 1.6, paddingLeft: '1.45rem', color: 'rgba(240,232,210,0.38)' }}>{repo.desc}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ))}
-            </div>
-            <a
-              href="https://github.com/dariazhao/Little-Pines"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 font-sans font-medium text-sm transition-opacity duration-200 hover:opacity-80"
-              style={{ background: 'rgba(240,232,210,0.1)', border: '1px solid rgba(240,232,210,0.2)', color: 'var(--cream)', padding: '0.75rem 1.5rem', borderRadius: '4px' }}
-            >
-              <Github size={15} />
-              Start on GitHub
-            </a>
-          </Reveal>
-        </div>
+
+                <div>
+                  <h2 className="font-serif font-semibold text-cream" style={{ fontSize: 'clamp(1.3rem, 2vw, 1.65rem)', marginBottom: '1.5rem' }}>
+                    Join the work
+                  </h2>
+                  <div className="flex flex-col gap-5 mb-8">
+                    {CONTRIBUTE.map(({ Icon, title, desc }) => (
+                      <div key={title} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                        <div style={{ color: 'rgba(240,232,210,0.32)', flexShrink: 0, marginTop: '0.1rem' }}>
+                          <Icon size={17} />
+                        </div>
+                        <div>
+                          <p className="font-sans font-semibold" style={{ fontSize: '0.875rem', marginBottom: '0.25rem', color: 'var(--amber)' }}>{title}</p>
+                          <p className="font-sans" style={{ fontSize: '0.82rem', lineHeight: 1.65, color: 'rgba(240,232,210,0.45)' }}>{desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <a
+                    href="https://github.com/dariazhao/Little-Pines"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2.5 font-sans font-medium text-sm transition-opacity duration-200 hover:opacity-80"
+                    style={{ background: 'rgba(240,232,210,0.1)', border: '1px solid rgba(240,232,210,0.2)', color: 'var(--cream)', padding: '0.75rem 1.5rem', borderRadius: '4px' }}
+                  >
+                    <Github size={15} />
+                    Start on GitHub
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </motion.div>
     </section>
