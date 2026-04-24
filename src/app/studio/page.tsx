@@ -58,13 +58,14 @@ function HeroConstellation() {
   )
 }
 
-/* ─── Hero sentence (3 wide lines) ─────────────────────────────── */
+/* ─── Hero sentence (4 balanced lines) ─────────────────────────── */
 const SENTENCE_LINES = [
-  { text: 'Children are born with an extraordinary capacity', amber: false, weight: 400 },
+  { text: 'Children are born with', amber: false, weight: 400 },
+  { text: 'an extraordinary capacity', amber: false, weight: 400 },
   { text: 'to feel, notice, and express', amber: true, weight: 600 },
   { text: 'the full range of human emotion.', amber: false, weight: 700 },
 ]
-const LINE_DELAYS = [0.3, 0.58, 0.86]
+const LINE_DELAYS = [0.3, 0.52, 0.74, 0.96]
 
 /* ─── Letter paragraphs ─────────────────────────────────────────── */
 type LetterPara = { text: string; italicSuffix?: string }
@@ -75,7 +76,7 @@ const LETTER_P3 = `Montessori, Waldorf, and other child-development traditions h
 
 const LETTER_P4_MAIN = `Little Pines Studio exists because this foundation is being undermined faster than any other part of childhood, and because the tools parents have been given to address it (therapy apps, SEL curricula, meditation videos) are almost all delivered through the same screens that caused the problem. The answer has to come from a different form factor entirely: a quiet, unhurried, screen-free friend that lives in a child’s room and helps them notice what they feel, name it, sit with it, and move through it. Not a therapist. Not a teacher.`
 
-const LETTER_P5 = `In 2019, I quit Wall Street to co-found Learn With Mochi, believing the most valuable investment we could make is in our children. Mochi was built on the belief that young children learn best through hands-on play, stories, and away from screens. The company is an honest expression of a thesis about early childhood that I still believe. Since then, I’ve spent 8 years learning and observing what four-year-olds actually need. With recent frontier AI and hardware acceleration, the technical moment to build this particular concept arrived in 2026. We are going to build it slowly, in public, in partnership with people like you. If you’ve read this far, I’d love to hear from you.`
+const LETTER_P5 = `In 2019, I quit Wall Street to co-found Learn With Mochi, believing the most valuable investment we could make is in our children. Mochi was built on the belief that young children learn best through hands-on play, stories, and away from screens. The company is an honest expression of a thesis about early childhood that I still believe. With recent frontier AI and hardware acceleration, the technical moment to build this particular concept arrived in 2026. We are going to build it slowly, in public, in partnership with people like you. If you’ve read this far, I’d love to hear from you.`
 
 const LETTER_PARAS: LetterPara[] = [
   { text: LETTER_P2 },
@@ -177,6 +178,14 @@ function InvitationHero() {
       className="relative flex flex-col items-center justify-center overflow-hidden"
       style={{ background: 'var(--forest-dark)', paddingTop: '11rem', paddingBottom: '10rem', textAlign: 'center', minHeight: '100svh' }}
     >
+      {/* Petit Prince background illustration */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true"
+        style={{ backgroundImage: "url('/petitprince.jpg')", backgroundSize: 'cover', backgroundPosition: 'center 30%' }}
+      />
+      {/* Dark overlay to keep text legible and tone whimsical */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true"
+        style={{ background: 'rgba(14,32,16,0.86)' }}
+      />
       <div className="absolute inset-0 bg-grain opacity-50 pointer-events-none" aria-hidden="true" />
 
       {/* Static stars */}
@@ -259,21 +268,6 @@ function InvitationHero() {
           style={{ height: '1px', width: '3.5rem', background: 'rgba(196,149,75,0.5)', transformOrigin: 'left center', margin: '0 auto 2rem' }}
         />
 
-        {/* "The gift of a rich interior life" — horizontal-rule treatment */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2.0 }}
-          className="flex items-center justify-center gap-5"
-          style={{ color: 'rgba(196,149,75,0.42)', marginBottom: '2rem' }}
-        >
-          <div style={{ flex: 1, height: '1px', background: 'rgba(196,149,75,0.38)', maxWidth: '88px' }} />
-          <span className="font-sans" style={{ fontSize: '0.52rem', letterSpacing: '0.28em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-            The gift of a rich interior life
-          </span>
-          <div style={{ flex: 1, height: '1px', background: 'rgba(196,149,75,0.38)', maxWidth: '88px' }} />
-        </motion.div>
-
         {/* Down arrow */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 2.3 }} className="flex justify-center">
           <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }} style={{ color: 'rgba(196,149,75,0.32)' }}>
@@ -290,9 +284,17 @@ function InvitationHero() {
 /* ─── Founder Letter ────────────────────────────────────────────── */
 function FounderLetter() {
   const [open, setOpen] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
+
+  const handleClose = () => {
+    setOpen(false)
+    setTimeout(() => {
+      sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 60)
+  }
 
   return (
-    <section id="build-with-us" style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 2, scrollMarginTop: '5rem' }}>
+    <section ref={sectionRef} id="build-with-us" style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 2, scrollMarginTop: '5rem' }}>
       <div className="mx-auto px-6 md:px-10" style={{ maxWidth: '660px', paddingTop: '5rem', paddingBottom: '5.5rem' }}>
 
         <Reveal>
@@ -324,7 +326,7 @@ function FounderLetter() {
 
             {/* Wax seal toggle */}
             <div className="flex flex-col items-center" style={{ margin: '0.5rem 0 1.25rem' }}>
-              <WaxSeal open={open} onClick={() => setOpen(!open)} />
+              <WaxSeal open={open} onClick={() => open ? handleClose() : setOpen(true)} />
             </div>
 
             {/* Expanding letter body */}
@@ -338,7 +340,7 @@ function FounderLetter() {
                   transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
                   style={{ overflow: 'hidden', marginTop: '1rem' }}
                 >
-                  <TypewriterLetter onClose={() => setOpen(false)} />
+                  <TypewriterLetter onClose={handleClose} />
                 </motion.div>
               )}
             </AnimatePresence>
