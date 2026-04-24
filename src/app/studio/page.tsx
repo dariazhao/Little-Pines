@@ -1,12 +1,24 @@
 'use client'
 
 import React, { useRef, useState } from 'react'
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { motion, useScroll, useTransform, AnimatePresence, MotionValue } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { PineBranch } from '@/components/illustrations/pine-branch'
-import { WorkshopSection, AfterBearSection, SessionsSection } from '../_homepage-after'
+import { WorkshopSection, AfterBearSection, SessionsSection, ShootingStars } from '../_homepage-after'
 import { CARDS } from './_cards'
+
+/* ─── Mobile detection (disables parallax on phones) ───────────── */
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false)
+  React.useEffect(() => {
+    const check = () => setMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+  return mobile
+}
 
 /* ─── Static star field ─────────────────────────────────────────── */
 const STUDIO_STARS: [number, number, number][] = [
@@ -58,25 +70,25 @@ function HeroConstellation() {
   )
 }
 
-/* ─── Hero sentence (4 balanced lines) ─────────────────────────── */
+/* ─── Hero sentence (4 balanced lines — no italic, no bold) ─────── */
 const SENTENCE_LINES = [
-  { text: 'Children are born with', amber: false, weight: 400 },
-  { text: 'an extraordinary capacity', amber: false, weight: 400 },
-  { text: 'to feel, notice, and express', amber: true, weight: 600 },
-  { text: 'the full range of human emotion.', amber: false, weight: 700 },
+  { text: 'Children are born with', amber: false },
+  { text: 'an extraordinary capacity', amber: false },
+  { text: 'to feel, notice, and express', amber: true },
+  { text: 'the full range of human emotion.', amber: false },
 ]
 const LINE_DELAYS = [0.3, 0.52, 0.74, 0.96]
 
 /* ─── Letter paragraphs ─────────────────────────────────────────── */
 type LetterPara = { text: string; italicSuffix?: string }
 
-const LETTER_P2 = `The screen economy has accelerated this loss. Every minute a child spends on YouTube, TikTok, or a tablet is a minute they’re not sitting with their own interior life. The dopamine reward cycle of short-form content trains children to flee from boredom, from discomfort, from the quiet moments where self-awareness actually develops. Jonathan Haidt documented the population-level consequences. But the individual consequence is simpler and sadder: millions of children are growing up without the basic emotional vocabulary and self-regulation skills that we carry with us through a lifetime.`
+const LETTER_P2 = `The screen economy has accelerated this loss. Every minute a child spends on YouTube, TikTok, or a tablet is a minute they're not sitting with their own interior life. The dopamine reward cycle of short-form content trains children to flee from boredom, from discomfort, from the quiet moments where self-awareness actually develops. Jonathan Haidt documented the population-level consequences. But the individual consequence is simpler and sadder: millions of children are growing up without the basic emotional vocabulary and self-regulation skills that we carry with us through a lifetime.`
 
 const LETTER_P3 = `Montessori, Waldorf, and other child-development traditions have always understood that emotional awareness is not separate from learning: it is the foundation of learning. A child who cannot name their frustration cannot work through it. A child who cannot recognize their excitement cannot channel it. Academic skills come later, and they come more easily, when the emotional foundation is strong.`
 
-const LETTER_P4_MAIN = `Little Pines Studio exists because this foundation is being undermined faster than any other part of childhood, and because the tools parents have been given to address it (therapy apps, SEL curricula, meditation videos) are almost all delivered through the same screens that caused the problem. The answer has to come from a different form factor entirely: a quiet, unhurried, screen-free friend that lives in a child’s room and helps them notice what they feel, name it, sit with it, and move through it. Not a therapist. Not a teacher.`
+const LETTER_P4_MAIN = `Little Pines Studio exists because this foundation is being undermined faster than any other part of childhood, and because the tools parents have been given to address it (therapy apps, SEL curricula, meditation videos) are almost all delivered through the same screens that caused the problem. The answer has to come from a different form factor entirely: a quiet, unhurried, screen-free friend that lives in a child's room and helps them notice what they feel, name it, sit with it, and move through it. Not a therapist. Not a teacher.`
 
-const LETTER_P5 = `In 2019, I quit Wall Street to co-found Learn With Mochi, believing the most valuable investment we could make is in our children. Mochi was built on the belief that young children learn best through hands-on play, stories, and away from screens. The company is an honest expression of a thesis about early childhood that I still believe. With recent frontier AI and hardware acceleration, the technical moment to build this particular concept arrived in 2026. We are going to build it slowly, in public, in partnership with people like you. If you’ve read this far, I’d love to hear from you.`
+const LETTER_P5 = `In 2019, I quit Wall Street to co-found Learn With Mochi, believing the most valuable investment we could make is in our children. Mochi was built on the belief that young children learn best through hands-on play, stories, and away from screens. The company is an honest expression of a thesis about early childhood that I still believe. With recent frontier AI and hardware acceleration, the technical moment to build this particular concept arrived in 2026. We are going to build it slowly, in public, in partnership with people like you. If you've read this far, I'd love to hear from you.`
 
 const LETTER_PARAS: LetterPara[] = [
   { text: LETTER_P2 },
@@ -172,17 +184,25 @@ function WaxSeal({ onClick, open }: { onClick: () => void; open: boolean }) {
 }
 
 /* ─── Hero ──────────────────────────────────────────────────────── */
-function InvitationHero() {
+function InvitationHero({ bgY, isMobile }: { bgY: MotionValue<string>; isMobile: boolean }) {
   return (
     <section
       className="relative flex flex-col items-center justify-center overflow-hidden"
       style={{ background: 'var(--forest-dark)', paddingTop: '11rem', paddingBottom: '10rem', textAlign: 'center', minHeight: '100svh' }}
     >
-      {/* Petit Prince background illustration */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true"
-        style={{ backgroundImage: "url('/petitprince.jpg')", backgroundSize: 'cover', backgroundPosition: 'center 30%' }}
+      {/* Petit Prince background — extends beyond section so parallax has room to move */}
+      <motion.div
+        className="absolute pointer-events-none"
+        aria-hidden="true"
+        style={{
+          top: '-15%', bottom: '-15%', left: 0, right: 0,
+          backgroundImage: "url('/petitprince.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 30%',
+          y: isMobile ? '0%' : bgY,
+        }}
       />
-      {/* Dark overlay to keep text legible and tone whimsical */}
+      {/* Dark overlay */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true"
         style={{ background: 'rgba(14,32,16,0.86)' }}
       />
@@ -197,6 +217,9 @@ function InvitationHero() {
 
       {/* Twinkling constellation */}
       <HeroConstellation />
+
+      {/* Shooting stars */}
+      <ShootingStars />
 
       {/* Radiating rings — bright inner-to-outer pulse */}
       <div className="absolute pointer-events-none" aria-hidden="true" style={{ left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }}>
@@ -231,7 +254,7 @@ function InvitationHero() {
           Little Pines Studio &middot; Calls for Collaboration
         </motion.p>
 
-        {/* Floating sentence — 3 wide lines */}
+        {/* Floating sentence — 4 lines, no italic, no bold */}
         <motion.div
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut', delay: 2.5 }}
@@ -246,11 +269,10 @@ function InvitationHero() {
                 transition={{ duration: 0.95, delay: LINE_DELAYS[i], ease: [0.19, 1, 0.22, 1] }}
                 style={{
                   fontSize: 'clamp(2.2rem, 5vw, 4rem)',
-                  fontStyle: 'italic',
-                  fontWeight: line.weight,
+                  fontWeight: 400,
                   lineHeight: 1.2,
                   letterSpacing: '-0.03em',
-                  color: line.amber ? 'var(--amber)' : i === 2 ? 'var(--cream)' : 'rgba(244,239,226,0.8)',
+                  color: line.amber ? 'var(--amber)' : 'rgba(244,239,226,0.85)',
                   paddingBottom: '0.06em',
                 }}
               >
@@ -268,8 +290,23 @@ function InvitationHero() {
           style={{ height: '1px', width: '3.5rem', background: 'rgba(196,149,75,0.5)', transformOrigin: 'left center', margin: '0 auto 2rem' }}
         />
 
+        {/* Quote + attribution */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, delay: 2.0 }}
+          style={{ marginBottom: '2rem' }}
+        >
+          <p className="font-serif" style={{ fontSize: 'clamp(0.82rem, 1.2vw, 0.96rem)', fontStyle: 'italic', color: 'rgba(244,239,226,0.45)', lineHeight: 1.65, letterSpacing: '0.01em' }}>
+            &ldquo;But eyes are blind. One must look with the heart.&rdquo;
+          </p>
+          <p className="font-sans" style={{ fontSize: '0.5rem', letterSpacing: '0.15em', color: 'rgba(196,149,75,0.36)', marginTop: '0.6rem' }}>
+            &mdash;Antoine de Saint-Exup&eacute;ry&rsquo;s <em style={{ fontStyle: 'italic' }}>The Little Prince</em>
+          </p>
+        </motion.div>
+
         {/* Down arrow */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 2.3 }} className="flex justify-center">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 2.6 }} className="flex justify-center">
           <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }} style={{ color: 'rgba(196,149,75,0.32)' }}>
             <svg width="14" height="22" viewBox="0 0 14 22" fill="none" aria-hidden="true">
               <path d="M7 2 V18 M2 13 L7 18 L12 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -308,10 +345,8 @@ function FounderLetter() {
         </Reveal>
 
         <Reveal delay={0.08}>
-          {/* Paper container */}
           <div style={{ background: 'rgba(255,250,238,0.72)', border: '1px solid rgba(196,149,75,0.12)', borderRadius: '8px', padding: 'clamp(1.75rem, 5vw, 2.75rem)', boxShadow: '0 2px 20px rgba(196,149,75,0.07)' }}>
 
-            {/* First paragraph — always visible */}
             <div className="font-serif text-charcoal" style={{ fontSize: 'clamp(0.97rem, 1.4vw, 1.07rem)', lineHeight: 1.88, marginBottom: '2rem' }}>
               <p>
                 In the first years of life, children express themselves naturally: they cry when they&rsquo;re
@@ -324,12 +359,10 @@ function FounderLetter() {
               </p>
             </div>
 
-            {/* Wax seal toggle */}
             <div className="flex flex-col items-center" style={{ margin: '0.5rem 0 1.25rem' }}>
               <WaxSeal open={open} onClick={() => open ? handleClose() : setOpen(true)} />
             </div>
 
-            {/* Expanding letter body */}
             <AnimatePresence initial={false}>
               {open && (
                 <motion.div
@@ -428,23 +461,50 @@ function ProgrammeRow({ card, isOpen, onToggle, isLast }: {
   )
 }
 
-/* ─── Programme Section ─────────────────────────────────────────── */
-function ProgrammeSection() {
+/* ─── Programme Column (independent accordion state) ────────────── */
+function ProgrammeColumn({ cards }: { cards: typeof CARDS }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const toggle = (i: number) => setOpenIndex(prev => prev === i ? null : i)
+  return (
+    <>
+      {cards.map((card, i) => (
+        <ProgrammeRow
+          key={card.id}
+          card={card}
+          isOpen={openIndex === i}
+          onToggle={() => toggle(i)}
+          isLast={i === cards.length - 1}
+        />
+      ))}
+    </>
+  )
+}
 
+/* ─── Programme Section (2-col on lg+) ─────────────────────────── */
+function ProgrammeSection() {
   return (
     <section style={{ background: 'var(--cream)', position: 'relative', zIndex: 3 }}>
-      <div className="mx-auto px-6 md:px-10" style={{ maxWidth: '760px', paddingTop: '1rem', paddingBottom: '5rem' }}>
+      <style>{`
+        @media (min-width: 1024px) {
+          .prog-left { border-right: 1px solid rgba(42,74,48,0.07); padding-right: 2.5rem; }
+          .prog-right { padding-left: 2.5rem; }
+        }
+      `}</style>
+      <div className="mx-auto px-6 md:px-10" style={{ maxWidth: '1140px', paddingTop: '1rem', paddingBottom: '5rem' }}>
         <Reveal>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(42,74,48,0.10)' }}>
             <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(42,74,48,0.32)' }}>Eight invitations</p>
             <div style={{ flex: 1, height: '1px', background: 'rgba(42,74,48,0.08)' }} />
           </div>
         </Reveal>
-        {CARDS.map((card, i) => (
-          <ProgrammeRow key={card.id} card={card} isOpen={openIndex === i} onToggle={() => toggle(i)} isLast={i === CARDS.length - 1} />
-        ))}
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          <div className="prog-left">
+            <ProgrammeColumn cards={CARDS.slice(0, 4)} />
+          </div>
+          <div className="prog-right">
+            <ProgrammeColumn cards={CARDS.slice(4)} />
+          </div>
+        </div>
       </div>
     </section>
   )
@@ -464,10 +524,22 @@ function PullUpSessionsSection() {
 
 /* ─── Page ──────────────────────────────────────────────────────── */
 export default function BuildWithUsPage() {
+  const heroRef = useRef<HTMLDivElement>(null)
+  const isMobile = useIsMobile()
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
+
+  // Parallax: bg image rises, letter section gets pulled up — desktop/tablet only
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '-22%'])
+  const letterY = useTransform(scrollYProgress, [0, 1], ['0px', '-60px'])
+
   return (
     <>
-      <InvitationHero />
-      <FounderLetter />
+      <div ref={heroRef}>
+        <InvitationHero bgY={bgY} isMobile={isMobile} />
+      </div>
+      <motion.div style={{ y: isMobile ? 0 : letterY }}>
+        <FounderLetter />
+      </motion.div>
       <ProgrammeSection />
       <WorkshopSection />
       <AfterBearSection />
