@@ -101,7 +101,7 @@ type CardData = {
   isParents?: boolean
 }
 
-const CARDS: CardData[] = [
+export const CARDS: CardData[] = [
   {
     n: '01',
     id: 'engineer',
