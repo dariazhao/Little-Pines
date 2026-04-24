@@ -251,29 +251,28 @@ export function AfterHero() {
   const heroY       = useTransform(scrollYProgress, [0, 0.20], [0, -48])
 
   // Globe — grows and drifts toward center (sprung for smooth motion)
-  const rawGlobeScale = useTransform(scrollYProgress, [0, 0.60], [1, 1.72])
-  const rawGlobeX     = useTransform(scrollYProgress, [0, 0.58], [0, -180])
-  const rawGlobeY     = useTransform(scrollYProgress, [0, 0.60], [-40, -75])
+  const rawGlobeScale = useTransform(scrollYProgress, [0, 0.50], [1, 1.72])
+  const rawGlobeX     = useTransform(scrollYProgress, [0, 0.48], [0, -180])
+  const rawGlobeY     = useTransform(scrollYProgress, [0, 0.50], [-40, -75])
   const globeScale    = useSpring(rawGlobeScale, { stiffness: 60, damping: 22, restDelta: 0.001 })
   const globeX        = useSpring(rawGlobeX,     { stiffness: 60, damping: 22, restDelta: 0.001 })
   const globeY        = useSpring(rawGlobeY,      { stiffness: 60, damping: 22, restDelta: 0.001 })
 
   // Inner quote carousel — fades out as globe expands
-  const innerQuoteOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0])
+  const innerQuoteOpacity = useTransform(scrollYProgress, [0, 0.22], [1, 0])
 
   // No overlay — globe stays fully visible, quote uses dark text instead
   const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0, 0])
 
   // Mobile top crop — fades in after hero text is gone so it never covers eyebrow
   const mobileCropTopOpacity = useTransform(scrollYProgress, [0.15, 0.28], [0, 1])
-  // CTA button fades slower — lingers until globe is near max enlarged size
 
   // Bottom globe fade — scroll-activated, invisible at rest
-  const globeBottomFadeOpacity = useTransform(scrollYProgress, [0.50, 0.90], [0, 1])
+  const globeBottomFadeOpacity = useTransform(scrollYProgress, [0.46, 0.82], [0, 1])
 
-  // Full-bleed quote — fades in over the giant globe, stays at full opacity
-  const quoteOpacity = useTransform(scrollYProgress, [0.35, 0.52], [0, 1])
-  const quoteY       = useTransform(scrollYProgress, [0.35, 0.52], [36, 0])
+  // Full-bleed quote — fades in right as carousel finishes fading out
+  const quoteOpacity = useTransform(scrollYProgress, [0.20, 0.34], [0, 1])
+  const quoteY       = useTransform(scrollYProgress, [0.20, 0.34], [36, 0])
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout> | null = null
@@ -288,7 +287,7 @@ export function AfterHero() {
   }, [])
 
   return (
-    <div ref={containerRef} style={{ height: '200vh', position: 'relative', zIndex: 1 }}>
+    <div ref={containerRef} style={{ height: '170vh', position: 'relative', zIndex: 1 }}>
       <div
         className="sticky top-0 overflow-hidden"
         style={{ height: '100vh', background: 'var(--forest-dark)' }}
@@ -1352,7 +1351,7 @@ function ConceptPaperSection() {
     >
       <div className="absolute inset-0 bg-grain opacity-[0.018] pointer-events-none" aria-hidden="true" />
 
-      <motion.div style={{ y: contentY }} className="relative z-10 mx-auto max-w-7xl px-6 md:px-12 lg:px-20 py-32 md:py-40">
+      <motion.div style={{ y: contentY }} className="relative z-10 mx-auto max-w-7xl px-6 md:px-12 lg:px-20 py-24 md:py-32">
 
         {/* Two-column: statement left, chapter list right */}
         <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-14 md:gap-20">
@@ -1419,13 +1418,13 @@ function ConceptPaperSection() {
           </div>
 
           {/* CC footer */}
-          <div style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid rgba(42,74,48,0.10)' }}>
-            <p className="font-sans text-sm" style={{ color: 'var(--charcoal)', opacity: 0.45, lineHeight: 1.7, marginBottom: '1rem' }}>
+          <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(42,74,48,0.10)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem', flexWrap: 'wrap' }}>
+            <p className="font-sans text-sm" style={{ color: 'var(--charcoal)', opacity: 0.45, lineHeight: 1.7 }}>
               Released under CC BY-SA 4.0. Share freely; attribute Little Pines Studio.
             </p>
             <Link
               href="/promise"
-              className="font-sans text-sm inline-flex items-center gap-2 transition-colors"
+              className="font-sans text-sm inline-flex items-center gap-2 transition-colors shrink-0"
               style={{ color: 'var(--amber)' }}
             >
               <ArrowRight className="w-3.5 h-3.5" /> The Little Pines Promise
