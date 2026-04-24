@@ -304,7 +304,7 @@ function CommitmentsSection() {
   return (
     <section style={{
       background: 'var(--cream)',
-      borderRadius: '2rem 2rem 0 0',
+      borderRadius: '2rem',
       marginTop: '-2rem',
       paddingTop: 'clamp(3.5rem, 7vw, 5.5rem)',
       paddingBottom: 'clamp(2.5rem, 5vw, 4rem)',
@@ -392,7 +392,7 @@ function OpenSourceSection() {
   const contentY = useTransform(scrollYProgress, [0, 1], [28, -28])
 
   return (
-    <section ref={ref} style={{ background: 'var(--forest-dark)', padding: '5rem 0 6rem', position: 'relative', zIndex: 6, overflow: 'hidden' }}>
+    <section ref={ref} style={{ background: 'var(--forest-dark)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', padding: '5rem 0 6rem', position: 'relative', zIndex: 6, overflow: 'hidden' }}>
       <div className="absolute inset-0 bg-grain opacity-50 pointer-events-none" aria-hidden="true" />
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true"><StarField /></div>
       <TwinklingStars />

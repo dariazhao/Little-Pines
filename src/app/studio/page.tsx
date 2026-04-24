@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useRef, useState } from 'react'
-import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
@@ -47,7 +46,7 @@ const LETTER_PARAS: LetterPara[] = [
   { text: LETTER_P5 },
 ]
 
-const PARA_DELAYS = [0.6, 2.4, 4.2, 6.0]
+const PARA_DELAYS = [0.3, 1.3, 2.3, 3.3]
 
 /* ─── Letter reveal (paragraph-by-paragraph fade from left) ─────── */
 function TypewriterLetter({ onClose }: { onClose: () => void }) {
@@ -58,7 +57,7 @@ function TypewriterLetter({ onClose }: { onClose: () => void }) {
           key={i}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 2.2, delay: PARA_DELAYS[i], ease: 'easeOut' }}
+          transition={{ duration: 1.4, delay: PARA_DELAYS[i], ease: 'easeOut' }}
           style={{ marginBottom: '1.5rem' }}
         >
           {para.text}
@@ -70,7 +69,7 @@ function TypewriterLetter({ onClose }: { onClose: () => void }) {
         className="font-serif italic"
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.52 }}
-        transition={{ duration: 1.4, delay: 8.6, ease: 'easeOut' }}
+        transition={{ duration: 1.4, delay: 5.2, ease: 'easeOut' }}
         style={{ color: 'var(--forest)', marginTop: '1.5rem', marginBottom: '2rem' }}
       >
         &mdash;Daria
@@ -79,7 +78,7 @@ function TypewriterLetter({ onClose }: { onClose: () => void }) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 9.4, duration: 0.8 }}
+        transition={{ delay: 6.0, duration: 0.8 }}
         className="flex justify-center"
       >
         <button
@@ -280,6 +279,9 @@ function FounderLetter() {
           <div style={{ background: 'rgba(255,250,238,0.72)', border: '1px solid rgba(196,149,75,0.12)', borderRadius: '8px', padding: 'clamp(1.75rem, 5vw, 2.75rem)', boxShadow: '0 2px 20px rgba(196,149,75,0.07)' }}>
 
             <div className="font-serif text-charcoal" style={{ fontSize: 'clamp(0.97rem, 1.4vw, 1.07rem)', lineHeight: 1.88, marginBottom: '2rem' }}>
+              <p style={{ fontWeight: 700, marginBottom: '1.5rem' }}>
+                Children are born with an extraordinary capacity to feel, notice, and express the full range of human emotion.
+              </p>
               <p>
                 In the first years of life, children express themselves naturally: they cry when they&rsquo;re
                 sad, they laugh when they&rsquo;re delighted, they cling when they&rsquo;re afraid,
@@ -415,7 +417,7 @@ function ProgrammeColumn({ cards }: { cards: typeof CARDS }) {
 /* ─── Programme Section (2-col on lg+) ─────────────────────────── */
 function ProgrammeSection() {
   return (
-    <section style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 4 }}>
+    <section style={{ background: 'var(--cream)', position: 'relative', zIndex: 3 }}>
       <style>{`
         @media (min-width: 1024px) {
           .prog-left { border-right: 1px solid rgba(42,74,48,0.07); padding-right: 2.5rem; }
@@ -442,45 +444,12 @@ function ProgrammeSection() {
   )
 }
 
-/* ─── Quote section ─────────────────────────────────────────────── */
-function QuoteSection() {
-  return (
-    <section style={{ background: 'var(--forest-dark)', position: 'relative', zIndex: 3, padding: '6rem 1.5rem 5rem', textAlign: 'center', overflow: 'hidden' }}>
-      <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" aria-hidden="true" />
-      <div className="relative z-10 mx-auto" style={{ maxWidth: '680px' }}>
-        <Reveal>
-          <div style={{ width: '2.5rem', height: '1px', background: 'rgba(196,149,75,0.45)', margin: '0 auto 3.5rem' }} />
-          <p className="font-serif" style={{ fontSize: 'clamp(1.3rem, 2.8vw, 2.1rem)', fontStyle: 'italic', color: 'rgba(244,239,226,0.82)', lineHeight: 1.52, letterSpacing: '-0.02em', marginBottom: '2rem' }}>
-            &ldquo;Children are born with an extraordinary capacity to feel, notice, and express the full range of human emotion.&rdquo;
-          </p>
-          <p className="font-sans" style={{ fontSize: '0.5rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.48)' }}>
-            Little Pines &mdash; est. 2026
-          </p>
-        </Reveal>
-        <Reveal delay={0.14}>
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3.5rem' }}>
-            <Image
-              src="/bear_sits.png"
-              alt=""
-              width={190}
-              height={190}
-              style={{ opacity: 0.18, filter: 'brightness(0.5) sepia(0.5)' }}
-              aria-hidden="true"
-            />
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  )
-}
-
 /* ─── Page ──────────────────────────────────────────────────────── */
 export default function BuildWithUsPage() {
   return (
     <>
       <InvitationHero />
       <FounderLetter />
-      <QuoteSection />
       <ProgrammeSection />
       <WorkshopSection />
     </>
