@@ -374,7 +374,7 @@ export function AfterHero() {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.54, duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
-                    className="flex justify-start mt-10"
+                    className="flex justify-center lg:justify-start mt-10"
                   >
                     <a
                       href="#read-the-brief"
