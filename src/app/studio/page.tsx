@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
@@ -8,7 +8,7 @@ import { PineBranch } from '@/components/illustrations/pine-branch'
 import { WorkshopSection, AfterBearSection, SessionsSection } from '../_homepage-after'
 import { CARDS } from './_cards'
 
-/* ─── Star data ─────────────────────────────────────────────────── */
+/* ─── Static star field ─────────────────────────────────────────── */
 const STUDIO_STARS: [number, number, number][] = [
   [8,12,1.2],[15,7,0.9],[23,18,1.4],[32,5,0.8],[41,14,1.1],
   [55,9,1.3],[63,20,0.9],[72,6,1.5],[80,15,1.0],[91,8,1.2],
@@ -18,97 +18,128 @@ const STUDIO_STARS: [number, number, number][] = [
   [70,95,1.0],[25,95,1.2],[85,25,0.9],[52,50,0.7],[33,65,1.0],
 ]
 
-/* ─── Hero sentence lines ────────────────────────────────────────── */
-const SENTENCE_LINES = [
-  { text: 'Children are born with', amber: false, weight: 400 },
-  { text: 'an extraordinary capacity', amber: false, weight: 400 },
-  { text: 'to feel, notice,', amber: true, weight: 600 },
-  { text: 'and express', amber: true, weight: 600 },
-  { text: 'the full range of', amber: false, weight: 400 },
-  { text: 'human emotion.', amber: false, weight: 700 },
+/* ─── Constellation overlay ─────────────────────────────────────── */
+const CONST_STARS = [
+  { x: 6,  y: 7  }, { x: 13, y: 13 }, { x: 22, y: 6  }, { x: 30, y: 16 },
+  { x: 38, y: 9  }, { x: 46, y: 4  }, { x: 53, y: 12 }, { x: 62, y: 8  },
+  { x: 69, y: 15 }, { x: 77, y: 5  }, { x: 84, y: 11 }, { x: 91, y: 7  },
+  { x: 96, y: 17 }, { x: 9,  y: 23 }, { x: 24, y: 27 },
+  { x: 43, y: 21 }, { x: 57, y: 25 }, { x: 72, y: 20 }, { x: 87, y: 28 }, { x: 3, y: 19 },
 ]
-const LINE_DELAYS = [0.3, 0.52, 0.74, 0.91, 1.1, 1.28]
+const CONST_EDGES = [
+  [0,1],[1,2],[2,3],[4,5],[5,6],[7,8],[8,9],
+  [10,11],[11,12],[19,13],[13,14],[14,15],
+]
 
-/* ─── Letter paragraph text (no em dashes) ──────────────────────── */
-const LETTER_P2 = `The screen economy has accelerated this loss. Every minute a child spends on YouTube, TikTok, or a tablet is a minute they're not sitting with their own interior life. The dopamine reward cycle of short-form content trains children to flee from boredom, from discomfort, from the quiet moments where self-awareness actually develops. Jonathan Haidt documented the population-level consequences. But the individual consequence is simpler and sadder: millions of children are growing up without the basic emotional vocabulary and self-regulation skills that we carry with us through a lifetime.`
+function HeroConstellation() {
+  return (
+    <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
+      {CONST_EDGES.map(([a, b], i) => {
+        const s = CONST_STARS[a], e = CONST_STARS[b]
+        return (
+          <line key={i}
+            x1={`${s.x}%`} y1={`${s.y}%`}
+            x2={`${e.x}%`} y2={`${e.y}%`}
+            stroke="rgba(244,239,226,0.18)" strokeWidth="0.6"
+          />
+        )
+      })}
+      {CONST_STARS.map((s, i) => (
+        <motion.circle
+          key={i}
+          cx={`${s.x}%`} cy={`${s.y}%`}
+          r={i % 4 === 0 ? 1.3 : 0.9}
+          fill="rgba(244,239,226,0.9)"
+          animate={{ opacity: [0.18, 0.72, 0.18] }}
+          transition={{ duration: 2.2 + (i * 0.28) % 1.8, delay: i * 0.12, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      ))}
+    </svg>
+  )
+}
+
+/* ─── Hero sentence (3 wide lines) ─────────────────────────────── */
+const SENTENCE_LINES = [
+  { text: 'Children are born with an extraordinary capacity', amber: false, weight: 400 },
+  { text: 'to feel, notice, and express', amber: true, weight: 600 },
+  { text: 'the full range of human emotion.', amber: false, weight: 700 },
+]
+const LINE_DELAYS = [0.3, 0.58, 0.86]
+
+/* ─── Letter paragraphs ─────────────────────────────────────────── */
+type LetterPara = { text: string; italicSuffix?: string }
+
+const LETTER_P2 = `The screen economy has accelerated this loss. Every minute a child spends on YouTube, TikTok, or a tablet is a minute they’re not sitting with their own interior life. The dopamine reward cycle of short-form content trains children to flee from boredom, from discomfort, from the quiet moments where self-awareness actually develops. Jonathan Haidt documented the population-level consequences. But the individual consequence is simpler and sadder: millions of children are growing up without the basic emotional vocabulary and self-regulation skills that we carry with us through a lifetime.`
+
 const LETTER_P3 = `Montessori, Waldorf, and other child-development traditions have always understood that emotional awareness is not separate from learning: it is the foundation of learning. A child who cannot name their frustration cannot work through it. A child who cannot recognize their excitement cannot channel it. Academic skills come later, and they come more easily, when the emotional foundation is strong.`
-const LETTER_P4 = `Little Pines Studio exists because this foundation is being undermined faster than any other part of childhood, and because the tools parents have been given to address it (therapy apps, SEL curricula, meditation videos) are almost all delivered through the same screens that caused the problem. The answer has to come from a different form factor entirely: a quiet, unhurried, screen-free friend that lives in a child's room and helps them notice what they feel, name it, sit with it, and move through it. Not a therapist. Not a teacher. A friend.`
-const LETTER_P5 = `I spent eight years at Learn With Mochi learning what four-year-olds actually need. The technical moment to build this particular friend arrived in 2026. We are going to build it slowly, in public, in partnership with people like you who read this far.`
-const LETTER_PARAS = [LETTER_P2, LETTER_P3, LETTER_P4, LETTER_P5]
-const LETTER_SEP = '\x00'
-const LETTER_FULL = LETTER_PARAS.join(LETTER_SEP)
-const LETTER_SPEED = 7
 
-/* ─── Typewriter letter ─────────────────────────────────────────── */
+const LETTER_P4_MAIN = `Little Pines Studio exists because this foundation is being undermined faster than any other part of childhood, and because the tools parents have been given to address it (therapy apps, SEL curricula, meditation videos) are almost all delivered through the same screens that caused the problem. The answer has to come from a different form factor entirely: a quiet, unhurried, screen-free friend that lives in a child’s room and helps them notice what they feel, name it, sit with it, and move through it. Not a therapist. Not a teacher.`
+
+const LETTER_P5 = `In 2019, I quit Wall Street to co-found Learn With Mochi, believing the most valuable investment we could make is in our children. Mochi was built on the belief that young children learn best through hands-on play, stories, and away from screens. The company is an honest expression of a thesis about early childhood that I still believe. Since then, I’ve spent 8 years learning and observing what four-year-olds actually need. With recent frontier AI and hardware acceleration, the technical moment to build this particular concept arrived in 2026. We are going to build it slowly, in public, in partnership with people like you. If you’ve read this far, I’d love to hear from you.`
+
+const LETTER_PARAS: LetterPara[] = [
+  { text: LETTER_P2 },
+  { text: LETTER_P3 },
+  { text: LETTER_P4_MAIN, italicSuffix: ' A friend.' },
+  { text: LETTER_P5 },
+]
+
+const PARA_DELAYS = [0.4, 1.3, 2.2, 3.1]
+
+/* ─── Letter reveal (paragraph-by-paragraph fade from left) ─────── */
 function TypewriterLetter({ onClose }: { onClose: () => void }) {
-  const [pos, setPos] = useState(0)
-
-  useEffect(() => {
-    const t = setInterval(() => {
-      setPos(p => {
-        if (p >= LETTER_FULL.length) { clearInterval(t); return p }
-        return p + 1
-      })
-    }, LETTER_SPEED)
-    return () => clearInterval(t)
-  }, [])
-
-  const isDone = pos >= LETTER_FULL.length
-
-  const paras = LETTER_PARAS.map((para, i) => {
-    const start = LETTER_PARAS.slice(0, i).reduce((s, p) => s + p.length + 1, 0)
-    const end = start + para.length
-    const revealed = LETTER_FULL.slice(start, Math.min(end, pos))
-    const isCurrent = pos >= start && pos < end
-    return { revealed, isCurrent }
-  })
-
   return (
     <div className="font-serif text-charcoal" style={{ fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)', lineHeight: 1.88 }}>
-      {paras.map(({ revealed, isCurrent }, i) =>
-        revealed.length > 0 ? (
-          <p key={i} style={{ marginBottom: '1.5rem' }}>
-            {revealed}
-            {isCurrent && !isDone && (
-              <motion.span
-                animate={{ opacity: [1, 0, 1] }}
-                transition={{ duration: 0.55, repeat: Infinity }}
-                style={{ color: 'var(--amber)', marginLeft: '1px' }}
-              >|</motion.span>
-            )}
-          </p>
-        ) : null
-      )}
+      {LETTER_PARAS.map((para, i) => (
+        <motion.p
+          key={i}
+          initial={{ opacity: 0, x: -12 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: PARA_DELAYS[i], ease: [0.19, 1, 0.22, 1] }}
+          style={{ marginBottom: '1.5rem' }}
+        >
+          {para.text}
+          {para.italicSuffix && <em>{para.italicSuffix}</em>}
+        </motion.p>
+      ))}
 
-      {isDone && (
-        <>
-          <p className="font-serif italic" style={{ color: 'var(--forest)', opacity: 0.5, marginTop: '1.5rem', marginBottom: '2.5rem' }}>
-            &mdash;Daria
-          </p>
-          <div className="flex justify-center">
-            <button
-              onClick={onClose}
-              className="font-sans inline-flex items-center gap-2 transition-opacity hover:opacity-70"
-              style={{
-                fontSize: '0.58rem',
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: 'rgba(42,74,48,0.42)',
-                background: 'none',
-                border: '1px solid rgba(42,74,48,0.14)',
-                borderRadius: '4px',
-                padding: '0.55rem 1.4rem',
-                cursor: 'pointer',
-              }}
-            >
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                <path d="M5 1 V9 M2 6 L5 9 L8 6" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" transform="rotate(180 5 5)"/>
-              </svg>
-              Close letter
-            </button>
-          </div>
-        </>
-      )}
+      <motion.p
+        className="font-serif italic"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.52 }}
+        transition={{ duration: 0.6, delay: 3.9, ease: [0.19, 1, 0.22, 1] }}
+        style={{ color: 'var(--forest)', marginTop: '1.5rem', marginBottom: '2rem' }}
+      >
+        &mdash;Daria
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 4.4, duration: 0.5 }}
+        className="flex justify-center"
+      >
+        <button
+          onClick={onClose}
+          className="font-sans inline-flex items-center gap-2 transition-opacity hover:opacity-70"
+          style={{
+            fontSize: '0.58rem',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'rgba(42,74,48,0.42)',
+            background: 'none',
+            border: '1px solid rgba(42,74,48,0.14)',
+            borderRadius: '4px',
+            padding: '0.55rem 1.4rem',
+            cursor: 'pointer',
+          }}
+        >
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+            <path d="M5 8 V2 M2 5 L5 2 L8 5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Close letter
+        </button>
+      </motion.div>
     </div>
   )
 }
@@ -119,7 +150,7 @@ function WaxSeal({ onClick, open }: { onClick: () => void; open: boolean }) {
     <button
       onClick={onClick}
       aria-label={open ? 'Close letter' : 'Open letter'}
-      className="relative flex flex-col items-center gap-3 group"
+      className="relative flex flex-col items-center gap-3"
       style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
     >
       <motion.div
@@ -127,25 +158,12 @@ function WaxSeal({ onClick, open }: { onClick: () => void; open: boolean }) {
         transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
       >
         <svg viewBox="0 0 88 88" width="68" height="68" aria-hidden="true">
-          <path
-            d="M44 3 C51 1 60 4 67 10 C74 16 80 24 82 33 C85 43 83 54 78 62 C73 70 64 76 54 79 C44 82 33 81 24 77 C15 73 8 65 5 55 C1 45 3 34 8 25 C13 16 21 8 30 5 C36 2 40 4 44 3 Z"
-            fill="var(--amber)"
-            opacity="0.88"
-          />
+          <path d="M44 3 C51 1 60 4 67 10 C74 16 80 24 82 33 C85 43 83 54 78 62 C73 70 64 76 54 79 C44 82 33 81 24 77 C15 73 8 65 5 55 C1 45 3 34 8 25 C13 16 21 8 30 5 C36 2 40 4 44 3 Z" fill="var(--amber)" opacity="0.88"/>
           <circle cx="44" cy="44" r="27" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8"/>
           <text x="44" y="49" textAnchor="middle" fontFamily="Georgia, serif" fontSize="17" fontStyle="italic" fontWeight="600" fill="rgba(255,255,255,0.82)" letterSpacing="1">LP</text>
         </svg>
       </motion.div>
-      <span
-        className="font-sans"
-        style={{
-          fontSize: '0.54rem',
-          letterSpacing: '0.2em',
-          textTransform: 'uppercase',
-          color: open ? 'rgba(42,74,48,0.28)' : 'rgba(196,149,75,0.65)',
-          transition: 'color 0.3s ease',
-        }}
-      >
+      <span className="font-sans" style={{ fontSize: '0.54rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: open ? 'rgba(42,74,48,0.28)' : 'rgba(196,149,75,0.65)', transition: 'color 0.3s ease' }}>
         {open ? 'close' : 'open the letter'}
       </span>
     </button>
@@ -157,51 +175,38 @@ function InvitationHero() {
   return (
     <section
       className="relative flex flex-col items-center justify-center overflow-hidden"
-      style={{
-        background: 'var(--forest-dark)',
-        paddingTop: '11rem',
-        paddingBottom: '10rem',
-        textAlign: 'center',
-        minHeight: '100svh',
-      }}
+      style={{ background: 'var(--forest-dark)', paddingTop: '11rem', paddingBottom: '10rem', textAlign: 'center', minHeight: '100svh' }}
     >
       <div className="absolute inset-0 bg-grain opacity-50 pointer-events-none" aria-hidden="true" />
 
+      {/* Static stars */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
         {STUDIO_STARS.map(([x, y, r], i) => (
           <circle key={i} cx={`${x}%`} cy={`${y}%`} r={r} fill="rgba(244,239,226,1)" opacity={0.11 + (i % 8) * 0.055} />
         ))}
       </svg>
 
-      {/* Radiating concentric rings — inner-to-outer pulse */}
+      {/* Twinkling constellation */}
+      <HeroConstellation />
+
+      {/* Radiating rings — bright inner-to-outer pulse */}
       <div className="absolute pointer-events-none" aria-hidden="true" style={{ left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }}>
         {([200, 310, 440, 580] as const).map((size, i) => (
           <motion.div
             key={i}
             style={{
-              position: 'absolute',
-              width: size, height: size,
-              borderRadius: '50%',
-              border: '1px solid rgba(196,149,75,1)',
-              top: '50%', left: '50%',
-              transform: 'translate(-50%,-50%)',
+              position: 'absolute', width: size, height: size,
+              borderRadius: '50%', border: '1px solid rgba(196,149,75,1)',
+              top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
             }}
-            animate={{ opacity: [0.04, 0.32 - i * 0.06, 0.04] }}
-            transition={{
-              duration: 2.8,
-              delay: i * 0.45,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
+            animate={{ opacity: [0.05, 0.55 - i * 0.10, 0.05] }}
+            transition={{ duration: 2.8, delay: i * 0.45, repeat: Infinity, ease: 'easeInOut' }}
           />
         ))}
       </div>
 
       {/* Amber bloom */}
-      <div className="absolute inset-x-0 pointer-events-none" aria-hidden="true" style={{
-        top: '15%', height: '70%',
-        background: 'radial-gradient(ellipse at 50% 50%, rgba(196,149,75,0.08) 0%, transparent 58%)',
-      }} />
+      <div className="absolute inset-x-0 pointer-events-none" aria-hidden="true" style={{ top: '15%', height: '70%', background: 'radial-gradient(ellipse at 50% 50%, rgba(196,149,75,0.09) 0%, transparent 58%)' }} />
 
       <div className="absolute top-0 left-0 pointer-events-none opacity-[0.038]" aria-hidden="true" style={{ width: 'min(200px, 26vw)', transform: 'rotate(-12deg) translateX(-14%)' }}>
         <PineBranch color="var(--cream)" />
@@ -210,20 +215,14 @@ function InvitationHero() {
         <PineBranch color="var(--cream)" flip />
       </div>
 
-      <div className="relative z-10 px-6" style={{ maxWidth: 'min(840px, 90vw)' }}>
-
+      <div className="relative z-10 px-6" style={{ maxWidth: 'min(920px, 92vw)' }}>
         {/* Eyebrow */}
-        <motion.p
-          className="font-sans"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.1 }}
-          style={{ fontSize: '0.52rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.50)', marginBottom: '3rem' }}
-        >
+        <motion.p className="font-sans" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.1 }}
+          style={{ fontSize: '0.52rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.50)', marginBottom: '3rem' }}>
           Little Pines Studio &middot; Calls for Collaboration
         </motion.p>
 
-        {/* Floating sentence — slides up per line, then gently floats */}
+        {/* Floating sentence — 3 wide lines */}
         <motion.div
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut', delay: 2.5 }}
@@ -237,12 +236,12 @@ function InvitationHero() {
                 animate={{ y: '0%' }}
                 transition={{ duration: 0.95, delay: LINE_DELAYS[i], ease: [0.19, 1, 0.22, 1] }}
                 style={{
-                  fontSize: 'clamp(2rem, 4.5vw, 3.5rem)',
+                  fontSize: 'clamp(2.2rem, 5vw, 4rem)',
                   fontStyle: 'italic',
                   fontWeight: line.weight,
-                  lineHeight: 1.22,
+                  lineHeight: 1.2,
                   letterSpacing: '-0.03em',
-                  color: line.amber ? 'var(--amber)' : i === 5 ? 'var(--cream)' : 'rgba(244,239,226,0.8)',
+                  color: line.amber ? 'var(--amber)' : i === 2 ? 'var(--cream)' : 'rgba(244,239,226,0.8)',
                   paddingBottom: '0.06em',
                 }}
               >
@@ -256,34 +255,28 @@ function InvitationHero() {
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ duration: 1.2, delay: 1.8, ease: [0.19, 1, 0.22, 1] }}
-          style={{ height: '1px', width: '3.5rem', background: 'rgba(196,149,75,0.5)', transformOrigin: 'left center', margin: '0 auto 1.75rem' }}
+          transition={{ duration: 1.2, delay: 1.5, ease: [0.19, 1, 0.22, 1] }}
+          style={{ height: '1px', width: '3.5rem', background: 'rgba(196,149,75,0.5)', transformOrigin: 'left center', margin: '0 auto 2rem' }}
         />
 
-        {/* Sub-text */}
-        <motion.p
-          className="font-sans"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2.1 }}
-          style={{ fontSize: '0.82rem', lineHeight: 1.7, color: 'rgba(244,239,226,0.35)', maxWidth: '48ch', marginInline: 'auto' }}
-        >
-          Eight invitations: to engineers, researchers, educators, investors, and the parents who believe in the power of a rich interior life.
-        </motion.p>
-
-        {/* Down arrow */}
+        {/* "The gift of a rich interior life" — horizontal-rule treatment */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2.4 }}
-          className="flex justify-center"
-          style={{ marginTop: '2rem' }}
+          transition={{ duration: 1, delay: 2.0 }}
+          className="flex items-center justify-center gap-5"
+          style={{ color: 'rgba(196,149,75,0.42)', marginBottom: '2rem' }}
         >
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ color: 'rgba(196,149,75,0.32)' }}
-          >
+          <div style={{ flex: 1, height: '1px', background: 'rgba(196,149,75,0.38)', maxWidth: '88px' }} />
+          <span className="font-sans" style={{ fontSize: '0.52rem', letterSpacing: '0.28em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+            The gift of a rich interior life
+          </span>
+          <div style={{ flex: 1, height: '1px', background: 'rgba(196,149,75,0.38)', maxWidth: '88px' }} />
+        </motion.div>
+
+        {/* Down arrow */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 2.3 }} className="flex justify-center">
+          <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }} style={{ color: 'rgba(196,149,75,0.32)' }}>
             <svg width="14" height="22" viewBox="0 0 14 22" fill="none" aria-hidden="true">
               <path d="M7 2 V18 M2 13 L7 18 L12 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -299,54 +292,30 @@ function FounderLetter() {
   const [open, setOpen] = useState(false)
 
   return (
-    <section
-      id="build-with-us"
-      style={{
-        background: 'var(--cream)',
-        borderRadius: '2rem 2rem 0 0',
-        marginTop: '-2rem',
-        position: 'relative',
-        zIndex: 2,
-        scrollMarginTop: '5rem',
-      }}
-    >
-      <div
-        className="mx-auto px-6 md:px-10"
-        style={{ maxWidth: '660px', paddingTop: '5rem', paddingBottom: '5.5rem' }}
-      >
-        {/* Section heading — outside paper */}
+    <section id="build-with-us" style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 2, scrollMarginTop: '5rem' }}>
+      <div className="mx-auto px-6 md:px-10" style={{ maxWidth: '660px', paddingTop: '5rem', paddingBottom: '5.5rem' }}>
+
         <Reveal>
           <p className="font-sans uppercase" style={{ fontSize: '0.54rem', letterSpacing: '0.26em', color: 'rgba(42,74,48,0.32)', marginBottom: '1.2rem' }}>
             A letter from the founder
           </p>
           <div style={{ marginBottom: '2.5rem' }}>
-            <h1 className="font-serif text-forest block" style={{ fontSize: 'clamp(2.6rem, 5.5vw, 4.2rem)', fontWeight: 700, lineHeight: 0.9, letterSpacing: '-0.03em' }}>
-              Build
-            </h1>
-            <span className="font-serif block" style={{ fontSize: 'clamp(2.6rem, 5.5vw, 4.2rem)', fontWeight: 400, fontStyle: 'italic', lineHeight: 1.1, letterSpacing: '-0.03em', color: 'var(--amber)' }}>
-              with us.
-            </span>
+            <h1 className="font-serif text-forest block" style={{ fontSize: 'clamp(2.6rem, 5.5vw, 4.2rem)', fontWeight: 700, lineHeight: 0.9, letterSpacing: '-0.03em' }}>Build</h1>
+            <span className="font-serif block" style={{ fontSize: 'clamp(2.6rem, 5.5vw, 4.2rem)', fontWeight: 400, fontStyle: 'italic', lineHeight: 1.1, letterSpacing: '-0.03em', color: 'var(--amber)' }}>with us.</span>
           </div>
         </Reveal>
 
-        {/* Paper / letter container */}
         <Reveal delay={0.08}>
-          <div
-            style={{
-              background: 'rgba(255, 250, 238, 0.72)',
-              border: '1px solid rgba(196,149,75,0.12)',
-              borderRadius: '8px',
-              padding: 'clamp(1.75rem, 5vw, 2.75rem)',
-              boxShadow: '0 2px 20px rgba(196,149,75,0.07)',
-            }}
-          >
+          {/* Paper container */}
+          <div style={{ background: 'rgba(255,250,238,0.72)', border: '1px solid rgba(196,149,75,0.12)', borderRadius: '8px', padding: 'clamp(1.75rem, 5vw, 2.75rem)', boxShadow: '0 2px 20px rgba(196,149,75,0.07)' }}>
+
             {/* First paragraph — always visible */}
             <div className="font-serif text-charcoal" style={{ fontSize: 'clamp(0.97rem, 1.4vw, 1.07rem)', lineHeight: 1.88, marginBottom: '2rem' }}>
               <p>
                 In the first years of life, children express themselves naturally: they cry when they&rsquo;re
                 sad, they laugh when they&rsquo;re delighted, they cling when they&rsquo;re afraid,
                 they withdraw when they&rsquo;re overstimulated. Parents, teachers, and cultures then
-                spend the next decade of a child&rsquo;s life, often without meaning to, teaching them
+                spend the next decade of a child&rsquo;s life &mdash; often without meaning to &mdash; teaching them
                 to suppress, ignore, and perform these feelings rather than notice, name, and understand
                 them. By the time a child is eight, most of them have lost the vocabulary for what&rsquo;s
                 happening inside them, even as the feelings themselves are intensifying.
@@ -358,7 +327,7 @@ function FounderLetter() {
               <WaxSeal open={open} onClick={() => setOpen(!open)} />
             </div>
 
-            {/* Typewriter reveal */}
+            {/* Expanding letter body */}
             <AnimatePresence initial={false}>
               {open && (
                 <motion.div
@@ -366,7 +335,7 @@ function FounderLetter() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+                  transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
                   style={{ overflow: 'hidden', marginTop: '1rem' }}
                 >
                   <TypewriterLetter onClose={() => setOpen(false)} />
@@ -381,61 +350,28 @@ function FounderLetter() {
 }
 
 /* ─── Programme Row ─────────────────────────────────────────────── */
-function ProgrammeRow({
-  card,
-  isOpen,
-  onToggle,
-  isLast,
-}: {
-  card: (typeof CARDS)[number]
-  isOpen: boolean
-  onToggle: () => void
-  isLast: boolean
+function ProgrammeRow({ card, isOpen, onToggle, isLast }: {
+  card: (typeof CARDS)[number]; isOpen: boolean; onToggle: () => void; isLast: boolean
 }) {
   const { Motif } = card
-
   return (
     <div style={{ borderBottom: isLast ? 'none' : '1px solid rgba(42,74,48,0.08)' }}>
       <button
         onClick={onToggle}
-        className="w-full text-left group"
-        style={{
-          background: 'none',
-          border: 'none',
-          padding: 'clamp(1.25rem, 3vw, 1.75rem) 0',
-          cursor: 'pointer',
-          display: 'grid',
-          gridTemplateColumns: 'auto 1fr auto',
-          gap: '1.25rem',
-          alignItems: 'center',
-        }}
+        className="w-full text-left"
+        style={{ background: 'none', border: 'none', padding: 'clamp(1.25rem, 3vw, 1.75rem) 0', cursor: 'pointer', display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: '1.25rem', alignItems: 'center' }}
       >
         <span className="font-sans" style={{ fontSize: '0.5rem', letterSpacing: '0.2em', color: 'rgba(196,149,75,0.45)', textTransform: 'uppercase', width: '2rem', flexShrink: 0 }}>
           {card.n}
         </span>
-
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', minWidth: 0 }}>
           <span className="font-serif" style={{ fontSize: 'clamp(1.05rem, 2.2vw, 1.35rem)', fontWeight: 600, color: 'var(--forest)', lineHeight: 1.15 }}>
             {card.role}
           </span>
-          <span
-            className="font-sans"
-            style={{
-              fontSize: '0.78rem',
-              lineHeight: 1.5,
-              color: 'rgba(42,74,48,0.38)',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              maxWidth: '46ch',
-              opacity: isOpen ? 0 : 1,
-              transition: 'opacity 0.2s ease',
-            }}
-          >
+          <span className="font-sans" style={{ fontSize: '0.78rem', lineHeight: 1.5, color: 'rgba(42,74,48,0.38)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '46ch', opacity: isOpen ? 0 : 1, transition: 'opacity 0.2s ease' }}>
             {card.headline}
           </span>
         </div>
-
         <motion.div
           animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ duration: 0.3, ease: [0.19, 1, 0.22, 1] }}
@@ -458,40 +394,21 @@ function ProgrammeRow({
             style={{ overflow: 'hidden' }}
           >
             <div className="relative" style={{ paddingTop: '0.5rem', paddingBottom: 'clamp(2rem, 4vw, 3rem)', paddingLeft: 'clamp(0rem, 2vw, 3.25rem)' }}>
-
-              <motion.div
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.8, delay: 0.1, ease: [0.19, 1, 0.22, 1] }}
-                style={{ height: '1.5px', width: '2.5rem', background: 'rgba(196,149,75,0.55)', transformOrigin: 'left center', marginBottom: '1.75rem' }}
-              />
-
+              <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.8, delay: 0.1, ease: [0.19, 1, 0.22, 1] }}
+                style={{ height: '1.5px', width: '2.5rem', background: 'rgba(196,149,75,0.55)', transformOrigin: 'left center', marginBottom: '1.75rem' }} />
               <div className="absolute pointer-events-none" aria-hidden="true" style={{ top: 0, right: 0, width: '52px', height: '72px', color: 'var(--forest)', opacity: 0.08 }}>
                 <Motif className="w-full h-full" />
               </div>
-
-              <span aria-hidden="true" className="absolute pointer-events-none select-none font-serif font-black" style={{ bottom: '1rem', right: '0.5rem', fontSize: 'clamp(5rem, 12vw, 9rem)', color: 'rgba(42,74,48,0.03)', lineHeight: 1, letterSpacing: '-0.05em' }}>
+              <span aria-hidden="true" className="absolute pointer-events-none select-none font-serif font-black"
+                style={{ bottom: '1rem', right: '0.5rem', fontSize: 'clamp(5rem, 12vw, 9rem)', color: 'rgba(42,74,48,0.03)', lineHeight: 1, letterSpacing: '-0.05em' }}>
                 {card.n}
               </span>
-
-              <p className="font-sans uppercase mb-4" style={{ fontSize: '0.52rem', letterSpacing: '0.18em', color: 'rgba(196,149,75,0.75)', lineHeight: 1.5 }}>
-                {card.label}
-              </p>
-
-              <p className="font-serif text-forest/85 mb-5" style={{ fontSize: 'clamp(1.05rem, 2vw, 1.22rem)', fontStyle: 'italic', fontWeight: 400, lineHeight: 1.42, maxWidth: '52ch' }}>
-                {card.headline}
-              </p>
-
-              <p className="font-sans mb-6" style={{ fontSize: '0.9rem', lineHeight: 1.84, color: 'rgba(40,40,40,0.50)', maxWidth: '60ch' }}>
-                {card.body}
-              </p>
-
+              <p className="font-sans uppercase mb-4" style={{ fontSize: '0.52rem', letterSpacing: '0.18em', color: 'rgba(196,149,75,0.75)', lineHeight: 1.5 }}>{card.label}</p>
+              <p className="font-serif text-forest/85 mb-5" style={{ fontSize: 'clamp(1.05rem, 2vw, 1.22rem)', fontStyle: 'italic', fontWeight: 400, lineHeight: 1.42, maxWidth: '52ch' }}>{card.headline}</p>
+              <p className="font-sans mb-6" style={{ fontSize: '0.9rem', lineHeight: 1.84, color: 'rgba(40,40,40,0.50)', maxWidth: '60ch' }}>{card.body}</p>
               <div style={{ borderLeft: '2px solid var(--amber)', paddingLeft: '1.1rem', marginBottom: '1.75rem', maxWidth: '54ch' }}>
-                <p className="font-serif" style={{ fontSize: 'clamp(0.9rem, 1.6vw, 1.02rem)', fontStyle: 'italic', fontWeight: 400, lineHeight: 1.65, color: 'rgba(42,74,48,0.72)' }}>
-                  {card.ask}
-                </p>
+                <p className="font-serif" style={{ fontSize: 'clamp(0.9rem, 1.6vw, 1.02rem)', fontStyle: 'italic', fontWeight: 400, lineHeight: 1.65, color: 'rgba(42,74,48,0.72)' }}>{card.ask}</p>
               </div>
-
               <div className="flex flex-wrap gap-x-7 gap-y-3">
                 {card.ctas.map((cta) => (
                   <a key={cta.label} href={cta.href} className="inline-flex items-center gap-2 font-sans transition-opacity hover:opacity-70 group" style={{ fontSize: '0.78rem', color: 'var(--amber)', textDecoration: 'none' }}>
@@ -519,21 +436,12 @@ function ProgrammeSection() {
       <div className="mx-auto px-6 md:px-10" style={{ maxWidth: '760px', paddingTop: '1rem', paddingBottom: '5rem' }}>
         <Reveal>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(42,74,48,0.10)' }}>
-            <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(42,74,48,0.32)' }}>
-              Eight invitations
-            </p>
+            <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(42,74,48,0.32)' }}>Eight invitations</p>
             <div style={{ flex: 1, height: '1px', background: 'rgba(42,74,48,0.08)' }} />
           </div>
         </Reveal>
-
         {CARDS.map((card, i) => (
-          <ProgrammeRow
-            key={card.id}
-            card={card}
-            isOpen={openIndex === i}
-            onToggle={() => toggle(i)}
-            isLast={i === CARDS.length - 1}
-          />
+          <ProgrammeRow key={card.id} card={card} isOpen={openIndex === i} onToggle={() => toggle(i)} isLast={i === CARDS.length - 1} />
         ))}
       </div>
     </section>
