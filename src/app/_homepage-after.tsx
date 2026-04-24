@@ -1711,17 +1711,6 @@ function AfterEarlyAccessSection() {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const contentY = useTransform(scrollYProgress, [0, 1], [32, -32])
-  const starsY   = useTransform(scrollYProgress, [0, 1], ['-6%', '6%'])
-  const forestY  = useTransform(scrollYProgress, [0, 1], ['-3%', '3%'])
-
-  const [isDesktop, setIsDesktop] = useState(false)
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1024px)')
-    setIsDesktop(mq.matches)
-    const h = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
-    mq.addEventListener('change', h)
-    return () => mq.removeEventListener('change', h)
-  }, [])
 
   return (
     <section
@@ -1739,23 +1728,14 @@ function AfterEarlyAccessSection() {
       <div className="absolute inset-0 bg-grain opacity-55 pointer-events-none" aria-hidden="true" />
       <PineNeedles color="var(--sage-light)" />
 
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{ y: isDesktop ? starsY : 0 }}
-        aria-hidden="true"
-      >
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <StarField />
-      </motion.div>
+      </div>
       <TwinklingStars />
       <ShootingStars />
-
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{ y: isDesktop ? forestY : 0 }}
-        aria-hidden="true"
-      >
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <ForestSilhouette />
-      </motion.div>
+      </div>
 
       <motion.div className="relative z-10 text-center px-6 max-w-md mx-auto" style={{ y: contentY }}>
         <p className="font-sans text-[0.64rem] tracking-[0.2em] uppercase text-sage-light/65 mb-4">
