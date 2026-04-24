@@ -6,6 +6,7 @@ import { FileText, GitFork, MessageCircle, Github } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { StarField, ForestSilhouette, ShootingStars, TwinklingStars } from '@/app/_homepage-after'
 import { PineBranch } from '@/components/illustrations/pine-branch'
+import { Globe } from '@/components/globe'
 
 /* ─── Data (kept intact) ────────────────────────────────────────── */
 const PROMISES = [
@@ -80,7 +81,7 @@ function PromiseHero() {
       style={{
         background: 'var(--forest-dark)',
         paddingTop: '11rem',
-        paddingBottom: '10rem',
+        paddingBottom: '4rem',
         textAlign: 'center',
         minHeight: '100svh',
       }}
@@ -120,7 +121,31 @@ function PromiseHero() {
         <PineBranch color="var(--cream)" flip />
       </div>
 
-      <div className="relative z-10 px-6" style={{ maxWidth: 'min(780px, 90vw)' }}>
+      {/* Globe peeking at bottom — only top arc visible, arrow overlays it */}
+      <motion.div
+        className="absolute pointer-events-none"
+        aria-hidden="true"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.8, delay: 1.2 }}
+        style={{
+          bottom: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 'min(680px, 90vw)',
+          height: 'min(240px, 24vh)',
+          overflow: 'hidden',
+          zIndex: 1,
+        }}
+      >
+        {/* Square container so Globe sizes correctly */}
+        <div style={{ width: '100%', aspectRatio: '1' }}>
+          <Globe style={{ width: '100%', height: '100%', display: 'block' }} />
+        </div>
+      </motion.div>
+
+      {/* Content — z-index above globe so arrow overlays */}
+      <div className="relative px-6" style={{ maxWidth: 'min(780px, 90vw)', zIndex: 10 }}>
 
         <motion.p
           className="font-sans"
@@ -164,12 +189,12 @@ function PromiseHero() {
           style={{ height: '1px', width: '3rem', background: 'rgba(196,149,75,0.5)', transformOrigin: 'left center', margin: '0 auto 2.5rem' }}
         />
 
-        {/* Floating down arrow */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 2.0 }} className="flex justify-center">
+        {/* Floating down arrow — overlays globe */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 2.0 }} className="flex justify-center" style={{ paddingBottom: '2rem' }}>
           <motion.div
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ color: 'rgba(196,149,75,0.32)' }}
+            style={{ color: 'rgba(196,149,75,0.40)' }}
           >
             <svg width="14" height="22" viewBox="0 0 14 22" fill="none" aria-hidden="true">
               <path d="M7 2 V18 M2 13 L7 18 L12 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -181,19 +206,24 @@ function PromiseHero() {
   )
 }
 
-/* ─── Commitment card (2×3 grid) ────────────────────────────────── */
-function CommitmentCard({ num, title, body, index }: { num: string; title: string; body: string; index: number }) {
+/* ─── Commitment slide (horizontal carousel card) ───────────────── */
+function CommitmentSlide({ num, title, body, index }: { num: string; title: string; body: string; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, amount: 0.15 })
+  const isInView = useInView(ref, { once: true, amount: 0 })
 
   return (
-    <div
+    <motion.div
       ref={ref}
-      className="promise-card relative"
+      className="flex-shrink-0 relative"
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.1 + index * 0.07, ease: [0.19, 1, 0.22, 1] }}
       style={{
-        padding: 'clamp(2.25rem, 4vw, 3.25rem)',
-        borderBottom: '1px solid rgba(42,74,48,0.07)',
+        width: 'clamp(260px, 36vw, 300px)',
+        padding: '2.5rem 2.25rem 2.75rem 2.25rem',
+        borderRight: '1px solid rgba(42,74,48,0.07)',
         overflow: 'hidden',
+        scrollSnapAlign: 'start',
       }}
     >
       {/* Ghost ordinal */}
@@ -201,76 +231,40 @@ function CommitmentCard({ num, title, body, index }: { num: string; title: strin
         className="absolute pointer-events-none select-none font-serif font-black"
         aria-hidden="true"
         style={{
-          fontSize: 'clamp(5.5rem, 12vw, 9rem)',
+          fontSize: 'clamp(5rem, 10vw, 8rem)',
           lineHeight: 1,
           letterSpacing: '-0.06em',
-          color: 'rgba(42,74,48,0.035)',
-          bottom: '-0.15em',
-          right: '-0.05em',
+          color: 'rgba(42,74,48,0.04)',
+          bottom: '-0.12em',
+          right: '-0.04em',
         }}
       >
         {num}
       </span>
 
-      {/* Amber rule draw-in */}
+      {/* Amber rule */}
       <motion.div
         initial={{ scaleX: 0 }}
         animate={isInView ? { scaleX: 1 } : {}}
-        transition={{ duration: 1.1, delay: 0.05, ease: [0.19, 1, 0.22, 1] }}
-        style={{
-          height: '1.5px',
-          width: 'clamp(1.75rem, 4vw, 2.5rem)',
-          background: 'rgba(196,149,75,0.6)',
-          transformOrigin: 'left center',
-          marginBottom: '1.25rem',
-        }}
+        transition={{ duration: 1, ease: [0.19, 1, 0.22, 1] }}
+        style={{ height: '1.5px', width: '2rem', background: 'rgba(196,149,75,0.6)', transformOrigin: 'left center', marginBottom: '1.1rem' }}
       />
 
-      {/* Eyebrow ordinal */}
-      <motion.p
-        className="font-sans"
-        initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.7, delay: 0.1 }}
-        style={{ fontSize: '0.5rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.45)', marginBottom: '1rem' }}
-      >
+      {/* Ordinal eyebrow */}
+      <p className="font-sans" style={{ fontSize: '0.5rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.45)', marginBottom: '0.85rem' }}>
         {num}
-      </motion.p>
+      </p>
 
       {/* Title */}
-      <motion.h2
-        className="font-serif"
-        initial={{ opacity: 0, y: 10 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-        style={{
-          fontSize: 'clamp(1.45rem, 2.8vw, 2.2rem)',
-          fontWeight: 600,
-          fontStyle: 'italic',
-          lineHeight: 1.1,
-          letterSpacing: '-0.03em',
-          color: 'var(--forest)',
-          marginBottom: '0.9rem',
-        }}
-      >
+      <h2 className="font-serif" style={{ fontSize: 'clamp(1.25rem, 2.4vw, 1.75rem)', fontWeight: 600, fontStyle: 'italic', lineHeight: 1.1, letterSpacing: '-0.03em', color: 'var(--forest)', marginBottom: '0.85rem' }}>
         {title}
-      </motion.h2>
+      </h2>
 
       {/* Body */}
-      <motion.p
-        className="font-sans"
-        initial={{ opacity: 0, y: 6 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8, delay: 0.25, ease: [0.19, 1, 0.22, 1] }}
-        style={{
-          fontSize: 'clamp(0.84rem, 1.2vw, 0.94rem)',
-          lineHeight: 1.82,
-          color: 'rgba(40,40,40,0.48)',
-        }}
-      >
+      <p className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.88rem)', lineHeight: 1.8, color: 'rgba(40,40,40,0.48)' }}>
         {body}
-      </motion.p>
-    </div>
+      </p>
+    </motion.div>
   )
 }
 
@@ -291,16 +285,7 @@ function OpenSourceSection() {
       <motion.div className="relative z-10 mx-auto max-w-6xl px-6 md:px-12 lg:px-20" style={{ y: contentY }}>
 
         <Reveal>
-          <div style={{ marginBottom: '1rem' }}>
-            <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(196,149,75,0.45)', marginBottom: '0.9rem' }}>
-              Our commitment to open source
-            </p>
-            <div style={{ height: '1px', width: '3rem', background: 'rgba(196,149,75,0.3)' }} />
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.06}>
-          <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start', marginBottom: '3.5rem', paddingTop: '2.5rem', paddingBottom: '3.5rem', borderBottom: '1px solid rgba(240,232,210,0.1)' }}>
+          <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start', marginBottom: '3.5rem', paddingBottom: '3.5rem', borderBottom: '1px solid rgba(240,232,210,0.1)' }}>
             <div style={{ color: 'var(--amber)', flexShrink: 0, marginTop: '0.1rem' }}>
               <FileText size={22} />
             </div>
@@ -365,6 +350,24 @@ function OpenSourceSection() {
             </a>
           </Reveal>
         </div>
+
+        {/* "Our commitment to open source" — full-width, centered, after 2-col, dark bg highlight */}
+        <Reveal>
+          <div style={{ marginTop: '4rem', paddingTop: '2.5rem', borderTop: '1px solid rgba(240,232,210,0.08)', textAlign: 'center' }}>
+            <p className="font-sans uppercase" style={{
+              display: 'inline-block',
+              fontSize: '0.52rem',
+              letterSpacing: '0.28em',
+              color: 'rgba(196,149,75,0.60)',
+              background: 'rgba(8, 20, 10, 0.88)',
+              padding: '0.5rem 1.5rem',
+              borderRadius: '4px',
+            }}>
+              Our commitment to open source
+            </p>
+          </div>
+        </Reveal>
+
       </motion.div>
     </section>
   )
@@ -376,17 +379,9 @@ export default function PromisePage() {
     <>
       <PromiseHero />
 
-      <section style={{ background: 'var(--cream)', position: 'relative', overflow: 'hidden' }}>
-        {/* Grid border rules: right border on left-column cells, no bottom border on last row */}
-        <style>{`
-          .promise-grid > .promise-card:nth-child(odd) { border-right: 1px solid rgba(42,74,48,0.07); }
-          .promise-grid > .promise-card:nth-last-child(-n+2) { border-bottom: none !important; }
-          @media (max-width: 767px) {
-            .promise-grid > .promise-card:nth-child(odd) { border-right: none !important; }
-            .promise-grid > .promise-card:nth-last-child(-n+2) { border-bottom: 1px solid rgba(42,74,48,0.07) !important; }
-            .promise-grid > .promise-card:last-child { border-bottom: none !important; }
-          }
-        `}</style>
+      {/* Horizontal scroll commitment carousel */}
+      <section style={{ background: 'var(--cream)', paddingTop: 'clamp(3.5rem, 7vw, 5.5rem)', paddingBottom: 'clamp(3.5rem, 7vw, 5.5rem)', overflow: 'hidden', position: 'relative' }}>
+        <style>{`.promise-scroll::-webkit-scrollbar { display: none; }`}</style>
         <div
           className="absolute pointer-events-none"
           aria-hidden="true"
@@ -395,12 +390,19 @@ export default function PromisePage() {
             background: 'radial-gradient(ellipse 80% 70% at 95% 5%, rgba(196,149,75,0.05) 0%, transparent 70%)',
           }}
         />
-        <div style={{ maxWidth: '900px', marginInline: 'auto', padding: 'clamp(4rem, 8vw, 5.5rem) clamp(1.5rem, 5vw, 3rem)' }}>
-          <div className="promise-grid grid grid-cols-1 md:grid-cols-2">
-            {PROMISES.map((p, i) => (
-              <CommitmentCard key={p.num} {...p} index={i} />
-            ))}
-          </div>
+        <div
+          className="promise-scroll flex overflow-x-auto"
+          style={{
+            scrollSnapType: 'x mandatory',
+            scrollbarWidth: 'none',
+            paddingLeft: 'clamp(1.5rem, 7vw, 5rem)',
+          }}
+        >
+          {PROMISES.map((p, i) => (
+            <CommitmentSlide key={p.num} {...p} index={i} />
+          ))}
+          {/* Trailing spacer so last card isn't flush to edge */}
+          <div style={{ flexShrink: 0, width: 'clamp(1.5rem, 7vw, 5rem)' }} />
         </div>
       </section>
 
