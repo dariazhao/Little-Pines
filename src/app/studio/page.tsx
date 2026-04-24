@@ -259,7 +259,7 @@ function FounderLetter() {
     setOpen(false)
     setTimeout(() => {
       sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 60)
+    }, 1400)
   }
 
   return (
@@ -302,7 +302,7 @@ function FounderLetter() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+                  transition={{ duration: 1.4, ease: [0.4, 0, 0.2, 1] }}
                   style={{ overflow: 'hidden', marginTop: '1rem' }}
                 >
                   <TypewriterLetter onClose={handleClose} />

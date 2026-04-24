@@ -269,12 +269,12 @@ function CommitmentSlide({ num, title, body, index }: { num: string; title: stri
   )
 }
 
-/* ─── Smooth scroll helper ───────────────────────────────────────── */
+/* ─── Smooth scroll helper (sine ease-in-out) ────────────────────── */
 function smoothScrollTo(el: HTMLElement, to: number, duration: number) {
   const start = el.scrollLeft
   const diff = to - start
   let startTime: number | null = null
-  const ease = (t: number) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t
+  const ease = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2
   const step = (ts: number) => {
     if (!startTime) startTime = ts
     const t = Math.min((ts - startTime) / duration, 1)
@@ -289,9 +289,9 @@ function CommitmentsSection() {
   const [active, setActive] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Auto-advance every 8 seconds
+  // Auto-advance every 6 seconds
   useEffect(() => {
-    const timer = setInterval(() => setActive(i => (i + 1) % PROMISES.length), 8000)
+    const timer = setInterval(() => setActive(i => (i + 1) % PROMISES.length), 6000)
     return () => clearInterval(timer)
   }, [])
 
@@ -302,7 +302,7 @@ function CommitmentsSection() {
     const card = el.children[active] as HTMLElement
     if (!card) return
     const pl = parseFloat(getComputedStyle(el).paddingLeft) || 0
-    smoothScrollTo(el, card.offsetLeft - pl, 1200)
+    smoothScrollTo(el, card.offsetLeft - pl, 1800)
   }, [active])
 
   const goTo = (i: number) => setActive(Math.max(0, Math.min(PROMISES.length - 1, i)))
@@ -480,9 +480,9 @@ function OpenSourceSection() {
         <AnimatePresence>
           {revealed && (
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.6, ease: 'easeInOut' }}
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
                 <div>
