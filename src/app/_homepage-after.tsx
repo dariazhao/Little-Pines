@@ -287,7 +287,7 @@ export function AfterHero() {
   }, [])
 
   return (
-    <div ref={containerRef} style={{ height: '170vh', position: 'relative', zIndex: 1 }}>
+    <div ref={containerRef} style={{ height: isMobile ? '120vh' : '170vh', position: 'relative', zIndex: 1 }}>
       <div
         className="sticky top-0 overflow-hidden"
         style={{ height: '100vh', background: 'var(--forest-dark)' }}
@@ -373,7 +373,7 @@ export function AfterHero() {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.54, duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
-                    className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-center lg:items-start mt-10"
+                    className="flex justify-center mt-10"
                   >
                     <a
                       href="#why-we-exist"
