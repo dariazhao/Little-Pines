@@ -428,7 +428,7 @@ export function AfterHero() {
 
         {/* Full-bleed quote — emerges over the giant globe */}
         <motion.div
-          className="absolute inset-0 flex items-end justify-center z-20 pointer-events-none px-8 pb-20 lg:items-center lg:pb-0"
+          className="absolute inset-0 flex items-end justify-center z-20 pointer-events-none px-8 pb-36 lg:items-center lg:pb-0"
           style={{ opacity: quoteOpacity }}
           aria-hidden="true"
         >
