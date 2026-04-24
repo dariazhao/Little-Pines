@@ -270,7 +270,8 @@ function CommitmentSlide({ num, title, body, index }: { num: string; title: stri
 }
 
 /* ─── Smooth scroll helper (sine ease-in-out) ────────────────────── */
-function smoothScrollTo(el: HTMLElement, to: number, duration: number) {
+function smoothScrollTo(el: HTMLElement, to: number, duration: number, animRef: React.MutableRefObject<number | null>) {
+  if (animRef.current !== null) cancelAnimationFrame(animRef.current)
   const start = el.scrollLeft
   const diff = to - start
   let startTime: number | null = null
@@ -279,15 +280,16 @@ function smoothScrollTo(el: HTMLElement, to: number, duration: number) {
     if (!startTime) startTime = ts
     const t = Math.min((ts - startTime) / duration, 1)
     el.scrollLeft = start + diff * ease(t)
-    if (t < 1) requestAnimationFrame(step)
+    if (t < 1) { animRef.current = requestAnimationFrame(step) } else { animRef.current = null }
   }
-  requestAnimationFrame(step)
+  animRef.current = requestAnimationFrame(step)
 }
 
 /* ─── Commitments carousel section ──────────────────────────────── */
 function CommitmentsSection() {
   const [active, setActive] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const animRef = useRef<number | null>(null)
 
   // Smooth-scroll to active card (eased)
   useEffect(() => {
@@ -296,10 +298,16 @@ function CommitmentsSection() {
     const card = el.children[active] as HTMLElement
     if (!card) return
     const pl = parseFloat(getComputedStyle(el).paddingLeft) || 0
-    smoothScrollTo(el, card.offsetLeft - pl, 1800)
+    smoothScrollTo(el, card.offsetLeft - pl, 700, animRef)
   }, [active])
 
   const goTo = (i: number) => setActive(Math.max(0, Math.min(PROMISES.length - 1, i)))
+
+  const handleScrollClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    if (e.clientX < rect.left + rect.width / 2) goTo(active - 1)
+    else goTo(active + 1)
+  }
 
   return (
     <section style={{
@@ -326,10 +334,12 @@ function CommitmentsSection() {
       <div
         ref={scrollRef}
         className="promise-scroll flex overflow-x-auto"
+        onClick={handleScrollClick}
         style={{
           scrollSnapType: 'x mandatory',
           scrollbarWidth: 'none',
           paddingLeft: 'clamp(1.5rem, 7vw, 5rem)',
+          cursor: 'pointer',
         }}
       >
         {PROMISES.map((p, i) => (

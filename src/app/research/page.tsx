@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
+import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { PineBranch } from '@/components/illustrations/pine-branch'
 import { Globe } from '@/components/globe'
-import { AfterBearSection, SessionsSection, ShootingStars } from '@/app/_homepage-after'
+import { AfterBearSection, ShootingStars } from '@/app/_homepage-after'
 
 /* ─── Static stars ───────────────────────────────────────────────── */
 const RESEARCH_STARS: [number, number, number][] = [
@@ -111,72 +111,6 @@ function ResearchHero() {
   )
 }
 
-/* ─── Thesis section ─────────────────────────────────────────────── */
-function ThesisSection({ onShowSessions, sessionsRevealed }: { onShowSessions: () => void; sessionsRevealed: boolean }) {
-  return (
-    <section style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 2 }}>
-      <div className="mx-auto px-6 md:px-12 lg:px-20" style={{ maxWidth: '1100px', paddingTop: '5rem', paddingBottom: '5.5rem' }}>
-
-        <Reveal>
-          <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(42,74,48,0.32)', marginBottom: '1.2rem' }}>
-            The case
-          </p>
-          <h2 className="font-serif" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 600, lineHeight: 1.1, letterSpacing: '-0.025em', color: 'var(--forest)', marginBottom: '3.5rem', maxWidth: '22ch' }}>
-            Emotional literacy is the foundation for a rich interior life.
-          </h2>
-        </Reveal>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20" style={{ marginBottom: '4rem' }}>
-          <Reveal>
-            <div className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
-              <p style={{ marginBottom: '1.25rem' }}>
-                In the first years of life, children are born with an almost unbounded capacity to feel. Research &mdash; from Gottman to Siegel &mdash; establishes that the ability to name and process emotional states is not a soft skill. It is the substrate on which learning, connection, and resilience are built.
-              </p>
-              <p>
-                Modern childhood systematically erodes this capacity. Overstimulation, screens, and adults who resolve discomfort before a child can sit with it &mdash; these are not edge cases. By the time a child is eight, most have been taught to suppress or avoid the feelings that were once their most natural mode of expression.
-              </p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <div className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
-              <p style={{ marginBottom: '1.25rem' }}>
-                Little Pines exists because the tools parents have been given are almost all delivered through the same screens that caused the problem. Therapy apps and SEL curricula cannot co-regulate. They cannot wait. A screen has nowhere to be next.
-              </p>
-              <p>
-                The form factor matters as much as the content. A quiet, unhurried, screen-free companion &mdash; one that has nowhere to be and nothing to sell &mdash; is a fundamentally different kind of tool. The research supports it. No one has yet built it well.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-
-        {!sessionsRevealed && (
-          <Reveal>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.7rem', marginTop: '1rem' }}>
-              <button
-                onClick={onShowSessions}
-                className="font-sans transition-opacity hover:opacity-60"
-                style={{ fontSize: '0.52rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(42,74,48,0.45)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-              >
-                How it works
-              </button>
-              <motion.div
-                animate={{ y: [0, 5, 0] }}
-                transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-                style={{ color: 'rgba(42,74,48,0.30)', cursor: 'pointer' }}
-                onClick={onShowSessions}
-              >
-                <svg width="14" height="22" viewBox="0 0 14 22" fill="none" aria-hidden="true">
-                  <path d="M7 2 V18 M2 13 L7 18 L12 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </motion.div>
-            </div>
-          </Reveal>
-        )}
-      </div>
-    </section>
-  )
-}
-
 /* ─── Pillars data ───────────────────────────────────────────────── */
 const PILLARS = [
   {
@@ -205,10 +139,172 @@ const PILLARS = [
   },
 ]
 
-/* ─── Pillars section ────────────────────────────────────────────── */
-function PillarsSection({ onShowBear, bearRevealed }: { onShowBear: () => void; bearRevealed: boolean }) {
+/* ─── Study metrics ──────────────────────────────────────────────── */
+const METRICS = [
+  { label: 'Primary',   measure: 'Emotional vocabulary growth',             tool: 'ACES-Y scale',     window: '16 weeks' },
+  { label: 'Secondary', measure: 'Parent-reported co-regulation frequency', tool: 'Weekly diary',     window: '16 weeks' },
+  { label: 'Tertiary',  measure: 'Child-initiated session count',           tool: 'Device telemetry', window: '16 weeks' },
+]
+
+/* ─── Tab: The Case ──────────────────────────────────────────────── */
+function CaseTabContent() {
   return (
-    <section style={{ background: 'var(--forest-dark)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 4, padding: '5rem 0 6rem', overflow: 'hidden' }}>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+      <Reveal>
+        <div className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
+          <p style={{ marginBottom: '1.25rem' }}>
+            In the first years of life, children are born with an almost unbounded capacity to feel. Research from Gottman to Siegel establishes that the ability to name and process emotional states is not a soft skill: it is the substrate on which learning, connection, and resilience are built.
+          </p>
+          <p>
+            Modern childhood systematically erodes this capacity. Overstimulation, screens, and adults who resolve discomfort before a child can sit with it: these are not edge cases. By the time a child is eight, most have been taught to suppress or avoid the feelings that were once their most natural mode of expression.
+          </p>
+        </div>
+      </Reveal>
+      <Reveal delay={0.08}>
+        <div className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
+          <p style={{ marginBottom: '1.25rem' }}>
+            Little Pines exists because the tools parents have been given are almost all delivered through the same screens that caused the problem. Therapy apps and SEL curricula cannot co-regulate. They cannot wait. A screen has nowhere to be next.
+          </p>
+          <p>
+            The form factor matters as much as the content. A quiet, unhurried, screen-free companion that has nowhere to be and nothing to sell is a fundamentally different kind of tool. The research supports it. No one has yet built it well.
+          </p>
+        </div>
+      </Reveal>
+    </div>
+  )
+}
+
+/* ─── Tab: The Study ─────────────────────────────────────────────── */
+function StudyTabContent() {
+  return (
+    <div>
+      <p className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', color: 'rgba(42,74,48,0.42)', marginBottom: '3rem', maxWidth: '52ch', lineHeight: 1.7 }}>
+        A pre-registered randomized controlled trial. 120 families. Ages 3&ndash;7. 16-week intervention with waitlist-control design. Enrollment opens Q1 2027.
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-3" style={{ background: 'rgba(42,74,48,0.07)', borderRadius: '8px', overflow: 'hidden', marginBottom: '3.5rem', gap: '1px' }}>
+        {METRICS.map((m) => (
+          <div key={m.label} style={{ background: 'var(--cream)', padding: '1.75rem 2rem' }}>
+            <p className="font-sans" style={{ fontSize: '0.48rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.55)', marginBottom: '0.6rem' }}>{m.label}</p>
+            <p className="font-serif" style={{ fontSize: 'clamp(0.92rem, 1.4vw, 1.05rem)', fontWeight: 600, color: 'var(--forest)', lineHeight: 1.3, marginBottom: '0.5rem' }}>{m.measure}</p>
+            <p className="font-sans" style={{ fontSize: '0.76rem', color: 'rgba(42,74,48,0.36)' }}>{m.tool} &middot; {m.window}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+        <div>
+          <h3 className="font-serif" style={{ fontSize: 'clamp(1rem, 1.6vw, 1.2rem)', fontWeight: 600, color: 'var(--forest)', marginBottom: '0.75rem' }}>Study design</h3>
+          <p className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.9rem)', lineHeight: 1.82, color: 'rgba(40,40,40,0.52)' }}>
+            120 families with children aged 3&ndash;7, recruited through Montessori and Waldorf networks. Half receive the bear at enrollment; half join a waitlist and receive it after the 16-week observation period ends. Both groups participate in structured parent-report surveys at weeks 4, 8, 12, and 16. All data is stored locally. Nothing leaves the household.
+          </p>
+        </div>
+        <div>
+          <h3 className="font-serif" style={{ fontSize: 'clamp(1rem, 1.6vw, 1.2rem)', fontWeight: 600, color: 'var(--forest)', marginBottom: '0.75rem' }}>On pre-registration</h3>
+          <p className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.9rem)', lineHeight: 1.82, color: 'rgba(40,40,40,0.52)' }}>
+            We are pre-registering hypotheses, methods, and analysis plans on the Open Science Framework before any data collection begins. If the results don&rsquo;t support the design, we will publish that too. This research belongs to the field, not to our marketing department.
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Tab: How it works ──────────────────────────────────────────── */
+function HowItWorksTabContent() {
+  return (
+    <div>
+      <p className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.75, color: 'rgba(40,40,40,0.5)', maxWidth: '54ch', marginBottom: '3rem' }}>
+        Every session follows the same arc: arrive in the body, name what is there, sit with it, and return to solid ground. The bear waits for the child, not the other way around.
+      </p>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+        {PILLARS.map((p) => (
+          <div key={p.n}>
+            <p className="font-sans uppercase" style={{ fontSize: '0.5rem', letterSpacing: '0.22em', color: 'rgba(196,149,75,0.55)', marginBottom: '0.4rem' }}>{p.n}</p>
+            <div style={{ width: '1.5rem', height: '1.5px', background: 'rgba(196,149,75,0.5)', marginBottom: '0.7rem' }} />
+            <h3 className="font-serif" style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', fontWeight: 600, color: 'var(--forest)', lineHeight: 1.2, marginBottom: '0.55rem' }}>{p.name}</h3>
+            <p className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.9rem)', lineHeight: 1.82, color: 'rgba(40,40,40,0.48)', fontStyle: 'italic' }}>{p.sessions}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ─── Binder tabs + content ──────────────────────────────────────── */
+const TABS = ['The Case', 'The Study', 'How it works'] as const
+type ResearchTab = typeof TABS[number]
+
+function TabbedSection() {
+  const [activeTab, setActiveTab] = useState<ResearchTab>('The Case')
+
+  return (
+    <section style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 2 }}>
+      <div className="mx-auto px-6 md:px-12 lg:px-20" style={{ maxWidth: '1100px', paddingTop: '4.5rem' }}>
+
+        <Reveal>
+          <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(42,74,48,0.32)', marginBottom: '1.2rem' }}>
+            The research
+          </p>
+          <h2 className="font-serif" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 600, lineHeight: 1.1, letterSpacing: '-0.025em', color: 'var(--forest)', marginBottom: '3rem', maxWidth: '22ch' }}>
+            Emotional literacy is the foundation for a rich interior life.
+          </h2>
+        </Reveal>
+
+        {/* File-binder tabs */}
+        <div style={{ display: 'flex', gap: '3px', alignItems: 'flex-end' }}>
+          {TABS.map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className="font-sans"
+              style={{
+                fontSize: '0.5rem',
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                padding: '0.55rem 1.25rem 0.65rem',
+                borderRadius: '5px 5px 0 0',
+                border: '1px solid rgba(42,74,48,0.10)',
+                borderBottom: activeTab === tab ? '1px solid var(--cream)' : '1px solid rgba(42,74,48,0.10)',
+                background: activeTab === tab ? 'var(--cream)' : 'rgba(42,74,48,0.035)',
+                color: activeTab === tab ? 'var(--forest)' : 'rgba(42,74,48,0.32)',
+                cursor: 'pointer',
+                position: 'relative',
+                bottom: activeTab === tab ? '-1px' : '0',
+                transition: 'color 0.2s ease, background 0.2s ease',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* Content area */}
+        <div style={{ borderTop: '1px solid rgba(42,74,48,0.10)', paddingTop: '3.5rem', paddingBottom: '5.5rem' }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.28, ease: 'easeInOut' }}
+            >
+              {activeTab === 'The Case' && <CaseTabContent />}
+              {activeTab === 'The Study' && <StudyTabContent />}
+              {activeTab === 'How it works' && <HowItWorksTabContent />}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Four Pillars ───────────────────────────────────────────────── */
+function PillarsSection() {
+  return (
+    <section style={{ background: 'var(--forest-dark)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 3, padding: '5rem 0 5rem', overflow: 'hidden' }}>
       <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" aria-hidden="true" />
       <div className="absolute inset-x-0 pointer-events-none" aria-hidden="true" style={{ top: '10%', height: '50%', background: 'radial-gradient(ellipse at 50% 50%, rgba(196,149,75,0.05) 0%, transparent 60%)' }} />
 
@@ -248,136 +344,37 @@ function PillarsSection({ onShowBear, bearRevealed }: { onShowBear: () => void; 
           <div style={{ borderTop: '1px solid rgba(240,232,210,0.08)' }} />
         </div>
 
-        {!bearRevealed && (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.7rem', marginTop: '3rem' }}>
-            <button
-              onClick={onShowBear}
-              className="font-sans transition-opacity hover:opacity-60"
-              style={{ fontSize: '0.52rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.55)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-            >
-              Meet the bear
-            </button>
-            <motion.div
-              animate={{ y: [0, 5, 0] }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ color: 'rgba(196,149,75,0.40)', cursor: 'pointer' }}
-              onClick={onShowBear}
-            >
-              <svg width="14" height="22" viewBox="0 0 14 22" fill="none" aria-hidden="true">
-                <path d="M7 2 V18 M2 13 L7 18 L12 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </motion.div>
-          </div>
-        )}
-      </div>
-    </section>
-  )
-}
-
-/* ─── Study metrics ──────────────────────────────────────────────── */
-const METRICS = [
-  { label: 'Primary',   measure: 'Emotional vocabulary growth',             tool: 'ACES-Y scale',      window: '16 weeks' },
-  { label: 'Secondary', measure: 'Parent-reported co-regulation frequency', tool: 'Weekly diary',      window: '16 weeks' },
-  { label: 'Tertiary',  measure: 'Child-initiated session count',           tool: 'Device telemetry',  window: '16 weeks' },
-]
-
-/* ─── Study section ──────────────────────────────────────────────── */
-function StudySection() {
-  return (
-    <section style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 5, paddingTop: '5rem', paddingBottom: '5.5rem' }}>
-      <div className="mx-auto px-6 md:px-12 lg:px-20" style={{ maxWidth: '1100px' }}>
-
-        <Reveal>
-          <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(42,74,48,0.32)', marginBottom: '1rem' }}>
-            The study
-          </p>
-          <h2 className="font-serif" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 600, lineHeight: 1.1, letterSpacing: '-0.025em', color: 'var(--forest)', marginBottom: '1rem' }}>
-            The efficacy study.
-          </h2>
-          <p className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', color: 'rgba(42,74,48,0.42)', marginBottom: '3.5rem', maxWidth: '52ch', lineHeight: 1.7 }}>
-            A pre-registered randomized controlled trial. 120 families. Ages 3&ndash;7. 16-week intervention with waitlist-control design. Enrollment opens Q1 2027.
-          </p>
-        </Reveal>
-
-        {/* Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-3" style={{ background: 'rgba(42,74,48,0.07)', borderRadius: '8px', overflow: 'hidden', marginBottom: '3.5rem', gap: '1px' }}>
-          {METRICS.map((m) => (
-            <Reveal key={m.label}>
-              <div style={{ background: 'var(--cream)', padding: '1.75rem 2rem' }}>
-                <p className="font-sans" style={{ fontSize: '0.48rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.55)', marginBottom: '0.6rem' }}>
-                  {m.label}
-                </p>
-                <p className="font-serif" style={{ fontSize: 'clamp(0.92rem, 1.4vw, 1.05rem)', fontWeight: 600, color: 'var(--forest)', lineHeight: 1.3, marginBottom: '0.5rem' }}>
-                  {m.measure}
-                </p>
-                <p className="font-sans" style={{ fontSize: '0.76rem', color: 'rgba(42,74,48,0.36)' }}>
-                  {m.tool} &middot; {m.window}
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-          <Reveal>
-            <h3 className="font-serif" style={{ fontSize: 'clamp(1rem, 1.6vw, 1.2rem)', fontWeight: 600, color: 'var(--forest)', marginBottom: '0.75rem' }}>
-              Study design
-            </h3>
-            <p className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.9rem)', lineHeight: 1.82, color: 'rgba(40,40,40,0.52)' }}>
-              120 families with children aged 3&ndash;7, recruited through Montessori and Waldorf networks. Half receive the bear at enrollment; half join a waitlist and receive it after the 16-week observation period ends. Both groups participate in structured parent-report surveys at weeks 4, 8, 12, and 16. All data is collected with full parental consent and stored locally — nothing leaves the household.
-            </p>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h3 className="font-serif" style={{ fontSize: 'clamp(1rem, 1.6vw, 1.2rem)', fontWeight: 600, color: 'var(--forest)', marginBottom: '0.75rem' }}>
-              On pre-registration
-            </h3>
-            <p className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.9rem)', lineHeight: 1.82, color: 'rgba(40,40,40,0.52)' }}>
-              We are pre-registering hypotheses, methods, and analysis plans on the Open Science Framework before any data collection begins. If the results don&rsquo;t support the design, we will publish that too. This research belongs to the field, not to our marketing department.
-            </p>
-          </Reveal>
+        {/* Scene break before artifact */}
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem 0 0.5rem' }}>
+          <div style={{ width: '2.5rem', height: '1px', background: 'rgba(196,149,75,0.28)' }} />
         </div>
       </div>
     </section>
-  )
-}
-
-/* ─── Pull-up Sessions wrapper ──────────────────────────────────── */
-function PullUpSessionsSection() {
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'start 0.25'] })
-  const y = useTransform(scrollYProgress, [0, 1], [100, 0])
-  return (
-    <motion.div ref={ref} style={{ y, position: 'relative', zIndex: 5 }}>
-      <SessionsSection />
-    </motion.div>
   )
 }
 
 /* ─── Page ──────────────────────────────────────────────────────── */
 export default function ResearchPage() {
-  const [showBear, setShowBear] = useState(false)
-  const [showSessions, setShowSessions] = useState(false)
-
   return (
     <>
       <ResearchHero />
-      <ThesisSection onShowSessions={() => setShowSessions(true)} sessionsRevealed={showSessions} />
-      <AnimatePresence>
-        {showSessions && (
-          <motion.div key="sessions" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.6, ease: 'easeInOut' }}>
-            <PullUpSessionsSection />
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <PillarsSection onShowBear={() => setShowBear(true)} bearRevealed={showBear} />
-      <AnimatePresence>
-        {showBear && (
-          <motion.div key="bear" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.6, ease: 'easeInOut' }}>
-            <AfterBearSection />
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <StudySection />
+      <TabbedSection />
+      <PillarsSection />
+      <AfterBearSection />
+      <div style={{ background: 'var(--forest-dark)', textAlign: 'center', padding: '4rem 1.5rem 5rem', position: 'relative' }}>
+        <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" aria-hidden="true" />
+        <p className="font-sans relative z-10" style={{ fontSize: '0.5rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }}>
+          Little Pines Studio &middot; Q3 2026
+        </p>
+        <a
+          href="/#notify"
+          className="font-sans relative z-10 inline-flex items-center gap-2 transition-opacity hover:opacity-80"
+          style={{ fontSize: '0.58rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.85)', border: '1px solid rgba(196,149,75,0.28)', borderRadius: '4px', padding: '0.7rem 1.8rem' }}
+        >
+          Get early access
+          <ArrowRight size={10} />
+        </a>
+      </div>
     </>
   )
 }
