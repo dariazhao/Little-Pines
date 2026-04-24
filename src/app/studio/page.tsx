@@ -9,18 +9,6 @@ import { WorkshopSection, AfterBearSection, SessionsSection, ShootingStars } fro
 import { CARDS } from './_cards'
 import { Globe } from '@/components/globe'
 
-/* ─── Mobile detection (disables parallax on phones) ───────────── */
-function useIsMobile() {
-  const [mobile, setMobile] = useState(false)
-  React.useEffect(() => {
-    const check = () => setMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
-  return mobile
-}
-
 /* ─── Static star field ─────────────────────────────────────────── */
 const STUDIO_STARS: [number, number, number][] = [
   [8,12,1.2],[15,7,0.9],[23,18,1.4],[32,5,0.8],[41,14,1.1],
@@ -30,46 +18,6 @@ const STUDIO_STARS: [number, number, number][] = [
   [12,60,1.0],[87,45,1.1],[3,80,0.9],[96,30,1.3],[45,3,0.8],
   [70,95,1.0],[25,95,1.2],[85,25,0.9],[52,50,0.7],[33,65,1.0],
 ]
-
-/* ─── Constellation overlay ─────────────────────────────────────── */
-const CONST_STARS = [
-  { x: 6,  y: 7  }, { x: 13, y: 13 }, { x: 22, y: 6  }, { x: 30, y: 16 },
-  { x: 38, y: 9  }, { x: 46, y: 4  }, { x: 53, y: 12 }, { x: 62, y: 8  },
-  { x: 69, y: 15 }, { x: 77, y: 5  }, { x: 84, y: 11 }, { x: 91, y: 7  },
-  { x: 96, y: 17 }, { x: 9,  y: 23 }, { x: 24, y: 27 },
-  { x: 43, y: 21 }, { x: 57, y: 25 }, { x: 72, y: 20 }, { x: 87, y: 28 }, { x: 3, y: 19 },
-]
-const CONST_EDGES = [
-  [0,1],[1,2],[2,3],[4,5],[5,6],[7,8],[8,9],
-  [10,11],[11,12],[19,13],[13,14],[14,15],
-]
-
-function HeroConstellation() {
-  return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
-      {CONST_EDGES.map(([a, b], i) => {
-        const s = CONST_STARS[a], e = CONST_STARS[b]
-        return (
-          <line key={i}
-            x1={`${s.x}%`} y1={`${s.y}%`}
-            x2={`${e.x}%`} y2={`${e.y}%`}
-            stroke="rgba(244,239,226,0.18)" strokeWidth="0.6"
-          />
-        )
-      })}
-      {CONST_STARS.map((s, i) => (
-        <motion.circle
-          key={i}
-          cx={`${s.x}%`} cy={`${s.y}%`}
-          r={i % 4 === 0 ? 1.3 : 0.9}
-          fill="rgba(244,239,226,0.9)"
-          animate={{ opacity: [0.18, 0.72, 0.18] }}
-          transition={{ duration: 2.2 + (i * 0.28) % 1.8, delay: i * 0.12, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      ))}
-    </svg>
-  )
-}
 
 /* ─── Hero sentence (4 balanced lines — no italic, no bold) ─────── */
 const SENTENCE_LINES = [
@@ -89,7 +37,7 @@ const LETTER_P3 = `Montessori, Waldorf, and other child-development traditions h
 
 const LETTER_P4_MAIN = `Little Pines Studio exists because this foundation is being undermined faster than any other part of childhood, and because the tools parents have been given to address it (therapy apps, SEL curricula, meditation videos) are almost all delivered through the same screens that caused the problem. The answer has to come from a different form factor entirely: a quiet, unhurried, screen-free friend that lives in a child's room and helps them notice what they feel, name it, sit with it, and move through it. Not a therapist. Not a teacher.`
 
-const LETTER_P5 = `In 2019, I quit Wall Street to co-found Learn With Mochi, believing the most valuable investment we could make is in our children. Mochi was built on the belief that young children learn best through hands-on play, stories, and away from screens. The company is an honest expression of a thesis about early childhood that I still believe. With recent frontier AI and hardware acceleration, the technical moment to build this particular concept arrived in 2026. We are going to build it slowly, in public, in partnership with people like you. If you've read this far, I'd love to hear from you.`
+const LETTER_P5 = `In 2019, I quit Wall Street to co-found Learn With Mochi, believing the most valuable investment we could make is in our children. Mochi was built on the belief that young children learn best through hands-on play, stories, and away from screens. That company was an honest expression of a thesis about early childhood that I still believe. With recent frontier AI and hardware acceleration, the technical moment to build this particular concept arrived in 2026. We're building it slowly, in public, with experts across the ecosystem. If you've read this far, I'd love to hear from you.`
 
 const LETTER_PARAS: LetterPara[] = [
   { text: LETTER_P2 },
@@ -98,7 +46,7 @@ const LETTER_PARAS: LetterPara[] = [
   { text: LETTER_P5 },
 ]
 
-const PARA_DELAYS = [0.4, 1.3, 2.2, 3.1]
+const PARA_DELAYS = [0.6, 2.4, 4.2, 6.0]
 
 /* ─── Letter reveal (paragraph-by-paragraph fade from left) ─────── */
 function TypewriterLetter({ onClose }: { onClose: () => void }) {
@@ -107,9 +55,9 @@ function TypewriterLetter({ onClose }: { onClose: () => void }) {
       {LETTER_PARAS.map((para, i) => (
         <motion.p
           key={i}
-          initial={{ opacity: 0, x: -12 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: PARA_DELAYS[i], ease: [0.19, 1, 0.22, 1] }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2.2, delay: PARA_DELAYS[i], ease: 'easeOut' }}
           style={{ marginBottom: '1.5rem' }}
         >
           {para.text}
@@ -121,7 +69,7 @@ function TypewriterLetter({ onClose }: { onClose: () => void }) {
         className="font-serif italic"
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.52 }}
-        transition={{ duration: 0.6, delay: 3.9, ease: [0.19, 1, 0.22, 1] }}
+        transition={{ duration: 1.4, delay: 8.6, ease: 'easeOut' }}
         style={{ color: 'var(--forest)', marginTop: '1.5rem', marginBottom: '2rem' }}
       >
         &mdash;Daria
@@ -130,7 +78,7 @@ function TypewriterLetter({ onClose }: { onClose: () => void }) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 4.4, duration: 0.5 }}
+        transition={{ delay: 9.4, duration: 0.8 }}
         className="flex justify-center"
       >
         <button
@@ -199,9 +147,6 @@ function InvitationHero() {
           <circle key={i} cx={`${x}%`} cy={`${y}%`} r={r} fill="rgba(244,239,226,1)" opacity={0.11 + (i % 8) * 0.055} />
         ))}
       </svg>
-
-      {/* Twinkling constellation */}
-      <HeroConstellation />
 
       {/* Shooting stars */}
       <ShootingStars />
@@ -289,23 +234,8 @@ function InvitationHero() {
           style={{ height: '1px', width: '3.5rem', background: 'rgba(196,149,75,0.5)', transformOrigin: 'left center', margin: '0 auto 2rem' }}
         />
 
-        {/* Quote + attribution */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.2, delay: 2.0 }}
-          style={{ marginBottom: '2rem' }}
-        >
-          <p className="font-serif" style={{ fontSize: 'clamp(0.82rem, 1.2vw, 0.96rem)', fontStyle: 'italic', color: 'rgba(244,239,226,0.45)', lineHeight: 1.65, letterSpacing: '0.01em' }}>
-            &ldquo;But eyes are blind. One must look with the heart.&rdquo;
-          </p>
-          <p className="font-sans" style={{ fontSize: '0.5rem', letterSpacing: '0.15em', color: 'rgba(196,149,75,0.36)', marginTop: '0.6rem' }}>
-            &mdash;Antoine de Saint-Exup&eacute;ry&rsquo;s <em style={{ fontStyle: 'italic' }}>The Little Prince</em>
-          </p>
-        </motion.div>
-
         {/* Down arrow */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 2.6 }} className="flex justify-center">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 2.0 }} className="flex justify-center">
           <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }} style={{ color: 'rgba(196,149,75,0.32)' }}>
             <svg width="14" height="22" viewBox="0 0 14 22" fill="none" aria-hidden="true">
               <path d="M7 2 V18 M2 13 L7 18 L12 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -517,27 +447,37 @@ function PullUpSessionsSection() {
   return (
     <motion.div ref={ref} style={{ y, position: 'relative', zIndex: 5 }}>
       <SessionsSection />
+      <div style={{ background: 'var(--forest-dark)', textAlign: 'center', padding: '4rem 1.5rem 5rem' }}>
+        <p className="font-sans" style={{ fontSize: '0.5rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }}>
+          Little Pines Studio &middot; Q3 2026
+        </p>
+        <a
+          href="/#notify"
+          className="font-sans inline-flex items-center gap-2 transition-opacity hover:opacity-80"
+          style={{
+            fontSize: '0.58rem',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'rgba(196,149,75,0.85)',
+            border: '1px solid rgba(196,149,75,0.28)',
+            borderRadius: '4px',
+            padding: '0.7rem 1.8rem',
+          }}
+        >
+          Get early access
+          <ArrowRight size={10} />
+        </a>
+      </div>
     </motion.div>
   )
 }
 
 /* ─── Page ──────────────────────────────────────────────────────── */
 export default function BuildWithUsPage() {
-  const heroRef = useRef<HTMLDivElement>(null)
-  const isMobile = useIsMobile()
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
-
-  // Pull the founder letter upward as hero scrolls out — desktop/tablet only
-  const letterY = useTransform(scrollYProgress, [0, 1], ['0px', '-60px'])
-
   return (
     <>
-      <div ref={heroRef}>
-        <InvitationHero />
-      </div>
-      <motion.div style={{ y: isMobile ? 0 : letterY }}>
-        <FounderLetter />
-      </motion.div>
+      <InvitationHero />
+      <FounderLetter />
       <ProgrammeSection />
       <WorkshopSection />
       <AfterBearSection />

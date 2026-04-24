@@ -8,7 +8,7 @@ import { StarField, ForestSilhouette, ShootingStars, TwinklingStars } from '@/ap
 import { PineBranch } from '@/components/illustrations/pine-branch'
 import { Globe } from '@/components/globe'
 
-/* ─── Data (kept intact) ────────────────────────────────────────── */
+/* ─── Data ──────────────────────────────────────────────────────── */
 const PROMISES = [
   {
     num: '01',
@@ -46,7 +46,7 @@ type RepoStatus = { background: string; color: string }
 const REPOS: { name: string; status: string; statusStyle: RepoStatus; desc: string }[] = [
   { name: 'little-pines-patterns', status: 'IN PROGRESS', statusStyle: { background: 'rgba(196,149,75,0.14)', color: 'rgba(140,100,40,0.9)' }, desc: 'Every pattern, cut guide, and stuffing template for the bear. Three sizes. Printable.' },
   { name: 'little-pines-sessions', status: 'DRAFTING',    statusStyle: { background: 'rgba(42,74,48,0.07)',  color: 'rgba(42,74,48,0.50)' },  desc: 'Structured play sessions for all four emotional frameworks, written for the seasons a child moves through.' },
-  { name: 'little-pines-studio',   status: 'PUBLIC',      statusStyle: { background: 'rgba(42,74,48,0.12)', color: 'rgba(42,74,48,0.72)' },  desc: 'The source for this website. Fork it, make it yours.' },
+  { name: 'little-pines-research', status: 'DRAFTING',    statusStyle: { background: 'rgba(42,74,48,0.07)',  color: 'rgba(42,74,48,0.50)' },  desc: 'Fine-tuned model weights for emotional literacy, trained on curated child-appropriate datasets. Published to Hugging Face. Adapt for your own conversational context.' },
 ]
 
 const CONTRIBUTE = [
@@ -54,18 +54,6 @@ const CONTRIBUTE = [
   { Icon: FileText,      title: 'Translate',       desc: 'A family in São Paulo should not need to read English to use these sessions. Open a pull request.' },
   { Icon: MessageCircle, title: 'Ask in public',   desc: 'Found something wrong? Have a question about the pedagogy? Say it publicly — we answer publicly.' },
 ]
-
-/* ─── Mobile detection ──────────────────────────────────────────── */
-function useIsMobile() {
-  const [mobile, setMobile] = useState(false)
-  useEffect(() => {
-    const check = () => setMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
-  return mobile
-}
 
 /* ─── Static star field ─────────────────────────────────────────── */
 const HERO_STARS: [number, number, number][] = [
@@ -106,17 +94,19 @@ function PromiseHero() {
         ))}
       </svg>
 
-      {/* Concentric rings */}
-      <div className="absolute pointer-events-none" aria-hidden="true" style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
-        {([560, 400, 270] as const).map((size, i) => (
-          <div key={i} style={{
-            position: 'absolute',
-            width: size, height: size,
-            borderRadius: '50%',
-            border: `1px solid rgba(196,149,75,${0.06 - i * 0.015})`,
-            top: '50%', left: '50%',
-            transform: 'translate(-50%, -50%)',
-          }} />
+      {/* Radiating rings — same as studio hero */}
+      <div className="absolute pointer-events-none" aria-hidden="true" style={{ left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }}>
+        {([200, 310, 440, 580] as const).map((size, i) => (
+          <motion.div
+            key={i}
+            style={{
+              position: 'absolute', width: size, height: size,
+              borderRadius: '50%', border: '1px solid rgba(196,149,75,1)',
+              top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+            }}
+            animate={{ opacity: [0.05, 0.55 - i * 0.10, 0.05] }}
+            transition={{ duration: 2.8, delay: i * 0.45, repeat: Infinity, ease: 'easeInOut' }}
+          />
         ))}
       </div>
 
@@ -133,7 +123,7 @@ function PromiseHero() {
         <PineBranch color="var(--cream)" flip />
       </div>
 
-      {/* Globe peeking at bottom — only top arc visible, arrow overlays it */}
+      {/* Globe — top arc only */}
       <motion.div
         className="absolute pointer-events-none"
         aria-hidden="true"
@@ -150,13 +140,12 @@ function PromiseHero() {
           zIndex: 1,
         }}
       >
-        {/* Square container so Globe sizes correctly */}
         <div style={{ width: '100%', aspectRatio: '1' }}>
           <Globe style={{ width: '100%', height: '100%', display: 'block' }} />
         </div>
       </motion.div>
 
-      {/* Content — z-index above globe so arrow overlays */}
+      {/* Content */}
       <div className="relative px-6" style={{ maxWidth: 'min(780px, 90vw)', zIndex: 10 }}>
 
         <motion.p
@@ -193,7 +182,7 @@ function PromiseHero() {
           ))}
         </div>
 
-        {/* Amber rule draw-in */}
+        {/* Amber rule */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
@@ -201,7 +190,7 @@ function PromiseHero() {
           style={{ height: '1px', width: '3rem', background: 'rgba(196,149,75,0.5)', transformOrigin: 'left center', margin: '0 auto 2.5rem' }}
         />
 
-        {/* Floating down arrow — overlays globe */}
+        {/* Floating down arrow */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 2.0 }} className="flex justify-center" style={{ paddingBottom: '2rem' }}>
           <motion.div
             animate={{ y: [0, 6, 0] }}
@@ -218,7 +207,7 @@ function PromiseHero() {
   )
 }
 
-/* ─── Commitment slide (horizontal carousel card) ───────────────── */
+/* ─── Commitment slide ───────────────────────────────────────────── */
 function CommitmentSlide({ num, title, body, index }: { num: string; title: string; body: string; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, amount: 0 })
@@ -280,6 +269,136 @@ function CommitmentSlide({ num, title, body, index }: { num: string; title: stri
   )
 }
 
+/* ─── Smooth scroll helper ───────────────────────────────────────── */
+function smoothScrollTo(el: HTMLElement, to: number, duration: number) {
+  const start = el.scrollLeft
+  const diff = to - start
+  let startTime: number | null = null
+  const ease = (t: number) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t
+  const step = (ts: number) => {
+    if (!startTime) startTime = ts
+    const t = Math.min((ts - startTime) / duration, 1)
+    el.scrollLeft = start + diff * ease(t)
+    if (t < 1) requestAnimationFrame(step)
+  }
+  requestAnimationFrame(step)
+}
+
+/* ─── Commitments carousel section ──────────────────────────────── */
+function CommitmentsSection() {
+  const [active, setActive] = useState(0)
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  // Auto-advance every 8 seconds
+  useEffect(() => {
+    const timer = setInterval(() => setActive(i => (i + 1) % PROMISES.length), 8000)
+    return () => clearInterval(timer)
+  }, [])
+
+  // Smooth-scroll to active card (1.2 s eased)
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    const card = el.children[active] as HTMLElement
+    if (!card) return
+    const pl = parseFloat(getComputedStyle(el).paddingLeft) || 0
+    smoothScrollTo(el, card.offsetLeft - pl, 1200)
+  }, [active])
+
+  const goTo = (i: number) => setActive(Math.max(0, Math.min(PROMISES.length - 1, i)))
+
+  return (
+    <section style={{
+      background: 'var(--cream)',
+      borderRadius: '2rem 2rem 0 0',
+      marginTop: '-2rem',
+      paddingTop: 'clamp(3.5rem, 7vw, 5.5rem)',
+      paddingBottom: 'clamp(2.5rem, 5vw, 4rem)',
+      overflow: 'hidden',
+      position: 'relative',
+      zIndex: 2,
+    }}>
+      <style>{`.promise-scroll::-webkit-scrollbar { display: none; }`}</style>
+      <div
+        className="absolute pointer-events-none"
+        aria-hidden="true"
+        style={{
+          top: 0, right: 0, width: '50%', height: '40%',
+          background: 'radial-gradient(ellipse 80% 70% at 95% 5%, rgba(196,149,75,0.05) 0%, transparent 70%)',
+        }}
+      />
+
+      {/* Scroll container */}
+      <div
+        ref={scrollRef}
+        className="promise-scroll flex overflow-x-auto"
+        style={{
+          scrollSnapType: 'x mandatory',
+          scrollbarWidth: 'none',
+          paddingLeft: 'clamp(1.5rem, 7vw, 5rem)',
+        }}
+      >
+        {PROMISES.map((p, i) => (
+          <CommitmentSlide key={p.num} {...p} index={i} />
+        ))}
+        <div style={{ flexShrink: 0, width: 'clamp(1.5rem, 7vw, 5rem)' }} />
+      </div>
+
+      {/* Navigation — prev arrow · numbered dots · next arrow */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.75rem', marginTop: '2.5rem' }}>
+        <button
+          onClick={() => goTo(active - 1)}
+          aria-label="Previous commitment"
+          style={{
+            background: 'none', border: 'none', cursor: active === 0 ? 'default' : 'pointer',
+            padding: '0.4rem',
+            color: active === 0 ? 'rgba(42,74,48,0.14)' : 'rgba(42,74,48,0.40)',
+            transition: 'color 0.3s ease',
+          }}
+        >
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+            <path d="M6 1 L1 6 L6 11 M1 6 H15" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+
+        <div style={{ display: 'flex', gap: '0.9rem', alignItems: 'center' }}>
+          {PROMISES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              aria-label={`Commitment ${i + 1}`}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer', padding: '0.2rem 0',
+                fontFamily: 'var(--font-sans, sans-serif)',
+                fontSize: '0.48rem', letterSpacing: '0.14em',
+                color: active === i ? 'rgba(196,149,75,0.85)' : 'rgba(42,74,48,0.22)',
+                transition: 'color 0.4s ease',
+              }}
+            >
+              {String(i + 1).padStart(2, '0')}
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={() => goTo(active + 1)}
+          aria-label="Next commitment"
+          style={{
+            background: 'none', border: 'none', cursor: active === PROMISES.length - 1 ? 'default' : 'pointer',
+            padding: '0.4rem',
+            color: active === PROMISES.length - 1 ? 'rgba(42,74,48,0.14)' : 'rgba(42,74,48,0.40)',
+            transition: 'color 0.3s ease',
+          }}
+        >
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+            <path d="M10 1 L15 6 L10 11 M15 6 H1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+  )
+}
+
 /* ─── Open Source ───────────────────────────────────────────────── */
 function OpenSourceSection() {
   const ref = useRef<HTMLElement>(null)
@@ -295,6 +414,20 @@ function OpenSourceSection() {
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true"><ForestSilhouette /></div>
 
       <motion.div className="relative z-10 mx-auto max-w-6xl px-6 md:px-12 lg:px-20" style={{ y: contentY }}>
+
+        {/* Section eyebrow — top */}
+        <Reveal>
+          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+            <p className="font-sans uppercase" style={{
+              display: 'inline-block',
+              fontSize: '0.52rem',
+              letterSpacing: '0.28em',
+              color: 'rgba(196,149,75,0.55)',
+            }}>
+              Our commitment to open source
+            </p>
+          </div>
+        </Reveal>
 
         <Reveal>
           <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start', marginBottom: '3.5rem', paddingBottom: '3.5rem', borderBottom: '1px solid rgba(240,232,210,0.1)' }}>
@@ -363,23 +496,6 @@ function OpenSourceSection() {
           </Reveal>
         </div>
 
-        {/* "Our commitment to open source" — full-width, centered, after 2-col, dark bg highlight */}
-        <Reveal>
-          <div style={{ marginTop: '4rem', paddingTop: '2.5rem', borderTop: '1px solid rgba(240,232,210,0.08)', textAlign: 'center' }}>
-            <p className="font-sans uppercase" style={{
-              display: 'inline-block',
-              fontSize: '0.52rem',
-              letterSpacing: '0.28em',
-              color: 'rgba(196,149,75,0.60)',
-              background: 'rgba(8, 20, 10, 0.88)',
-              padding: '0.5rem 1.5rem',
-              borderRadius: '4px',
-            }}>
-              Our commitment to open source
-            </p>
-          </div>
-        </Reveal>
-
       </motion.div>
     </section>
   )
@@ -387,46 +503,10 @@ function OpenSourceSection() {
 
 /* ─── Page ──────────────────────────────────────────────────────── */
 export default function PromisePage() {
-  const heroRef = useRef<HTMLDivElement>(null)
-  const isMobile = useIsMobile()
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
-  const carouselY = useTransform(scrollYProgress, [0, 1], ['0px', '-60px'])
-
   return (
     <>
-      <div ref={heroRef}>
-        <PromiseHero />
-      </div>
-
-      {/* Horizontal scroll commitment carousel — pulled up on scroll, rounded top corners */}
-      <motion.div style={{ y: isMobile ? 0 : carouselY }}>
-      <section style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', paddingTop: 'clamp(3.5rem, 7vw, 5.5rem)', paddingBottom: 'clamp(3.5rem, 7vw, 5.5rem)', overflow: 'hidden', position: 'relative', zIndex: 2 }}>
-        <style>{`.promise-scroll::-webkit-scrollbar { display: none; }`}</style>
-        <div
-          className="absolute pointer-events-none"
-          aria-hidden="true"
-          style={{
-            top: 0, right: 0, width: '50%', height: '40%',
-            background: 'radial-gradient(ellipse 80% 70% at 95% 5%, rgba(196,149,75,0.05) 0%, transparent 70%)',
-          }}
-        />
-        <div
-          className="promise-scroll flex overflow-x-auto"
-          style={{
-            scrollSnapType: 'x mandatory',
-            scrollbarWidth: 'none',
-            paddingLeft: 'clamp(1.5rem, 7vw, 5rem)',
-          }}
-        >
-          {PROMISES.map((p, i) => (
-            <CommitmentSlide key={p.num} {...p} index={i} />
-          ))}
-          {/* Trailing spacer so last card isn't flush to edge */}
-          <div style={{ flexShrink: 0, width: 'clamp(1.5rem, 7vw, 5rem)' }} />
-        </div>
-      </section>
-      </motion.div>
-
+      <PromiseHero />
+      <CommitmentsSection />
       <OpenSourceSection />
     </>
   )
