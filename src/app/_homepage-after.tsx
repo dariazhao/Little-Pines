@@ -1417,6 +1417,20 @@ function ConceptPaperSection() {
                 cardRule={cardRule} hoverRule={hoverRule} ghostColor={ghostColor} />
             ))}
           </div>
+
+          {/* CC footer */}
+          <div style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid rgba(42,74,48,0.10)' }}>
+            <p className="font-sans text-sm" style={{ color: 'var(--charcoal)', opacity: 0.45, lineHeight: 1.7, marginBottom: '1rem' }}>
+              Released under CC BY-SA 4.0. Share freely; attribute Little Pines Studio.
+            </p>
+            <Link
+              href="/promise"
+              className="font-sans text-sm inline-flex items-center gap-2 transition-colors"
+              style={{ color: 'var(--amber)' }}
+            >
+              <ArrowRight className="w-3.5 h-3.5" /> The Little Pines Promise
+            </Link>
+          </div>
         </div>
 
       </motion.div>
