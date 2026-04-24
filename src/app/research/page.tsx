@@ -302,7 +302,7 @@ function TabbedSection() {
 }
 
 /* ─── Four Pillars ───────────────────────────────────────────────── */
-function PillarsSection() {
+function PillarsSection({ onReveal, revealed }: { onReveal: () => void; revealed: boolean }) {
   return (
     <section style={{ background: 'var(--forest-dark)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 3, padding: '5rem 0 5rem', overflow: 'hidden' }}>
       <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" aria-hidden="true" />
@@ -344,9 +344,30 @@ function PillarsSection() {
           <div style={{ borderTop: '1px solid rgba(240,232,210,0.08)' }} />
         </div>
 
-        {/* Scene break before artifact */}
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem 0 0.5rem' }}>
-          <div style={{ width: '2.5rem', height: '1px', background: 'rgba(196,149,75,0.28)' }} />
+        {/* Scene break / Meet the bear CTA */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '3rem 0 0.5rem', gap: '0.75rem' }}>
+          {revealed ? (
+            <div style={{ width: '2.5rem', height: '1px', background: 'rgba(196,149,75,0.28)' }} />
+          ) : (
+            <>
+              <button
+                onClick={onReveal}
+                className="font-sans"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.52rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.60)', padding: 0 }}
+              >
+                Meet the bear
+              </button>
+              <motion.div
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ color: 'rgba(196,149,75,0.40)' }}
+              >
+                <svg width="14" height="22" viewBox="0 0 14 22" fill="none" aria-hidden="true">
+                  <path d="M7 2 V18 M2 13 L7 18 L12 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </motion.div>
+            </>
+          )}
         </div>
       </div>
     </section>
@@ -355,26 +376,38 @@ function PillarsSection() {
 
 /* ─── Page ──────────────────────────────────────────────────────── */
 export default function ResearchPage() {
+  const [artifactOpen, setArtifactOpen] = useState(false)
   return (
     <>
       <ResearchHero />
       <TabbedSection />
-      <PillarsSection />
-      <AfterBearSection />
-      <div style={{ background: 'var(--forest-dark)', textAlign: 'center', padding: '4rem 1.5rem 5rem', position: 'relative' }}>
-        <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" aria-hidden="true" />
-        <p className="font-sans relative z-10" style={{ fontSize: '0.5rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }}>
-          Little Pines Studio &middot; Q3 2026
-        </p>
-        <a
-          href="/#notify"
-          className="font-sans relative z-10 inline-flex items-center gap-2 transition-opacity hover:opacity-80"
-          style={{ fontSize: '0.58rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.85)', border: '1px solid rgba(196,149,75,0.28)', borderRadius: '4px', padding: '0.7rem 1.8rem' }}
-        >
-          Get early access
-          <ArrowRight size={10} />
-        </a>
-      </div>
+      <PillarsSection onReveal={() => setArtifactOpen(true)} revealed={artifactOpen} />
+      <AnimatePresence>
+        {artifactOpen && (
+          <motion.div
+            key="artifact"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+          >
+            <AfterBearSection />
+            <div style={{ background: 'var(--forest-dark)', textAlign: 'center', padding: '4rem 1.5rem 5rem', position: 'relative' }}>
+              <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" aria-hidden="true" />
+              <p className="font-sans relative z-10" style={{ fontSize: '0.5rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }}>
+                Little Pines Studio &middot; Q3 2026
+              </p>
+              <a
+                href="/#notify"
+                className="font-sans relative z-10 inline-flex items-center gap-2 transition-opacity hover:opacity-80"
+                style={{ fontSize: '0.58rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.85)', border: '1px solid rgba(196,149,75,0.28)', borderRadius: '4px', padding: '0.7rem 1.8rem' }}
+              >
+                Get early access
+                <ArrowRight size={10} />
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }
