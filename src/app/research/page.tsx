@@ -112,7 +112,7 @@ function ResearchHero() {
 }
 
 /* ─── Thesis section ─────────────────────────────────────────────── */
-function ThesisSection({ onShowBear, bearRevealed }: { onShowBear: () => void; bearRevealed: boolean }) {
+function ThesisSection({ onShowSessions, sessionsRevealed }: { onShowSessions: () => void; sessionsRevealed: boolean }) {
   return (
     <section style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 2 }}>
       <div className="mx-auto px-6 md:px-12 lg:px-20" style={{ maxWidth: '1100px', paddingTop: '5rem', paddingBottom: '5.5rem' }}>
@@ -121,8 +121,8 @@ function ThesisSection({ onShowBear, bearRevealed }: { onShowBear: () => void; b
           <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(42,74,48,0.32)', marginBottom: '1.2rem' }}>
             The case
           </p>
-          <h2 className="font-serif" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 600, lineHeight: 1.1, letterSpacing: '-0.025em', color: 'var(--forest)', marginBottom: '3.5rem', maxWidth: '20ch' }}>
-            Emotional literacy is the foundation. Everything else builds on top.
+          <h2 className="font-serif" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 600, lineHeight: 1.1, letterSpacing: '-0.025em', color: 'var(--forest)', marginBottom: '3.5rem', maxWidth: '22ch' }}>
+            Emotional literacy is the foundation for a rich interior life.
           </h2>
         </Reveal>
 
@@ -130,47 +130,45 @@ function ThesisSection({ onShowBear, bearRevealed }: { onShowBear: () => void; b
           <Reveal>
             <div className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
               <p style={{ marginBottom: '1.25rem' }}>
-                In the first years of life, children are born with an almost unbounded capacity to feel. Developmental research — from Gottman&rsquo;s Emotion Coaching work to Siegel&rsquo;s Interpersonal Neurobiology — establishes that the ability to name, tolerate, and process one&rsquo;s own emotional states is not a soft skill. It is the substrate on which everything else — academic learning, social connection, resilience, creativity — is built.
+                In the first years of life, children are born with an almost unbounded capacity to feel. Research &mdash; from Gottman to Siegel &mdash; establishes that the ability to name and process emotional states is not a soft skill. It is the substrate on which learning, connection, and resilience are built.
               </p>
               <p>
-                The problem is that modern childhood systematically erodes this capacity. Overstimulation, screen-mediated experience, and well-meaning adults who resolve discomfort before a child can sit with it — these are not edge cases. They are the norm. By the time a child is eight, most have been taught to suppress, perform, or avoid the feelings that were once their most natural mode of expression.
+                Modern childhood systematically erodes this capacity. Overstimulation, screens, and adults who resolve discomfort before a child can sit with it &mdash; these are not edge cases. By the time a child is eight, most have been taught to suppress or avoid the feelings that were once their most natural mode of expression.
               </p>
             </div>
           </Reveal>
           <Reveal delay={0.08}>
             <div className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
               <p style={{ marginBottom: '1.25rem' }}>
-                Little Pines Studio exists because the tools parents have been given to address this gap are almost all delivered through the same screens that caused the problem. Therapy apps and SEL curricula cannot co-regulate. They cannot wait. A screen has nowhere to be next, and so it does not know how to be still.
+                Little Pines exists because the tools parents have been given are almost all delivered through the same screens that caused the problem. Therapy apps and SEL curricula cannot co-regulate. They cannot wait. A screen has nowhere to be next.
               </p>
               <p>
-                We believe the form factor matters as much as the content. A quiet, unhurried, screen-free companion that lives in a child&rsquo;s room — one that has nowhere to be and nothing to sell — is a fundamentally different kind of tool. The research supports it. No one has yet built it well.
+                The form factor matters as much as the content. A quiet, unhurried, screen-free companion &mdash; one that has nowhere to be and nothing to sell &mdash; is a fundamentally different kind of tool. The research supports it. No one has yet built it well.
               </p>
             </div>
           </Reveal>
         </div>
 
-        <Reveal>
-          <div style={{ borderTop: '1px solid rgba(42,74,48,0.08)', paddingTop: '3rem', textAlign: 'center' }}>
-            <p className="font-serif" style={{ fontSize: 'clamp(1.05rem, 1.8vw, 1.4rem)', fontStyle: 'italic', color: 'var(--forest)', opacity: 0.5, lineHeight: 1.55, maxWidth: '38ch', margin: '0 auto 0.75rem' }}>
-              &ldquo;A child who cannot name their frustration cannot work through it.&rdquo;
-            </p>
-            <p className="font-sans" style={{ fontSize: '0.5rem', letterSpacing: '0.16em', color: 'rgba(196,149,75,0.5)', textTransform: 'uppercase' }}>
-              Dan Siegel &mdash; Interpersonal Neurobiology
-            </p>
-          </div>
-        </Reveal>
-
-        {!bearRevealed && (
+        {!sessionsRevealed && (
           <Reveal>
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.7rem', marginTop: '1rem' }}>
               <button
-                onClick={onShowBear}
-                className="font-sans inline-flex items-center gap-2 transition-opacity hover:opacity-70"
-                style={{ fontSize: '0.58rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--forest)', border: '1px solid rgba(42,74,48,0.22)', borderRadius: '4px', padding: '0.75rem 2rem', cursor: 'pointer', background: 'transparent' }}
+                onClick={onShowSessions}
+                className="font-sans transition-opacity hover:opacity-60"
+                style={{ fontSize: '0.52rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(42,74,48,0.45)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
               >
-                Meet the bear
-                <ArrowRight size={11} />
+                How it works
               </button>
+              <motion.div
+                animate={{ y: [0, 5, 0] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ color: 'rgba(42,74,48,0.30)', cursor: 'pointer' }}
+                onClick={onShowSessions}
+              >
+                <svg width="14" height="22" viewBox="0 0 14 22" fill="none" aria-hidden="true">
+                  <path d="M7 2 V18 M2 13 L7 18 L12 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </motion.div>
             </div>
           </Reveal>
         )}
@@ -208,7 +206,7 @@ const PILLARS = [
 ]
 
 /* ─── Pillars section ────────────────────────────────────────────── */
-function PillarsSection({ onShowSessions, sessionsRevealed }: { onShowSessions: () => void; sessionsRevealed: boolean }) {
+function PillarsSection({ onShowBear, bearRevealed }: { onShowBear: () => void; bearRevealed: boolean }) {
   return (
     <section style={{ background: 'var(--forest-dark)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 4, padding: '5rem 0 6rem', overflow: 'hidden' }}>
       <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" aria-hidden="true" />
@@ -250,16 +248,25 @@ function PillarsSection({ onShowSessions, sessionsRevealed }: { onShowSessions: 
           <div style={{ borderTop: '1px solid rgba(240,232,210,0.08)' }} />
         </div>
 
-        {!sessionsRevealed && (
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>
+        {!bearRevealed && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.7rem', marginTop: '3rem' }}>
             <button
-              onClick={onShowSessions}
-              className="font-sans inline-flex items-center gap-2 transition-opacity hover:opacity-70"
-              style={{ fontSize: '0.58rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.85)', border: '1px solid rgba(196,149,75,0.28)', borderRadius: '4px', padding: '0.75rem 2rem', cursor: 'pointer', background: 'none' }}
+              onClick={onShowBear}
+              className="font-sans transition-opacity hover:opacity-60"
+              style={{ fontSize: '0.52rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.55)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
             >
-              How it works
-              <ArrowRight size={11} />
+              Meet the bear
             </button>
+            <motion.div
+              animate={{ y: [0, 5, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+              style={{ color: 'rgba(196,149,75,0.40)', cursor: 'pointer' }}
+              onClick={onShowBear}
+            >
+              <svg width="14" height="22" viewBox="0 0 14 22" fill="none" aria-hidden="true">
+                <path d="M7 2 V18 M2 13 L7 18 L12 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </motion.div>
           </div>
         )}
       </div>
@@ -342,19 +349,6 @@ function PullUpSessionsSection() {
   return (
     <motion.div ref={ref} style={{ y, position: 'relative', zIndex: 5 }}>
       <SessionsSection />
-      <div style={{ background: 'var(--forest-dark)', textAlign: 'center', padding: '4rem 1.5rem 5rem' }}>
-        <p className="font-sans" style={{ fontSize: '0.5rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }}>
-          Little Pines Studio &middot; Q3 2026
-        </p>
-        <a
-          href="/#notify"
-          className="font-sans inline-flex items-center gap-2 transition-opacity hover:opacity-80"
-          style={{ fontSize: '0.58rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.85)', border: '1px solid rgba(196,149,75,0.28)', borderRadius: '4px', padding: '0.7rem 1.8rem' }}
-        >
-          Get early access
-          <ArrowRight size={10} />
-        </a>
-      </div>
     </motion.div>
   )
 }
@@ -367,19 +361,19 @@ export default function ResearchPage() {
   return (
     <>
       <ResearchHero />
-      <ThesisSection onShowBear={() => setShowBear(true)} bearRevealed={showBear} />
-      <AnimatePresence>
-        {showBear && (
-          <motion.div key="bear" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.6, ease: 'easeInOut' }}>
-            <AfterBearSection />
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <PillarsSection onShowSessions={() => setShowSessions(true)} sessionsRevealed={showSessions} />
+      <ThesisSection onShowSessions={() => setShowSessions(true)} sessionsRevealed={showSessions} />
       <AnimatePresence>
         {showSessions && (
           <motion.div key="sessions" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.6, ease: 'easeInOut' }}>
             <PullUpSessionsSection />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <PillarsSection onShowBear={() => setShowBear(true)} bearRevealed={showBear} />
+      <AnimatePresence>
+        {showBear && (
+          <motion.div key="bear" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.6, ease: 'easeInOut' }}>
+            <AfterBearSection />
           </motion.div>
         )}
       </AnimatePresence>

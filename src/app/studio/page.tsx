@@ -279,7 +279,7 @@ function FounderLetter() {
           <div style={{ background: 'rgba(255,250,238,0.72)', border: '1px solid rgba(196,149,75,0.12)', borderRadius: '8px', padding: 'clamp(1.75rem, 5vw, 2.75rem)', boxShadow: '0 2px 20px rgba(196,149,75,0.07)' }}>
 
             <div className="font-serif text-charcoal" style={{ fontSize: 'clamp(0.97rem, 1.4vw, 1.07rem)', lineHeight: 1.88, marginBottom: '2rem' }}>
-              <p style={{ fontWeight: 700, marginBottom: '1.5rem' }}>
+              <p style={{ marginBottom: '1.5rem' }}>
                 Children are born with an extraordinary capacity to feel, notice, and express the full range of human emotion.
               </p>
               <p>
