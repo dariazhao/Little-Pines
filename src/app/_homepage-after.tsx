@@ -462,8 +462,8 @@ export function AfterHero() {
 ══════════════════════════════════════════════════════════════════ */
 
 /* ─── SVG line-art icons ─── */
-function BearPawIcon({ active, size = 68 }: { active: boolean; size?: number }) {
-  const s = { strokeWidth: 1.4, stroke: 'var(--forest)', fill: 'none', strokeLinecap: 'round' as const }
+function BearPawIcon({ active, size = 68, color = 'var(--forest)' }: { active: boolean; size?: number; color?: string }) {
+  const s = { strokeWidth: 1.4, stroke: color, fill: 'none', strokeLinecap: 'round' as const }
   const t = (delay: number) => ({ duration: 0.75, delay, ease: 'easeOut' as const })
   return (
     <svg viewBox="0 0 80 80" width={size} height={size}>
@@ -480,8 +480,8 @@ function BearPawIcon({ active, size = 68 }: { active: boolean; size?: number }) 
   )
 }
 
-function ChipIcon({ active, size = 68 }: { active: boolean; size?: number }) {
-  const s = { strokeWidth: 1.4, stroke: 'var(--forest)', fill: 'none', strokeLinecap: 'round' as const }
+function ChipIcon({ active, size = 68, color = 'var(--forest)' }: { active: boolean; size?: number; color?: string }) {
+  const s = { strokeWidth: 1.4, stroke: color, fill: 'none', strokeLinecap: 'round' as const }
   const t = (delay: number) => ({ duration: 0.6, delay, ease: 'easeOut' as const })
   return (
     <svg viewBox="0 0 80 80" width={size} height={size}>
@@ -503,8 +503,8 @@ function ChipIcon({ active, size = 68 }: { active: boolean; size?: number }) {
   )
 }
 
-function NetworkIcon({ active, size = 68 }: { active: boolean; size?: number }) {
-  const s = { strokeWidth: 1.4, stroke: 'var(--forest)', fill: 'none', strokeLinecap: 'round' as const }
+function NetworkIcon({ active, size = 68, color = 'var(--forest)' }: { active: boolean; size?: number; color?: string }) {
+  const s = { strokeWidth: 1.4, stroke: color, fill: 'none', strokeLinecap: 'round' as const }
   const t = (delay: number) => ({ duration: 0.65, delay, ease: 'easeOut' as const })
   return (
     <svg viewBox="0 0 80 80" width={size} height={size}>
@@ -526,22 +526,55 @@ const METHOD_PANELS = [
     title: 'Screen-free.',
     body: "A physical plush in the child's room. No screen, no camera, ever. The child initiates every interaction by squeezing the paw.",
     Icon: BearPawIcon,
+    cardBg: '#2A4A30',
+    hoverBg: '#F4EFE2',
+    cardText: 'rgba(244,239,226,0.90)',
+    hoverText: '#2A4A30',
+    cardIcon: 'rgba(244,239,226,0.72)',
+    hoverIcon: '#2A4A30',
+    cardEyebrow: 'rgba(196,149,75,0.80)',
+    hoverEyebrow: 'rgba(196,149,75,0.70)',
+    cardRule: 'rgba(196,149,75,0.50)',
+    hoverRule: 'rgba(42,74,48,0.30)',
+    ghostColor: 'rgba(244,239,226,0.055)',
   },
   {
     num: '02',
     title: 'On-device.',
     body: 'A frontier small model runs entirely inside the plush. Voice data never leaves the toy. Hardware switches cut the microphone and WiFi at the circuit level.',
     Icon: ChipIcon,
+    cardBg: '#B5873A',
+    hoverBg: '#1D3320',
+    cardText: 'rgba(244,239,226,0.90)',
+    hoverText: 'rgba(244,239,226,0.85)',
+    cardIcon: 'rgba(244,239,226,0.72)',
+    hoverIcon: 'rgba(244,239,226,0.82)',
+    cardEyebrow: 'rgba(244,239,226,0.50)',
+    hoverEyebrow: 'rgba(196,149,75,0.75)',
+    cardRule: 'rgba(244,239,226,0.38)',
+    hoverRule: 'rgba(196,149,75,0.55)',
+    ghostColor: 'rgba(244,239,226,0.055)',
   },
   {
     num: '03',
     title: 'Open-source.',
     body: 'Sewing patterns, session guides, model fine-tuning, safety protocols. Published as we build. A parent, a school, another studio — anyone can adapt what we make.',
     Icon: NetworkIcon,
+    cardBg: '#7A3C1E',
+    hoverBg: '#F4EFE2',
+    cardText: 'rgba(244,239,226,0.90)',
+    hoverText: '#7A3C1E',
+    cardIcon: 'rgba(244,239,226,0.72)',
+    hoverIcon: '#7A3C1E',
+    cardEyebrow: 'rgba(196,149,75,0.78)',
+    hoverEyebrow: 'rgba(196,149,75,0.70)',
+    cardRule: 'rgba(196,149,75,0.48)',
+    hoverRule: 'rgba(122,60,30,0.32)',
+    ghostColor: 'rgba(244,239,226,0.055)',
   },
 ]
 
-type IconComp = (p: { active: boolean; size?: number }) => React.ReactElement
+type IconComp = (p: { active: boolean; size?: number; color?: string }) => React.ReactElement
 
 function MethodCard({ num, title, body, Icon, delay }: {
   num: string; title: string; body: string; Icon: IconComp; delay: number
@@ -1377,8 +1410,11 @@ function ConceptPaperSection() {
             marginBottom: '2.75rem',
           }} />
           <div style={{ display: 'flex', gap: 'clamp(0.5rem, 1.2vw, 0.85rem)' }}>
-            {METHOD_PANELS.map(({ num, title, body, Icon }, i) => (
-              <HoverRevealCard key={num} num={num} title={title} body={body} Icon={Icon} delay={0.06 + i * 0.09} />
+            {METHOD_PANELS.map(({ num, title, body, Icon, cardBg, hoverBg, cardText, hoverText, cardIcon, hoverIcon, cardEyebrow, hoverEyebrow, cardRule, hoverRule, ghostColor }, i) => (
+              <HoverRevealCard key={num} num={num} title={title} body={body} Icon={Icon} delay={0.06 + i * 0.09}
+                cardBg={cardBg} hoverBg={hoverBg} cardText={cardText} hoverText={hoverText}
+                cardIcon={cardIcon} hoverIcon={hoverIcon} cardEyebrow={cardEyebrow} hoverEyebrow={hoverEyebrow}
+                cardRule={cardRule} hoverRule={hoverRule} ghostColor={ghostColor} />
             ))}
           </div>
         </div>
@@ -1785,8 +1821,14 @@ function EpigraphSection() {
 /* ══════════════════════════════════════════════════════════════════
    COMMITMENTS — HOVER REVEAL CARDS
 ══════════════════════════════════════════════════════════════════ */
-function HoverRevealCard({ num, title, body, Icon, delay }: {
-  num: string; title: string; body: string; Icon: IconComp; delay: number
+function HoverRevealCard({ num, title, body, Icon, delay,
+  cardBg, hoverBg, cardText, hoverText, cardIcon, hoverIcon,
+  cardEyebrow, hoverEyebrow, cardRule, hoverRule, ghostColor,
+}: {
+  num: string; title: string; body: string; Icon: IconComp; delay: number;
+  cardBg: string; hoverBg: string; cardText: string; hoverText: string;
+  cardIcon: string; hoverIcon: string; cardEyebrow: string; hoverEyebrow: string;
+  cardRule: string; hoverRule: string; ghostColor: string;
 }) {
   const [hovered, setHovered] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -1808,8 +1850,8 @@ function HoverRevealCard({ num, title, body, Icon, delay }: {
         overflow: 'hidden',
         cursor: 'default',
         height: 'clamp(260px, 28vw, 380px)',
-        background: 'var(--cream)',
-        border: '1px solid rgba(42,74,48,0.09)',
+        background: cardBg,
+        border: 'none',
       }}
     >
       {/* Giant ghost number watermark */}
@@ -1822,8 +1864,8 @@ function HoverRevealCard({ num, title, body, Icon, delay }: {
           fontSize: 'clamp(7rem, 18vw, 14rem)',
           fontWeight: 800,
           fontFamily: 'Georgia, serif',
-          color: 'var(--forest)',
-          opacity: 0.042,
+          color: ghostColor,
+          opacity: 1,
           lineHeight: 1,
           userSelect: 'none',
           pointerEvents: 'none',
@@ -1845,11 +1887,11 @@ function HoverRevealCard({ num, title, body, Icon, delay }: {
         }}
       >
         <div style={{ marginBottom: '0.9rem' }}>
-          <Icon active={inView} size={34} />
+          <Icon active={inView} size={34} color={cardIcon} />
         </div>
         <p
           className="font-sans"
-          style={{ fontSize: '0.44rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'var(--amber)', marginBottom: '0.55rem' }}
+          style={{ fontSize: '0.44rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: cardEyebrow, marginBottom: '0.55rem' }}
         >
           {num}
         </p>
@@ -1860,7 +1902,7 @@ function HoverRevealCard({ num, title, body, Icon, delay }: {
             fontWeight: 700,
             letterSpacing: '-0.03em',
             lineHeight: 0.95,
-            color: 'var(--forest)',
+            color: cardText,
           }}
         >
           {title}
@@ -1868,7 +1910,7 @@ function HoverRevealCard({ num, title, body, Icon, delay }: {
         <motion.div
           animate={{ width: hovered ? '3rem' : '1.25rem' }}
           transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
-          style={{ height: '1px', background: 'var(--amber)', opacity: 0.6, marginTop: '0.85rem' }}
+          style={{ height: '1px', background: cardRule, opacity: 1, marginTop: '0.85rem' }}
         />
       </div>
 
@@ -1880,23 +1922,30 @@ function HoverRevealCard({ num, title, body, Icon, delay }: {
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'var(--forest)',
+          background: hoverBg,
           padding: 'clamp(1.4rem, 2.5vw, 2.25rem)',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
+          paddingTop: 'clamp(1.6rem, 3vw, 2.5rem)',
           zIndex: 2,
         }}
       >
+        <div style={{ marginBottom: '0.8rem' }}>
+          <Icon active={true} size={30} color={hoverIcon} />
+        </div>
         <p
           className="font-sans"
-          style={{ fontSize: '0.44rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.65)', marginBottom: '1rem' }}
+          style={{ fontSize: '0.44rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: hoverEyebrow, marginBottom: '0.65rem' }}
         >
           {num} · {title}
         </p>
+        <motion.div
+          style={{ height: '1px', width: '1.5rem', background: hoverRule, opacity: 1, marginBottom: '0.9rem' }}
+        />
         <p
           className="font-serif"
-          style={{ fontSize: 'clamp(0.92rem, 1.3vw, 1.06rem)', lineHeight: 1.8, color: 'rgba(244,239,226,0.82)' }}
+          style={{ fontSize: 'clamp(0.88rem, 1.25vw, 1.02rem)', lineHeight: 1.82, color: hoverText }}
         >
           {body}
         </p>
