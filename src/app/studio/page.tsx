@@ -249,6 +249,36 @@ function InvitationHero() {
   )
 }
 
+/* ─── Quote Insert ──────────────────────────────────────────────── */
+function QuoteInsert() {
+  return (
+    <section style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 2 }}>
+      <div className="mx-auto px-6 md:px-10" style={{ maxWidth: '660px', paddingTop: '3.5rem', paddingBottom: '2.5rem' }}>
+        <Reveal>
+          <blockquote style={{
+            background: 'rgba(255,250,238,0.72)',
+            border: '1px solid rgba(196,149,75,0.12)',
+            borderRadius: '8px',
+            padding: 'clamp(1.5rem, 4vw, 2.25rem)',
+            boxShadow: '0 2px 20px rgba(196,149,75,0.07)',
+            textAlign: 'center',
+            margin: 0,
+          }}>
+            <div aria-hidden="true" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+              <div style={{ height: '1px', width: '2rem', background: 'linear-gradient(to right, transparent, rgba(196,149,75,0.45))' }} />
+              <div style={{ fontSize: '1rem', color: 'rgba(196,149,75,0.55)', fontFamily: 'serif' }}>&ldquo;</div>
+              <div style={{ height: '1px', width: '2rem', background: 'linear-gradient(to left, transparent, rgba(196,149,75,0.45))' }} />
+            </div>
+            <p className="font-serif" style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', fontStyle: 'italic', fontWeight: 400, lineHeight: 1.65, color: 'var(--forest)', maxWidth: '38ch', margin: '0 auto' }}>
+              Children are born with an extraordinary capacity to feel, notice, and express the full range of human emotion.
+            </p>
+          </blockquote>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
 /* ─── Founder Letter ────────────────────────────────────────────── */
 function FounderLetter() {
   const [open, setOpen] = useState(false)
@@ -262,8 +292,8 @@ function FounderLetter() {
   }
 
   return (
-    <section ref={sectionRef} id="build-with-us" style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 2, scrollMarginTop: '5rem' }}>
-      <div className="mx-auto px-6 md:px-10" style={{ maxWidth: '660px', paddingTop: '5rem', paddingBottom: '5.5rem' }}>
+    <section ref={sectionRef} id="build-with-us" style={{ background: 'var(--cream)', borderRadius: 0, marginTop: 0, position: 'relative', zIndex: 2, scrollMarginTop: '5rem' }}>
+      <div className="mx-auto px-6 md:px-10" style={{ maxWidth: '660px', paddingTop: '3rem', paddingBottom: '5.5rem' }}>
 
         <Reveal>
           <p className="font-sans uppercase" style={{ fontSize: '0.54rem', letterSpacing: '0.26em', color: 'rgba(42,74,48,0.32)', marginBottom: '1.2rem' }}>
@@ -279,9 +309,6 @@ function FounderLetter() {
           <div style={{ background: 'rgba(255,250,238,0.72)', border: '1px solid rgba(196,149,75,0.12)', borderRadius: '8px', padding: 'clamp(1.75rem, 5vw, 2.75rem)', boxShadow: '0 2px 20px rgba(196,149,75,0.07)' }}>
 
             <div className="font-serif text-charcoal" style={{ fontSize: 'clamp(0.97rem, 1.4vw, 1.07rem)', lineHeight: 1.88, marginBottom: '2rem' }}>
-              <p style={{ marginBottom: '1.5rem' }}>
-                Children are born with an extraordinary capacity to feel, notice, and express the full range of human emotion.
-              </p>
               <p>
                 In the first years of life, children express themselves naturally: they cry when they&rsquo;re
                 sad, they laugh when they&rsquo;re delighted, they cling when they&rsquo;re afraid,
@@ -449,6 +476,7 @@ export default function BuildWithUsPage() {
   return (
     <>
       <InvitationHero />
+      <QuoteInsert />
       <FounderLetter />
       <ProgrammeSection />
       <WorkshopSection />

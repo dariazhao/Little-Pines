@@ -560,16 +560,16 @@ const METHOD_PANELS = [
     title: 'Open-source.',
     body: 'Sewing patterns, session guides, model fine-tuning, safety protocols. Published as we build. A parent, a school, another studio — anyone can adapt what we make.',
     Icon: NetworkIcon,
-    cardBg: '#1B2F4E',
+    cardBg: '#6B4226',
     hoverBg: '#F4EFE2',
     cardText: 'rgba(244,239,226,0.90)',
-    hoverText: '#1B2F4E',
+    hoverText: '#6B4226',
     cardIcon: 'rgba(244,239,226,0.72)',
-    hoverIcon: '#1B2F4E',
+    hoverIcon: '#6B4226',
     cardEyebrow: 'rgba(196,149,75,0.78)',
     hoverEyebrow: 'rgba(196,149,75,0.70)',
     cardRule: 'rgba(196,149,75,0.48)',
-    hoverRule: 'rgba(27,47,78,0.32)',
+    hoverRule: 'rgba(107,66,38,0.32)',
     ghostColor: 'rgba(244,239,226,0.055)',
   },
 ]
@@ -1122,65 +1122,87 @@ const BEAR_SPECS = [
   { label: 'Price',   value: '$129 target'     },
 ]
 
+function SpecPill({ s, i, inView }: { s: { label: string; value: string }; i: number; inView: boolean }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ delay: 0.7 + i * 0.12, duration: 0.55, ease: [0.19, 1, 0.22, 1] }}
+      style={{
+        display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+        padding: '0.3rem 0.85rem', borderRadius: '100px',
+        border: '1px solid rgba(196,149,75,0.22)',
+        background: 'rgba(18,38,22,0.80)',
+      }}
+    >
+      <span style={{ fontSize: '0.58rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(168,197,172,0.55)', fontFamily: 'var(--font-sans)' }}>
+        {s.label}
+      </span>
+      <span style={{ fontSize: '0.68rem', color: 'rgba(244,239,226,0.82)', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
+        {s.value}
+      </span>
+    </motion.div>
+  )
+}
+
 function BearSpotlight() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, amount: 0.15 })
   return (
-    <div ref={ref} className="relative flex flex-col items-center">
-      {/* Amber radial glow */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          width: 'clamp(280px, 44vw, 500px)',
-          height: 'clamp(280px, 44vw, 500px)',
-          background: 'radial-gradient(ellipse, rgba(196,149,75,0.20) 0%, transparent 68%)',
-          borderRadius: '50%',
-          top: '50%', left: '50%',
-          animation: 'glow-pulse 6s ease-in-out infinite',
-          pointerEvents: 'none',
-        }}
-      />
-      {/* Bear */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 1.4, ease: [0.19, 1, 0.22, 1] }}
-      >
+    <div ref={ref} className="relative flex flex-col md:flex-row items-center justify-center gap-8 md:gap-10 lg:gap-14">
+
+      {/* Left labels — desktop only */}
+      <div className="hidden md:flex flex-col gap-3 items-end">
+        {BEAR_SPECS.slice(0, 2).map((s, i) => (
+          <SpecPill key={s.label} s={s} i={i} inView={inView} />
+        ))}
+      </div>
+
+      {/* Bear + glow */}
+      <div className="relative flex flex-col items-center">
         <div
-          className="relative w-52 h-52 md:w-72 md:h-72"
-          style={{ animation: 'bear-breathe 5.5s ease-in-out infinite' }}
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            width: 'clamp(280px, 44vw, 500px)',
+            height: 'clamp(280px, 44vw, 500px)',
+            background: 'radial-gradient(ellipse, rgba(196,149,75,0.20) 0%, transparent 68%)',
+            borderRadius: '50%',
+            top: '50%', left: '50%',
+            animation: 'glow-pulse 6s ease-in-out infinite',
+            pointerEvents: 'none',
+          }}
+        />
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1.4, ease: [0.19, 1, 0.22, 1] }}
         >
-          <Image
-            src="/bear_sits.png"
-            alt="The Little Pines bear"
-            fill
-            className="object-contain brightness-0 invert opacity-[0.80]"
-          />
-        </div>
-      </motion.div>
-      {/* Spec pills */}
-      <div className="mt-8 flex flex-wrap justify-center gap-2">
-        {BEAR_SPECS.map((s, i) => (
-          <motion.div
-            key={s.label}
-            initial={{ opacity: 0, y: 8 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.7 + i * 0.12, duration: 0.55, ease: [0.19, 1, 0.22, 1] }}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-              padding: '0.3rem 0.85rem', borderRadius: '100px',
-              border: '1px solid rgba(196,149,75,0.22)',
-              background: 'rgba(18,38,22,0.80)',
-            }}
+          <div
+            className="relative w-52 h-52 md:w-72 md:h-72"
+            style={{ animation: 'bear-breathe 5.5s ease-in-out infinite' }}
           >
-            <span style={{ fontSize: '0.58rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(168,197,172,0.55)', fontFamily: 'var(--font-sans)' }}>
-              {s.label}
-            </span>
-            <span style={{ fontSize: '0.68rem', color: 'rgba(244,239,226,0.82)', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
-              {s.value}
-            </span>
-          </motion.div>
+            <Image
+              src="/bear_sits.png"
+              alt="The Little Pines bear"
+              fill
+              className="object-contain brightness-0 invert opacity-[0.80]"
+            />
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Right labels — desktop only */}
+      <div className="hidden md:flex flex-col gap-3 items-start">
+        {BEAR_SPECS.slice(2).map((s, i) => (
+          <SpecPill key={s.label} s={s} i={i + 2} inView={inView} />
+        ))}
+      </div>
+
+      {/* Mobile: all labels below */}
+      <div className="flex md:hidden flex-wrap justify-center gap-2">
+        {BEAR_SPECS.map((s, i) => (
+          <SpecPill key={s.label} s={s} i={i} inView={inView} />
         ))}
       </div>
     </div>

@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { PineBranch } from '@/components/illustrations/pine-branch'
 import { Globe } from '@/components/globe'
-import { AfterBearSection, ShootingStars } from '@/app/_homepage-after'
+import { AfterBearSection, ShootingStars, ForestSilhouette } from '@/app/_homepage-after'
 
 /* ─── Static stars ───────────────────────────────────────────────── */
 const RESEARCH_STARS: [number, number, number][] = [
@@ -304,7 +304,7 @@ function TabbedSection() {
 /* ─── Four Pillars ───────────────────────────────────────────────── */
 function PillarsSection({ onReveal, revealed }: { onReveal: () => void; revealed: boolean }) {
   return (
-    <section style={{ background: 'var(--forest-dark)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 3, padding: '5rem 0 5rem', overflow: 'hidden' }}>
+    <section style={{ background: 'var(--forest-dark)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 3, padding: '5rem 0 0', overflow: 'hidden' }}>
       <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" aria-hidden="true" />
       <div className="absolute inset-x-0 pointer-events-none" aria-hidden="true" style={{ top: '10%', height: '50%', background: 'radial-gradient(ellipse at 50% 50%, rgba(196,149,75,0.05) 0%, transparent 60%)' }} />
 
@@ -345,15 +345,25 @@ function PillarsSection({ onReveal, revealed }: { onReveal: () => void; revealed
         </div>
 
         {/* Scene break / Meet the bear CTA */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '3rem 0 0.5rem', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '3rem 0 8rem', gap: '0.75rem', position: 'relative', zIndex: 2 }}>
           {revealed ? (
             <div style={{ width: '2.5rem', height: '1px', background: 'rgba(196,149,75,0.28)' }} />
           ) : (
             <>
               <button
                 onClick={onReveal}
-                className="font-sans"
-                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.52rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.60)', padding: 0 }}
+                className="font-sans transition-opacity hover:opacity-70"
+                style={{
+                  background: 'none',
+                  border: '1px solid rgba(240,232,210,0.18)',
+                  borderRadius: '4px',
+                  padding: '0.6rem 1.75rem',
+                  fontSize: '0.52rem',
+                  letterSpacing: '0.22em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(240,232,210,0.45)',
+                  cursor: 'pointer',
+                }}
               >
                 Meet the bear
               </button>
@@ -370,6 +380,9 @@ function PillarsSection({ onReveal, revealed }: { onReveal: () => void; revealed
           )}
         </div>
       </div>
+
+      {/* Forest silhouette — shown until bear is revealed */}
+      {!revealed && <ForestSilhouette />}
     </section>
   )
 }
@@ -391,18 +404,15 @@ export default function ResearchPage() {
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
             <AfterBearSection />
-            <div style={{ background: 'var(--forest-dark)', textAlign: 'center', padding: '4rem 1.5rem 5rem', position: 'relative' }}>
+            <div style={{ background: 'var(--forest-dark)', textAlign: 'center', padding: '3rem 1.5rem 4rem', position: 'relative' }}>
               <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" aria-hidden="true" />
-              <p className="font-sans relative z-10" style={{ fontSize: '0.5rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }}>
-                Little Pines Studio &middot; Q3 2026
-              </p>
               <a
                 href="/#notify"
-                className="font-sans relative z-10 inline-flex items-center gap-2 transition-opacity hover:opacity-80"
-                style={{ fontSize: '0.58rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.85)', border: '1px solid rgba(196,149,75,0.28)', borderRadius: '4px', padding: '0.7rem 1.8rem' }}
+                className="font-sans relative z-10 inline-flex items-center gap-2 font-medium transition-opacity hover:opacity-80"
+                style={{ fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--cream)', background: 'rgba(240,232,210,0.1)', border: '1px solid rgba(240,232,210,0.22)', borderRadius: '4px', padding: '0.75rem 1.5rem' }}
               >
-                Get early access
-                <ArrowRight size={10} />
+                Get Early Access
+                <ArrowRight size={12} />
               </a>
             </div>
           </motion.div>

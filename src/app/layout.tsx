@@ -21,19 +21,20 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://littlepines.studio'),
   title: {
-    default: 'Little Pines Studio — Handcrafted Play for Curious Minds',
+    default: 'Little Pines Studio | Home',
     template: '%s | Little Pines Studio',
   },
   description:
-    'Open-source toy patterns and handcrafted bears for Montessori and Waldorf-inspired childhood. Ethically made with fine Peruvian alpaca fiber.',
+    'An open-source toy studio that helps young children notice and name what they feel.',
   keywords: [
     'Montessori toys',
     'Waldorf toys',
     'open source toy patterns',
-    'handcrafted alpaca plush',
+    'emotional literacy',
+    'children emotional development',
     'natural fiber toys',
-    'educational toys',
     'Little Pines Studio',
   ],
   authors: [{ name: 'Daria Zhao', url: 'https://github.com/dariazhao' }],
@@ -42,14 +43,14 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     siteName: 'Little Pines Studio',
-    title: 'Little Pines Studio — Handcrafted Play for Curious Minds',
+    title: 'Little Pines Studio | Home',
     description:
-      'Open-source toy patterns and handcrafted bears for Montessori and Waldorf-inspired childhood.',
+      'An open-source toy studio that helps young children notice and name what they feel.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Little Pines Studio',
-    description: 'Handcrafted play for curious minds.',
+    title: 'Little Pines Studio | Home',
+    description: 'An open-source toy studio that helps young children notice and name what they feel.',
   },
   robots: {
     index: true,
