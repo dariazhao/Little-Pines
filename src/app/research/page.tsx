@@ -156,7 +156,7 @@ function CaseTabContent() {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
       <div>
         <div style={{ width: '2rem', height: '1.5px', background: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }} />
-        <div className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
+        <div className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.9rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
           <p style={{ marginBottom: '1.25rem' }}>
             In the first years of life, children are born with an almost unbounded capacity to feel. Research from Gottman to Siegel establishes that the ability to name and process emotional states is not a soft skill: it is the substrate on which learning, connection, and resilience are built.
           </p>
@@ -167,12 +167,12 @@ function CaseTabContent() {
       </div>
       <div>
         <div style={{ width: '2rem', height: '1.5px', background: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }} />
-        <div className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
+        <div className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.9rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
           <p style={{ marginBottom: '1.25rem' }}>
             Little Pines exists because the tools parents have been given are almost all delivered through the same screens that caused the problem. Therapy apps and SEL curricula cannot co-regulate. They cannot wait. A screen has nowhere to be next.
           </p>
           <p>
-            The form factor matters as much as the content. A quiet, unhurried, screen-free companion that has nowhere to be and nothing to sell is a fundamentally different kind of tool. The research supports it. No one has yet built it well.
+            The form factor matters as much as the content. A quiet, unhurried, screen-free companion that has nowhere to be and nothing to sell is a fundamentally different kind of tool. The research supports it. No one has built it well, yet.
           </p>
         </div>
       </div>
