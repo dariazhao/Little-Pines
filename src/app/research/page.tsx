@@ -426,7 +426,7 @@ function ArtifactDivider() {
   return (
     <div style={{ background: 'var(--forest-dark)', position: 'relative', zIndex: 3 }}>
       <div className="mx-auto px-6 md:px-12 lg:px-20" style={{ maxWidth: '1100px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingTop: '1.5rem', marginBottom: '1rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(196,149,75,0.10)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingTop: '1.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(196,149,75,0.10)' }}>
           <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(196,149,75,0.35)', whiteSpace: 'nowrap' }}>The artifact</p>
           <div style={{ flex: 1, height: '1px', background: 'rgba(196,149,75,0.10)' }} />
         </div>
@@ -489,6 +489,7 @@ export default function ResearchPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
+            style={{ background: 'var(--forest-dark)' }}
           >
             <ArtifactDivider />
             <CompactArtifactSection />
