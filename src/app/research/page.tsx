@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
@@ -147,40 +147,31 @@ const METRICS = [
 ]
 
 /* ─── Tab: The Case ──────────────────────────────────────────────── */
-const CASE_ITEMS = [
-  {
-    n: '01',
-    name: 'The Capacity',
-    body: 'In the first years of life, children are born with an almost unbounded capacity to feel. Research from Gottman to Siegel establishes that the ability to name and process emotional states is not a soft skill: it is the substrate on which learning, connection, and resilience are built.',
-  },
-  {
-    n: '02',
-    name: 'The Erosion',
-    body: 'Modern childhood systematically erodes this capacity. Overstimulation, screens, and adults who resolve discomfort before a child can sit with it: these are not edge cases. By the time a child is eight, most have been taught to suppress or avoid the feelings that were once their most natural mode of expression.',
-  },
-  {
-    n: '03',
-    name: 'The Trap',
-    body: 'Little Pines exists because the tools parents have been given are almost all delivered through the same screens that caused the problem. Therapy apps and SEL curricula cannot co-regulate. They cannot wait. A screen has nowhere to be next.',
-  },
-  {
-    n: '04',
-    name: 'The Answer',
-    body: 'The form factor matters as much as the content. A quiet, unhurried, screen-free companion that has nowhere to be and nothing to sell is a fundamentally different kind of tool. The research supports it. No one has yet built it well.',
-  },
-]
-
 function CaseTabContent() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
-      {CASE_ITEMS.map((item) => (
-        <div key={item.n}>
-          <p className="font-sans uppercase" style={{ fontSize: '0.5rem', letterSpacing: '0.22em', color: 'rgba(196,149,75,0.55)', marginBottom: '0.4rem' }}>{item.n}</p>
-          <div style={{ width: '1.5rem', height: '1.5px', background: 'rgba(196,149,75,0.5)', marginBottom: '0.7rem' }} />
-          <h3 className="font-serif" style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', fontWeight: 600, color: 'var(--forest)', lineHeight: 1.2, marginBottom: '0.55rem' }}>{item.name}</h3>
-          <p className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.9rem)', lineHeight: 1.82, color: 'rgba(40,40,40,0.55)' }}>{item.body}</p>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+      <div>
+        <div style={{ width: '2rem', height: '1.5px', background: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }} />
+        <div className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
+          <p style={{ marginBottom: '1.25rem' }}>
+            In the first years of life, children are born with an almost unbounded capacity to feel. Research from Gottman to Siegel establishes that the ability to name and process emotional states is not a soft skill: it is the substrate on which learning, connection, and resilience are built.
+          </p>
+          <p>
+            Modern childhood systematically erodes this capacity. Overstimulation, screens, and adults who resolve discomfort before a child can sit with it: these are not edge cases. By the time a child is eight, most have been taught to suppress or avoid the feelings that were once their most natural mode of expression.
+          </p>
         </div>
-      ))}
+      </div>
+      <div>
+        <div style={{ width: '2rem', height: '1.5px', background: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }} />
+        <div className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
+          <p style={{ marginBottom: '1.25rem' }}>
+            Little Pines exists because the tools parents have been given are almost all delivered through the same screens that caused the problem. Therapy apps and SEL curricula cannot co-regulate. They cannot wait. A screen has nowhere to be next.
+          </p>
+          <p>
+            The form factor matters as much as the content. A quiet, unhurried, screen-free companion that has nowhere to be and nothing to sell is a fundamentally different kind of tool. The research supports it. No one has yet built it well.
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
@@ -226,7 +217,7 @@ function HowItWorksTabContent() {
   return (
     <div>
       <p className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.75, color: 'rgba(40,40,40,0.5)', maxWidth: '54ch', marginBottom: '2.5rem' }}>
-        Four session types. Child-initiated, every time. Squeeze the paw to start. Put the bear down to stop.
+        Four session types. Child-initiated, every time. Squeeze the paw to start. Put the bear down to stop. The bear is asleep by default, never prying.
       </p>
       <ScatteredCards />
     </div>
@@ -239,6 +230,26 @@ type ResearchTab = typeof TABS[number]
 
 function TabbedSection() {
   const [activeTab, setActiveTab] = useState<ResearchTab>('The Case')
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const startTimer = () => {
+    if (timerRef.current) clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setActiveTab(prev => TABS[(TABS.indexOf(prev) + 1) % TABS.length])
+    }, 8000)
+  }
+
+  useEffect(() => {
+    startTimer()
+    return () => { if (timerRef.current) clearInterval(timerRef.current) }
+  }, [])
+
+  const navigate = (tab: ResearchTab) => {
+    setActiveTab(tab)
+    startTimer()
+  }
+
+  const activeIdx = TABS.indexOf(activeTab)
 
   return (
     <section style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 2 }}>
@@ -255,10 +266,10 @@ function TabbedSection() {
 
         {/* File-binder tabs */}
         <div style={{ display: 'flex', gap: '3px', alignItems: 'flex-end' }}>
-          {TABS.map(tab => (
+          {TABS.map((tab, i) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => navigate(tab)}
               className="font-sans"
               style={{
                 fontSize: '0.5rem',
@@ -267,12 +278,12 @@ function TabbedSection() {
                 padding: '0.55rem 1.25rem 0.65rem',
                 borderRadius: '5px 5px 0 0',
                 border: '1px solid rgba(42,74,48,0.10)',
-                borderBottom: activeTab === tab ? '1px solid var(--cream)' : '1px solid rgba(42,74,48,0.10)',
-                background: activeTab === tab ? 'var(--cream)' : 'rgba(42,74,48,0.035)',
-                color: activeTab === tab ? 'var(--forest)' : 'rgba(42,74,48,0.32)',
+                borderBottom: activeIdx === i ? '1px solid var(--cream)' : '1px solid rgba(42,74,48,0.10)',
+                background: activeIdx === i ? 'var(--cream)' : 'rgba(42,74,48,0.035)',
+                color: activeIdx === i ? 'var(--forest)' : 'rgba(42,74,48,0.32)',
                 cursor: 'pointer',
                 position: 'relative',
-                bottom: activeTab === tab ? '-1px' : '0',
+                bottom: activeIdx === i ? '-1px' : '0',
                 transition: 'color 0.2s ease, background 0.2s ease',
                 whiteSpace: 'nowrap',
               }}
@@ -283,20 +294,49 @@ function TabbedSection() {
         </div>
 
         {/* Content area */}
-        <div style={{ borderTop: '1px solid rgba(42,74,48,0.10)', paddingTop: '3.5rem', paddingBottom: '5.5rem' }}>
+        <div style={{ borderTop: '1px solid rgba(42,74,48,0.10)', paddingTop: '3.5rem', paddingBottom: '3rem' }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.28, ease: 'easeInOut' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.45, ease: 'easeInOut' }}
             >
               {activeTab === 'The Case' && <CaseTabContent />}
               {activeTab === 'The Study' && <StudyTabContent />}
               {activeTab === 'How it works' && <HowItWorksTabContent />}
             </motion.div>
           </AnimatePresence>
+        </div>
+
+        {/* Dot navigation */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.75rem', paddingBottom: '4.5rem' }}>
+          <button
+            onClick={() => navigate(TABS[(activeIdx - 1 + TABS.length) % TABS.length])}
+            aria-label="Previous tab"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.4rem', color: 'rgba(42,74,48,0.35)', transition: 'color 0.2s ease' }}
+          >
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+              <path d="M6 1 L1 6 L6 11 M1 6 H15" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <div style={{ display: 'flex', gap: '0.55rem', alignItems: 'center' }}>
+            {TABS.map((_, i) => (
+              <button key={i} onClick={() => navigate(TABS[i])} aria-label={`Tab ${i + 1}`} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem' }}>
+                <span style={{ display: 'block', width: activeIdx === i ? 20 : 6, height: 6, borderRadius: 3, background: activeIdx === i ? 'rgba(196,149,75,0.75)' : 'rgba(42,74,48,0.22)', transition: 'all 0.4s ease' }} />
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={() => navigate(TABS[(activeIdx + 1) % TABS.length])}
+            aria-label="Next tab"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.4rem', color: 'rgba(42,74,48,0.35)', transition: 'color 0.2s ease' }}
+          >
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+              <path d="M10 1 L15 6 L10 11 M15 6 H1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
         </div>
       </div>
     </section>
@@ -313,7 +353,7 @@ function PillarsSection({ onReveal, revealed }: { onReveal: () => void; revealed
       <div className="relative z-10 mx-auto px-6 md:px-12 lg:px-20" style={{ maxWidth: '1100px' }}>
         <Reveal>
           <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(196,149,75,0.45)', marginBottom: '1rem' }}>
-            Four pillars
+            From research to pedagogy
           </p>
           <h2 className="font-serif text-cream" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', fontWeight: 600, lineHeight: 1.1, letterSpacing: '-0.025em', marginBottom: '4rem' }}>
             How sessions are designed.
