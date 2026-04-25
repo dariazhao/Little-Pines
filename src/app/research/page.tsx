@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { PineBranch } from '@/components/illustrations/pine-branch'
 import { Globe } from '@/components/globe'
-import { AfterBearSection, ShootingStars, ForestSilhouette } from '@/app/_homepage-after'
+import { AfterBearSection, ScatteredCards, ShootingStars, ForestSilhouette } from '@/app/_homepage-after'
 
 /* ─── Static stars ───────────────────────────────────────────────── */
 const RESEARCH_STARS: [number, number, number][] = [
@@ -225,19 +225,10 @@ function StudyTabContent() {
 function HowItWorksTabContent() {
   return (
     <div>
-      <p className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.75, color: 'rgba(40,40,40,0.5)', maxWidth: '54ch', marginBottom: '3rem' }}>
-        Every session follows the same arc: arrive in the body, name what is there, sit with it, and return to solid ground. The bear waits for the child, not the other way around.
+      <p className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.75, color: 'rgba(40,40,40,0.5)', maxWidth: '54ch', marginBottom: '2.5rem' }}>
+        Four session types. Child-initiated, every time. Squeeze the paw to start. Put the bear down to stop.
       </p>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
-        {PILLARS.map((p) => (
-          <div key={p.n}>
-            <p className="font-sans uppercase" style={{ fontSize: '0.5rem', letterSpacing: '0.22em', color: 'rgba(196,149,75,0.55)', marginBottom: '0.4rem' }}>{p.n}</p>
-            <div style={{ width: '1.5rem', height: '1.5px', background: 'rgba(196,149,75,0.5)', marginBottom: '0.7rem' }} />
-            <h3 className="font-serif" style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', fontWeight: 600, color: 'var(--forest)', lineHeight: 1.2, marginBottom: '0.55rem' }}>{p.name}</h3>
-            <p className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.9rem)', lineHeight: 1.82, color: 'rgba(40,40,40,0.48)', fontStyle: 'italic' }}>{p.sessions}</p>
-          </div>
-        ))}
-      </div>
+      <ScatteredCards />
     </div>
   )
 }

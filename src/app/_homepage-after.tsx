@@ -1216,7 +1216,7 @@ const CARD_SCATTER = [
   { tilt:  2.8, yOff: 10  },
 ] as const
 
-function ScatteredCards() {
+export function ScatteredCards() {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 mt-3">
       {AFTER_SESSION_CARDS.map((card, i) => {
