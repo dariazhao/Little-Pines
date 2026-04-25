@@ -394,6 +394,165 @@ function CommitmentsSection() {
   )
 }
 
+/* ─── Three non-negotiables ─────────────────────────────────────── */
+const DESIGN_PILLARS = [
+  {
+    num: '01',
+    title: 'Screen-free.',
+    color: '#2A4A30',
+    ghostColor: 'rgba(244,239,226,0.048)',
+    body: "A physical plush in the child's room. No screen, no camera, ever. The bear waits quietly until invited — by the child, always, with a squeeze of its paw.",
+    proof: 'No wake words. No push notifications. No passive listening.',
+    icon: (
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="17" r="5" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" />
+        <circle cx="8" cy="10" r="2.5" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" />
+        <circle cx="14" cy="8" r="2.5" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" />
+        <circle cx="20" cy="10" r="2.5" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" />
+        <circle cx="22" cy="17" r="2" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" />
+      </svg>
+    ),
+  },
+  {
+    num: '02',
+    title: 'On-device.',
+    color: '#B5873A',
+    ghostColor: 'rgba(244,239,226,0.048)',
+    body: 'A frontier small model runs entirely inside the plush. Voice data never leaves the toy. Two hardware switches cut the microphone and WiFi at the circuit level.',
+    proof: 'Not a setting. Not a policy. A physical fact.',
+    icon: (
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <rect x="8" y="8" width="12" height="12" rx="2" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" />
+        <rect x="11" y="11" width="6" height="6" rx="1" stroke="rgba(244,239,226,0.65)" strokeWidth="1" />
+        <line x1="11" y1="8" x2="11" y2="4" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="17" y1="8" x2="17" y2="4" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="11" y1="20" x2="11" y2="24" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="17" y1="20" x2="17" y2="24" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="8" y1="11" x2="4" y2="11" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="8" y1="17" x2="4" y2="17" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="20" y1="11" x2="24" y2="11" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="20" y1="17" x2="24" y2="17" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    num: '03',
+    title: 'Open-source.',
+    color: '#6B4226',
+    ghostColor: 'rgba(244,239,226,0.048)',
+    body: 'Sewing patterns, session guides, model fine-tuning, safety protocols — published as we build. A parent, a school, another studio: anyone can use, adapt, and improve what we make.',
+    proof: 'CC BY-SA 4.0. Use it, remix it, distribute it.',
+    icon: (
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="5" r="2.5" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" />
+        <circle cx="5" cy="23" r="2.5" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" />
+        <circle cx="23" cy="23" r="2.5" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" />
+        <line x1="12.2" y1="7.2" x2="6.5" y2="20.8" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="15.8" y1="7.2" x2="21.5" y2="20.8" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="7.5" y1="23" x2="20.5" y2="23" stroke="rgba(244,239,226,0.65)" strokeWidth="1.2" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+]
+
+type DesignPillarData = typeof DESIGN_PILLARS[number]
+
+function DesignPillarCard({ num, title, color, ghostColor, body, proof, icon, delay }: DesignPillarData & { delay: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, amount: 0.15 })
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 36 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.9, delay, ease: [0.19, 1, 0.22, 1] }}
+      style={{
+        background: color,
+        borderRadius: '1.25rem',
+        overflow: 'hidden',
+        position: 'relative',
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '420px',
+      }}
+    >
+      {/* Ghost ordinal */}
+      <span
+        aria-hidden="true"
+        className="font-serif"
+        style={{
+          position: 'absolute',
+          bottom: '-0.08em',
+          right: '-0.04em',
+          fontSize: 'clamp(7rem, 12vw, 11rem)',
+          fontWeight: 800,
+          lineHeight: 1,
+          letterSpacing: '-0.06em',
+          color: ghostColor,
+          userSelect: 'none',
+          pointerEvents: 'none',
+        }}
+      >
+        {num}
+      </span>
+
+      {/* Main content */}
+      <div style={{ padding: '2.5rem 2.25rem', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 1 }}>
+        <div style={{ marginBottom: '2rem' }}>{icon}</div>
+
+        <p className="font-sans" style={{ fontSize: '0.5rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(196,149,75,0.78)', marginBottom: '0.7rem' }}>
+          {num}
+        </p>
+
+        <h3 className="font-serif" style={{ fontSize: 'clamp(1.9rem, 3.2vw, 2.6rem)', fontWeight: 600, fontStyle: 'italic', lineHeight: 1.05, letterSpacing: '-0.03em', color: 'rgba(244,239,226,0.92)', marginBottom: '1rem' }}>
+          {title}
+        </h3>
+
+        <div style={{ width: '2rem', height: '1.5px', background: 'rgba(196,149,75,0.55)', marginBottom: '1.75rem' }} />
+
+        <p className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.9rem)', lineHeight: 1.85, color: 'rgba(244,239,226,0.58)', flex: 1 }}>
+          {body}
+        </p>
+      </div>
+
+      {/* Proof band */}
+      <div style={{ background: 'rgba(0,0,0,0.16)', padding: '1rem 2.25rem', position: 'relative', zIndex: 1 }}>
+        <p className="font-sans" style={{ fontSize: '0.72rem', fontStyle: 'italic', color: 'rgba(244,239,226,0.45)', lineHeight: 1.6 }}>
+          {proof}
+        </p>
+      </div>
+    </motion.div>
+  )
+}
+
+function ThreeNonNegotiablesSection() {
+  return (
+    <section style={{ background: 'var(--cream)', position: 'relative', zIndex: 3, paddingTop: 'clamp(3.5rem, 7vw, 5.5rem)', paddingBottom: 'clamp(4.5rem, 9vw, 7rem)' }}>
+      <div className="mx-auto px-6 md:px-12 lg:px-20" style={{ maxWidth: '1200px' }}>
+
+        <Reveal>
+          <div style={{ marginBottom: 'clamp(2.5rem, 5vw, 4rem)' }}>
+            <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.28em', color: 'rgba(42,74,48,0.35)', marginBottom: '1rem' }}>
+              How the bear is built
+            </p>
+            <h2 className="font-serif" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.4rem)', fontWeight: 600, letterSpacing: '-0.025em', color: 'var(--forest)', lineHeight: 1.15 }}>
+              Three decisions that define everything else.
+            </h2>
+          </div>
+        </Reveal>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {DESIGN_PILLARS.map((pillar, i) => (
+            <DesignPillarCard key={pillar.num} {...pillar} delay={0.1 + i * 0.14} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 /* ─── Open Source ───────────────────────────────────────────────── */
 function OpenSourceSection() {
   const ref = useRef<HTMLElement>(null)
@@ -543,6 +702,7 @@ export default function PromisePage() {
     <>
       <PromiseHero />
       <CommitmentsSection />
+      <ThreeNonNegotiablesSection />
       <OpenSourceSection />
     </>
   )
