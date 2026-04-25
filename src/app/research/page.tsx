@@ -151,7 +151,7 @@ function CaseTabContent() {
   return (
     <div>
       <p className="font-serif" style={{ fontSize: 'clamp(1.05rem, 1.8vw, 1.3rem)', fontStyle: 'italic', fontWeight: 400, lineHeight: 1.55, color: 'var(--forest)', opacity: 0.82, maxWidth: '58ch', marginBottom: '2.5rem' }}>
-        The foundation of a rich interior life is laid before age eight — in the years when feelings are either noticed, or quietly trained away.
+        The foundation of a rich interior life is laid before age eight <span style={{ color: 'var(--amber)', opacity: 0.7 }}>—</span> in the years when feelings are either noticed, or quietly trained away.
       </p>
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
       <div>
