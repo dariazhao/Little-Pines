@@ -356,36 +356,78 @@ function PillarsSection({ onReveal, revealed }: { onReveal: () => void; revealed
         </div>
 
         {/* Scene break / Meet the bear CTA */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '3rem 0 8rem', gap: '0.75rem', position: 'relative', zIndex: 2 }}>
-          {revealed ? (
-            <div style={{ width: '2.5rem', height: '1px', background: 'rgba(196,149,75,0.28)' }} />
-          ) : (
-            <>
-              <button
-                onClick={onReveal}
-                className="font-sans transition-opacity hover:opacity-70"
-                style={{
-                  background: 'none',
-                  border: '1px solid rgba(240,232,210,0.18)',
-                  borderRadius: '4px',
-                  padding: '0.6rem 1.75rem',
-                  fontSize: '0.52rem',
-                  letterSpacing: '0.22em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(240,232,210,0.45)',
-                  cursor: 'pointer',
-                }}
-              >
-                Meet the bear
-              </button>
-            </>
-          )}
-        </div>
+        {!revealed && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '3rem 0 8rem', gap: '0.75rem', position: 'relative', zIndex: 2 }}>
+            <button
+              onClick={onReveal}
+              className="font-sans transition-opacity hover:opacity-70"
+              style={{
+                background: 'none',
+                border: '1px solid rgba(240,232,210,0.18)',
+                borderRadius: '4px',
+                padding: '0.6rem 1.75rem',
+                fontSize: '0.52rem',
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'rgba(240,232,210,0.45)',
+                cursor: 'pointer',
+              }}
+            >
+              Meet the bear
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Forest silhouette — shown until bear is revealed */}
       {!revealed && <ForestSilhouette />}
     </section>
+  )
+}
+
+/* ─── Bear trail divider ─────────────────────────────────────────── */
+function PawPrintSvg({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={Math.round(size * 1.25)} viewBox="0 0 16 20" fill="currentColor" aria-hidden="true">
+      <ellipse cx="8" cy="15" rx="5.5" ry="4" />
+      <circle cx="3" cy="8.5" r="2.1" />
+      <circle cx="7" cy="6.5" r="2.1" />
+      <circle cx="11" cy="6.5" r="2.1" />
+      <circle cx="13.5" cy="9" r="1.9" />
+    </svg>
+  )
+}
+
+const PAW_TRAIL = [
+  { x: 3,  y: 18, rotate: -22, size: 10, opacity: 0.18, delay: 0.05 },
+  { x: 13, y: 62, rotate:  14, size: 11, opacity: 0.24, delay: 0.20 },
+  { x: 24, y: 15, rotate: -10, size: 12, opacity: 0.22, delay: 0.34 },
+  { x: 35, y: 62, rotate:   8, size: 13, opacity: 0.28, delay: 0.48 },
+  { x: 48, y: 22, rotate: -16, size: 15, opacity: 0.36, delay: 0.62 },
+  { x: 61, y: 60, rotate:  10, size: 13, opacity: 0.28, delay: 0.76 },
+  { x: 73, y: 18, rotate: -12, size: 12, opacity: 0.22, delay: 0.90 },
+  { x: 84, y: 58, rotate:   6, size: 11, opacity: 0.20, delay: 1.04 },
+  { x: 93, y: 22, rotate:  -8, size: 10, opacity: 0.16, delay: 1.18 },
+]
+
+function BearTrailDivider() {
+  return (
+    <div style={{ background: 'var(--forest-dark)', position: 'relative', zIndex: 3, overflow: 'hidden', height: '88px' }}>
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 50% 120% at 50% 50%, rgba(196,149,75,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
+      <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'rgba(196,149,75,0.15)' }} />
+      {PAW_TRAIL.map((p, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, scale: 0.4 }}
+          animate={{ opacity: p.opacity, scale: 1 }}
+          transition={{ duration: 0.45, delay: p.delay, ease: [0.34, 1.56, 0.64, 1] }}
+          style={{ position: 'absolute', left: `${p.x}%`, top: `${p.y}%`, transform: `rotate(${p.rotate}deg)`, color: 'rgba(196,149,75,1)', lineHeight: 0 }}
+        >
+          <PawPrintSvg size={p.size} />
+        </motion.div>
+      ))}
+      <div aria-hidden="true" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '1px', background: 'rgba(196,149,75,0.15)' }} />
+    </div>
   )
 }
 
@@ -405,6 +447,7 @@ export default function ResearchPage() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
+            <BearTrailDivider />
             <AfterBearSection />
             <div style={{ background: 'var(--forest-dark)', textAlign: 'center', padding: '3rem 1.5rem 4rem', position: 'relative' }}>
               <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" aria-hidden="true" />
