@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { PineBranch } from '@/components/illustrations/pine-branch'
@@ -251,30 +251,82 @@ function InvitationHero() {
 
 /* ─── Quote Insert ──────────────────────────────────────────────── */
 function QuoteInsert() {
+  const ref = useRef<HTMLElement>(null)
+  const inView = useInView(ref, { once: true, amount: 0.45 })
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const parallaxY = useTransform(scrollYProgress, [0, 1], [28, -28])
+
   return (
-    <section style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 2 }}>
-      <div className="mx-auto px-6 md:px-10" style={{ maxWidth: '660px', paddingTop: '3.5rem', paddingBottom: '2.5rem' }}>
-        <Reveal>
-          <blockquote style={{
-            background: 'rgba(255,250,238,0.72)',
-            border: '1px solid rgba(196,149,75,0.12)',
-            borderRadius: '8px',
-            padding: 'clamp(1.5rem, 4vw, 2.25rem)',
-            boxShadow: '0 2px 20px rgba(196,149,75,0.07)',
-            textAlign: 'center',
-            margin: 0,
-          }}>
-            <div aria-hidden="true" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-              <div style={{ height: '1px', width: '2rem', background: 'linear-gradient(to right, transparent, rgba(196,149,75,0.45))' }} />
-              <div style={{ fontSize: '1rem', color: 'rgba(196,149,75,0.55)', fontFamily: 'serif' }}>&ldquo;</div>
-              <div style={{ height: '1px', width: '2rem', background: 'linear-gradient(to left, transparent, rgba(196,149,75,0.45))' }} />
-            </div>
-            <p className="font-serif" style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', fontStyle: 'italic', fontWeight: 400, lineHeight: 1.65, color: 'var(--forest)', maxWidth: '38ch', margin: '0 auto' }}>
-              Children are born with an extraordinary capacity to feel, notice, and express the full range of human emotion.
-            </p>
-          </blockquote>
-        </Reveal>
-      </div>
+    <section
+      ref={ref}
+      style={{ background: 'var(--cream)', borderRadius: '2rem 2rem 0 0', marginTop: '-2rem', position: 'relative', zIndex: 2, overflow: 'hidden' }}
+    >
+      <motion.div
+        style={{ y: parallaxY, maxWidth: '980px', margin: '0 auto', padding: 'clamp(4rem, 9vw, 6.5rem) clamp(1.5rem, 4vw, 3rem)', textAlign: 'center' }}
+      >
+
+          {/* Large amber opening curly quote */}
+          <div style={{ overflow: 'hidden', lineHeight: 0.7, marginBottom: 'clamp(0.5rem, 1.5vw, 0.75rem)' }}>
+            <motion.span
+              className="font-serif"
+              initial={{ y: '110%' }}
+              animate={inView ? { y: '0%' } : {}}
+              transition={{ duration: 0.75, ease: [0.19, 1, 0.22, 1] }}
+              aria-hidden="true"
+              style={{
+                display: 'block',
+                fontSize: 'clamp(4rem, 7vw, 6.5rem)',
+                color: 'rgba(196,149,75,0.45)',
+                fontStyle: 'normal',
+              }}
+            >
+              &ldquo;
+            </motion.span>
+          </div>
+
+          {/* Line 1 */}
+          <div style={{ overflow: 'hidden' }}>
+            <motion.p
+              className="font-serif"
+              initial={{ y: '108%' }}
+              animate={inView ? { y: '0%' } : {}}
+              transition={{ duration: 1.05, delay: 0.10, ease: [0.19, 1, 0.22, 1] }}
+              style={{
+                fontSize: 'clamp(1.85rem, 3.4vw, 2.8rem)',
+                fontStyle: 'italic',
+                fontWeight: 400,
+                lineHeight: 1.22,
+                letterSpacing: '-0.025em',
+                color: 'var(--forest)',
+                margin: 0,
+              }}
+            >
+              Children are born with an extraordinary capacity to feel,
+            </motion.p>
+          </div>
+
+          {/* Line 2 */}
+          <div style={{ overflow: 'hidden' }}>
+            <motion.p
+              className="font-serif"
+              initial={{ y: '108%' }}
+              animate={inView ? { y: '0%' } : {}}
+              transition={{ duration: 1.05, delay: 0.24, ease: [0.19, 1, 0.22, 1] }}
+              style={{
+                fontSize: 'clamp(1.85rem, 3.4vw, 2.8rem)',
+                fontStyle: 'italic',
+                fontWeight: 400,
+                lineHeight: 1.22,
+                letterSpacing: '-0.025em',
+                color: 'var(--forest)',
+                margin: 0,
+              }}
+            >
+              notice, and express the full range of human emotion.&rdquo;
+            </motion.p>
+          </div>
+
+      </motion.div>
     </section>
   )
 }
