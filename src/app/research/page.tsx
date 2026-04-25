@@ -149,6 +149,10 @@ const METRICS = [
 /* ─── Tab: The Case ──────────────────────────────────────────────── */
 function CaseTabContent() {
   return (
+    <div>
+      <p className="font-serif" style={{ fontSize: 'clamp(1.05rem, 1.8vw, 1.3rem)', fontStyle: 'italic', fontWeight: 400, lineHeight: 1.55, color: 'var(--forest)', opacity: 0.82, maxWidth: '58ch', marginBottom: '2.5rem' }}>
+        Before a child learns to manage their feelings, they simply have them — fully, without apology, with the whole body. That is not a phase to grow out of. It is a capacity to grow into.
+      </p>
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
       <div>
         <div style={{ width: '2rem', height: '1.5px', background: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }} />
@@ -172,6 +176,7 @@ function CaseTabContent() {
           </p>
         </div>
       </div>
+    </div>
     </div>
   )
 }
@@ -236,7 +241,7 @@ function TabbedSection() {
     if (timerRef.current) clearInterval(timerRef.current)
     timerRef.current = setInterval(() => {
       setActiveTab(prev => TABS[(TABS.indexOf(prev) + 1) % TABS.length])
-    }, 8000)
+    }, 15000)
   }
 
   useEffect(() => {
