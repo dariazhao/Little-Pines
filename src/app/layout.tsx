@@ -43,14 +43,16 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     siteName: 'Little Pines Studio',
-    title: 'Little Pines Studio | Home',
+    title: 'Little Pines Studio · Open-Source Toy Studio',
     description:
       'An open-source toy studio that helps young children notice and name what they feel.',
+    images: [{ url: '/social_preview.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Little Pines Studio | Home',
+    title: 'Little Pines Studio · Open-Source Toy Studio',
     description: 'An open-source toy studio that helps young children notice and name what they feel.',
+    images: ['/social_preview.png'],
   },
   robots: {
     index: true,
