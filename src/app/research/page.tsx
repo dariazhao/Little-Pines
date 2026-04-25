@@ -157,11 +157,8 @@ function CaseTabContent() {
       <div>
         <div style={{ width: '2rem', height: '1.5px', background: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }} />
         <div className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.9rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
-          <p style={{ marginBottom: '1.25rem' }}>
-            In the first years of life, children are born with an almost unbounded capacity to feel. Research from Gottman to Siegel establishes that the ability to name and process emotional states is not a soft skill: it is the substrate on which learning, connection, and resilience are built.
-          </p>
           <p>
-            Modern childhood systematically erodes this capacity. Overstimulation, screens, and adults who resolve discomfort before a child can sit with it: these are not edge cases. By the time a child is eight, most have been taught to suppress or avoid the feelings that were once their most natural mode of expression.
+            In the first years of life, children are born with an almost unbounded capacity to feel. Research from Gottman to Siegel establishes that the ability to name and process emotional states is not a soft skill: it is the substrate on which learning, connection, and resilience are built. Modern childhood systematically erodes this capacity. Overstimulation, screens, and adults who resolve discomfort before a child can sit with it: these are not edge cases. By the time a child is eight, most have been taught to suppress or avoid the feelings that were once their most natural mode of expression.
           </p>
         </div>
       </div>
