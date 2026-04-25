@@ -151,7 +151,7 @@ function CaseTabContent() {
   return (
     <div>
       <p className="font-serif" style={{ fontSize: 'clamp(1.05rem, 1.8vw, 1.3rem)', fontStyle: 'italic', fontWeight: 400, lineHeight: 1.55, color: 'var(--forest)', opacity: 0.82, maxWidth: '58ch', marginBottom: '2.5rem' }}>
-        Before the managing starts, there is just the feeling — complete, present, fully alive. That is where a rich interior life begins.
+        The foundation of a rich interior life is laid before age eight — in the years when feelings are either noticed, or quietly trained away.
       </p>
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
       <div>
