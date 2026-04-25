@@ -166,7 +166,7 @@ function CaseTabContent() {
         <div style={{ width: '2rem', height: '1.5px', background: 'rgba(196,149,75,0.45)', marginBottom: '1.5rem' }} />
         <div className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.9rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
           <p style={{ marginBottom: '1.25rem' }}>
-            Little Pines exists because the tools parents have been given are almost all delivered through the same screens that caused the problem. Therapy apps and SEL curricula cannot co-regulate. They cannot wait. A screen has nowhere to be next.
+            <strong>Little Pines Studio</strong> exists because the tools parents have been given are almost all delivered through the same screens that caused the problem. Therapy apps and SEL curricula cannot co-regulate. They cannot wait. A screen has nowhere to be next.
           </p>
           <p>
             The form factor matters as much as the content. A quiet, unhurried, screen-free companion that has nowhere to be and nothing to sell is a fundamentally different kind of tool. The research supports it. No one has built it well, yet.
