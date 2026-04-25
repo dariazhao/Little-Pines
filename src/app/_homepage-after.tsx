@@ -1009,7 +1009,7 @@ function BuildWithUsTeaserSection() {
    SECTION 6 — THE BEAR / NIGHT CLEARING
 ══════════════════════════════════════════════════════════════════ */
 
-const BEAR_MAGIC_CSS = `
+export const BEAR_MAGIC_CSS = `
   @keyframes bear-breathe {
     0%, 100% { transform: scale(1) translateY(0px); }
     50%       { transform: scale(1.022) translateY(-4px); }
@@ -1079,7 +1079,7 @@ function BearNightSky() {
   )
 }
 
-function StaggerHeadline() {
+export function StaggerHeadline() {
   const ref = useRef<HTMLHeadingElement>(null)
   const inView = useInView(ref, { once: true, amount: 0.2 })
   const lines: [string[], boolean[]][] = [
@@ -1145,7 +1145,7 @@ function SpecPill({ s, i, inView }: { s: { label: string; value: string }; i: nu
   )
 }
 
-function BearSpotlight() {
+export function BearSpotlight({ showRings = false }: { showRings?: boolean }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, amount: 0.15 })
   return (
@@ -1160,6 +1160,7 @@ function BearSpotlight() {
 
       {/* Bear + glow */}
       <div className="relative flex flex-col items-center">
+        {/* Ambient glow */}
         <div
           aria-hidden="true"
           style={{
@@ -1171,12 +1172,27 @@ function BearSpotlight() {
             top: '50%', left: '50%',
             animation: 'glow-pulse 6s ease-in-out infinite',
             pointerEvents: 'none',
+            zIndex: 0,
           }}
         />
+        {/* Radiating rings */}
+        {showRings && (
+          <div className="absolute pointer-events-none" aria-hidden="true"
+            style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
+            {([130, 190, 260, 340] as const).map((size, i) => (
+              <motion.div key={i}
+                style={{ position: 'absolute', width: size, height: size, borderRadius: '50%', border: '1px solid rgba(196,149,75,1)', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                animate={{ opacity: [0.04, 0.40 - i * 0.08, 0.04] }}
+                transition={{ duration: 2.8, delay: i * 0.45, repeat: Infinity, ease: 'easeInOut' }}
+              />
+            ))}
+          </div>
+        )}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1.4, ease: [0.19, 1, 0.22, 1] }}
+          style={{ position: 'relative', zIndex: 2 }}
         >
           <div
             className="relative w-52 h-52 md:w-72 md:h-72"

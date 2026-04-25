@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { PineBranch } from '@/components/illustrations/pine-branch'
 import { Globe } from '@/components/globe'
-import { AfterBearSection, ScatteredCards, ShootingStars, ForestSilhouette } from '@/app/_homepage-after'
+import { BEAR_MAGIC_CSS, StaggerHeadline, BearSpotlight, ScatteredCards, ShootingStars, ForestSilhouette } from '@/app/_homepage-after'
 
 /* ─── Static stars ───────────────────────────────────────────────── */
 const RESEARCH_STARS: [number, number, number][] = [
@@ -151,7 +151,7 @@ function CaseTabContent() {
   return (
     <div>
       <p className="font-serif" style={{ fontSize: 'clamp(1.05rem, 1.8vw, 1.3rem)', fontStyle: 'italic', fontWeight: 400, lineHeight: 1.55, color: 'var(--forest)', opacity: 0.82, maxWidth: '58ch', marginBottom: '2.5rem' }}>
-        Before a child learns to manage their feelings, they simply have them — fully, without apology, with the whole body. That is not a phase to grow out of. It is a capacity to grow into.
+        Before the managing starts, there is just the feeling — complete, present, fully alive. That is where a rich interior life begins.
       </p>
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
       <div>
@@ -421,49 +421,56 @@ function PillarsSection({ onReveal, revealed }: { onReveal: () => void; revealed
   )
 }
 
-/* ─── Bear trail divider ─────────────────────────────────────────── */
-function PawPrintSvg({ size = 16 }: { size?: number }) {
+/* ─── Artifact divider (studio-style, dark) ──────────────────────── */
+function ArtifactDivider() {
   return (
-    <svg width={size} height={Math.round(size * 1.25)} viewBox="0 0 16 20" fill="currentColor" aria-hidden="true">
-      <ellipse cx="8" cy="15" rx="5.5" ry="4" />
-      <circle cx="3" cy="8.5" r="2.1" />
-      <circle cx="7" cy="6.5" r="2.1" />
-      <circle cx="11" cy="6.5" r="2.1" />
-      <circle cx="13.5" cy="9" r="1.9" />
-    </svg>
+    <div style={{ background: 'var(--forest-dark)', position: 'relative', zIndex: 3 }}>
+      <div className="mx-auto px-6 md:px-12 lg:px-20" style={{ maxWidth: '1100px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingTop: '1.5rem', marginBottom: '1rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(196,149,75,0.10)' }}>
+          <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(196,149,75,0.35)', whiteSpace: 'nowrap' }}>The artifact</p>
+          <div style={{ flex: 1, height: '1px', background: 'rgba(196,149,75,0.10)' }} />
+        </div>
+      </div>
+    </div>
   )
 }
 
-const PAW_TRAIL = [
-  { x: 3,  y: 18, rotate: -22, size: 10, opacity: 0.18, delay: 0.05 },
-  { x: 13, y: 62, rotate:  14, size: 11, opacity: 0.24, delay: 0.20 },
-  { x: 24, y: 15, rotate: -10, size: 12, opacity: 0.22, delay: 0.34 },
-  { x: 35, y: 62, rotate:   8, size: 13, opacity: 0.28, delay: 0.48 },
-  { x: 48, y: 22, rotate: -16, size: 15, opacity: 0.36, delay: 0.62 },
-  { x: 61, y: 60, rotate:  10, size: 13, opacity: 0.28, delay: 0.76 },
-  { x: 73, y: 18, rotate: -12, size: 12, opacity: 0.22, delay: 0.90 },
-  { x: 84, y: 58, rotate:   6, size: 11, opacity: 0.20, delay: 1.04 },
-  { x: 93, y: 22, rotate:  -8, size: 10, opacity: 0.16, delay: 1.18 },
-]
-
-function BearTrailDivider() {
+/* ─── Compact artifact fold ──────────────────────────────────────── */
+function CompactArtifactSection() {
   return (
-    <div style={{ background: 'var(--forest-dark)', position: 'relative', zIndex: 3, overflow: 'hidden', height: '88px' }}>
-      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 50% 120% at 50% 50%, rgba(196,149,75,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
-      <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'rgba(196,149,75,0.15)' }} />
-      {PAW_TRAIL.map((p, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, scale: 0.4 }}
-          animate={{ opacity: p.opacity, scale: 1 }}
-          transition={{ duration: 0.45, delay: p.delay, ease: [0.34, 1.56, 0.64, 1] }}
-          style={{ position: 'absolute', left: `${p.x}%`, top: `${p.y}%`, transform: `rotate(${p.rotate}deg)`, color: 'rgba(196,149,75,1)', lineHeight: 0 }}
-        >
-          <PawPrintSvg size={p.size} />
-        </motion.div>
-      ))}
-      <div aria-hidden="true" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '1px', background: 'rgba(196,149,75,0.15)' }} />
-    </div>
+    <section style={{ background: 'var(--forest-dark)', position: 'relative', zIndex: 3, overflow: 'hidden' }}>
+      <style>{BEAR_MAGIC_CSS}</style>
+      <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" aria-hidden="true" />
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true"
+        style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 55%, rgba(196,149,75,0.07) 0%, transparent 65%)' }} />
+
+      <div className="relative z-10 mx-auto max-w-5xl px-6 md:px-12 lg:px-20"
+        style={{ paddingTop: 'clamp(2rem, 4vw, 3.5rem)', paddingBottom: 'clamp(2rem, 4vw, 3.5rem)' }}>
+
+        <div className="text-center" style={{ marginBottom: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
+          <StaggerHeadline />
+          <Reveal delay={0.35}>
+            <p className="font-sans text-sm leading-relaxed mt-4 max-w-[46ch] mx-auto"
+              style={{ color: 'rgba(240,232,210,0.52)' }}>
+              Standing nine inches tall and endlessly patient, our flagship plush is made from the softest Peruvian alpaca. Squeeze its paw and the bear wakes, ready to listen.
+            </p>
+          </Reveal>
+        </div>
+
+        <BearSpotlight showRings />
+
+        <div className="text-center" style={{ marginTop: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
+          <a
+            href="/#notify"
+            className="font-sans inline-flex items-center gap-2 font-medium transition-opacity hover:opacity-80"
+            style={{ fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--cream)', background: 'rgba(240,232,210,0.08)', border: '1px solid rgba(240,232,210,0.22)', borderRadius: '4px', padding: '0.75rem 1.5rem' }}
+          >
+            Get Early Access
+            <ArrowRight size={12} />
+          </a>
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -483,19 +490,8 @@ export default function ResearchPage() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
-            <BearTrailDivider />
-            <AfterBearSection />
-            <div style={{ background: 'var(--forest-dark)', textAlign: 'center', padding: '3rem 1.5rem 4rem', position: 'relative' }}>
-              <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" aria-hidden="true" />
-              <a
-                href="/#notify"
-                className="font-sans relative z-10 inline-flex items-center gap-2 font-medium transition-opacity hover:opacity-80"
-                style={{ fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--cream)', background: 'rgba(240,232,210,0.1)', border: '1px solid rgba(240,232,210,0.22)', borderRadius: '4px', padding: '0.75rem 1.5rem' }}
-              >
-                Get Early Access
-                <ArrowRight size={12} />
-              </a>
-            </div>
+            <ArtifactDivider />
+            <CompactArtifactSection />
           </motion.div>
         )}
       </AnimatePresence>
