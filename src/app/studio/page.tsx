@@ -345,12 +345,15 @@ function FounderLetter() {
 
   return (
     <section ref={sectionRef} id="build-with-us" style={{ background: 'var(--cream)', borderRadius: 0, marginTop: 0, position: 'relative', zIndex: 2, scrollMarginTop: '5rem' }}>
+      <div className="mx-auto px-6 md:px-10" style={{ maxWidth: '980px', paddingTop: '2.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(42,74,48,0.10)' }}>
+          <p className="font-sans uppercase" style={{ fontSize: '0.52rem', letterSpacing: '0.26em', color: 'rgba(42,74,48,0.32)' }}>A letter from the founder</p>
+          <div style={{ flex: 1, height: '1px', background: 'rgba(42,74,48,0.08)' }} />
+        </div>
+      </div>
       <div className="mx-auto px-6 md:px-10" style={{ maxWidth: '660px', paddingTop: '3rem', paddingBottom: '5.5rem' }}>
 
         <Reveal>
-          <p className="font-sans uppercase" style={{ fontSize: '0.54rem', letterSpacing: '0.26em', color: 'rgba(42,74,48,0.32)', marginBottom: '1.2rem' }}>
-            A letter from the founder
-          </p>
           <div style={{ marginBottom: '2.5rem' }}>
             <h1 className="font-serif text-forest block" style={{ fontSize: 'clamp(2.6rem, 5.5vw, 4.2rem)', fontWeight: 700, lineHeight: 0.9, letterSpacing: '-0.03em' }}>Build</h1>
             <span className="font-serif block" style={{ fontSize: 'clamp(2.6rem, 5.5vw, 4.2rem)', fontWeight: 400, fontStyle: 'italic', lineHeight: 1.1, letterSpacing: '-0.03em', color: 'var(--amber)' }}>with us.</span>

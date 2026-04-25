@@ -1501,7 +1501,7 @@ export function AfterBearSection() {
       <Fireflies />
 
       {/* Content */}
-      <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-12 lg:px-20 pt-40 pb-14 md:pt-52 md:pb-18">
+      <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-12 lg:px-20 pt-20 pb-8 md:pt-28 md:pb-12">
 
         {/* ── Headline ── */}
         <div className="text-center mb-8 md:mb-10">

@@ -147,29 +147,40 @@ const METRICS = [
 ]
 
 /* ─── Tab: The Case ──────────────────────────────────────────────── */
+const CASE_ITEMS = [
+  {
+    n: '01',
+    name: 'The Capacity',
+    body: 'In the first years of life, children are born with an almost unbounded capacity to feel. Research from Gottman to Siegel establishes that the ability to name and process emotional states is not a soft skill: it is the substrate on which learning, connection, and resilience are built.',
+  },
+  {
+    n: '02',
+    name: 'The Erosion',
+    body: 'Modern childhood systematically erodes this capacity. Overstimulation, screens, and adults who resolve discomfort before a child can sit with it: these are not edge cases. By the time a child is eight, most have been taught to suppress or avoid the feelings that were once their most natural mode of expression.',
+  },
+  {
+    n: '03',
+    name: 'The Trap',
+    body: 'Little Pines exists because the tools parents have been given are almost all delivered through the same screens that caused the problem. Therapy apps and SEL curricula cannot co-regulate. They cannot wait. A screen has nowhere to be next.',
+  },
+  {
+    n: '04',
+    name: 'The Answer',
+    body: 'The form factor matters as much as the content. A quiet, unhurried, screen-free companion that has nowhere to be and nothing to sell is a fundamentally different kind of tool. The research supports it. No one has yet built it well.',
+  },
+]
+
 function CaseTabContent() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-      <Reveal>
-        <div className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
-          <p style={{ marginBottom: '1.25rem' }}>
-            In the first years of life, children are born with an almost unbounded capacity to feel. Research from Gottman to Siegel establishes that the ability to name and process emotional states is not a soft skill: it is the substrate on which learning, connection, and resilience are built.
-          </p>
-          <p>
-            Modern childhood systematically erodes this capacity. Overstimulation, screens, and adults who resolve discomfort before a child can sit with it: these are not edge cases. By the time a child is eight, most have been taught to suppress or avoid the feelings that were once their most natural mode of expression.
-          </p>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+      {CASE_ITEMS.map((item) => (
+        <div key={item.n}>
+          <p className="font-sans uppercase" style={{ fontSize: '0.5rem', letterSpacing: '0.22em', color: 'rgba(196,149,75,0.55)', marginBottom: '0.4rem' }}>{item.n}</p>
+          <div style={{ width: '1.5rem', height: '1.5px', background: 'rgba(196,149,75,0.5)', marginBottom: '0.7rem' }} />
+          <h3 className="font-serif" style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', fontWeight: 600, color: 'var(--forest)', lineHeight: 1.2, marginBottom: '0.55rem' }}>{item.name}</h3>
+          <p className="font-sans" style={{ fontSize: 'clamp(0.82rem, 1.1vw, 0.9rem)', lineHeight: 1.82, color: 'rgba(40,40,40,0.55)' }}>{item.body}</p>
         </div>
-      </Reveal>
-      <Reveal delay={0.08}>
-        <div className="font-sans" style={{ fontSize: 'clamp(0.85rem, 1.2vw, 0.95rem)', lineHeight: 1.88, color: 'rgba(40,40,40,0.58)' }}>
-          <p style={{ marginBottom: '1.25rem' }}>
-            Little Pines exists because the tools parents have been given are almost all delivered through the same screens that caused the problem. Therapy apps and SEL curricula cannot co-regulate. They cannot wait. A screen has nowhere to be next.
-          </p>
-          <p>
-            The form factor matters as much as the content. A quiet, unhurried, screen-free companion that has nowhere to be and nothing to sell is a fundamentally different kind of tool. The research supports it. No one has yet built it well.
-          </p>
-        </div>
-      </Reveal>
+      ))}
     </div>
   )
 }
@@ -367,15 +378,6 @@ function PillarsSection({ onReveal, revealed }: { onReveal: () => void; revealed
               >
                 Meet the bear
               </button>
-              <motion.div
-                animate={{ y: [0, 6, 0] }}
-                transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-                style={{ color: 'rgba(196,149,75,0.40)' }}
-              >
-                <svg width="14" height="22" viewBox="0 0 14 22" fill="none" aria-hidden="true">
-                  <path d="M7 2 V18 M2 13 L7 18 L12 13" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </motion.div>
             </>
           )}
         </div>
